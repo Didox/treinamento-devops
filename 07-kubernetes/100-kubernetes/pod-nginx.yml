@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: imersao-nginx
+  labels:
+    app: label-imersao-nginx
+spec:
+  containers:
+    - name: container-nginx-imersao
+      image: nginx
+      ports:
+        - containerPort: 80

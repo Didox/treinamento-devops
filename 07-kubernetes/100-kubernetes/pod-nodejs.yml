@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: imersao-nodejs
+  labels:
+    app: label-imersao-nodejs
+spec:
+  containers:
+    - name: container-nodejs-imersao
+      image: didox/app-imersao-docker-nodejs
+      ports:
+        - containerPort: 80

@@ -1,0 +1,9 @@
+- hosts: all
+  tasks:
+    - name: Capitura da variável de ambiente
+      debug:
+        msg: "'{{ lookup('env', 'MINHA_SENHA') }}' is the MINHA_SENHA environment variable."
+
+    - shell: "echo 'Minha senha é: {{ lookup('env', 'MINHA_SENHA') }}' >> teste.txt"
+
+  # MINHA_SENHA=12345 ansible-playbook -i hosts provisionar.yml -u ubuntu --private-key ../../id_rsa_itau_treinamento

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: didox-nginx
+  labels:
+    app: label-pod-didox-nginx
+spec:
+  containers:
+    - name: container-pod-nginx
+      image: nginx:latest
+      ports:
+        - containerPort: 80

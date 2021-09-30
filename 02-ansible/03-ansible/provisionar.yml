@@ -1,0 +1,17 @@
+- hosts: all
+  tasks:
+    - name: "Criando um arquivo a toa no servidor"
+      shell: "echo 'escrevendo algo no servidor' >> teste.txt"
+
+    - name: "Roda: sudo apt-get update"
+      become: true
+      apt:
+        upgrade: yes
+        update_cache: yes
+        cache_valid_time: 86400 #Um dia
+
+    - name: "Instalando apache com sudo no servidor"
+      apt:
+        name: "apache2"
+        state: latest
+      become: yes # permite rodar como sudo

@@ -1,0 +1,74 @@
+- hosts: all
+
+  handlers:
+    - name: "restart nginx"
+      service:
+        name: nginx
+        state: restarted
+      become: yes
+
+  tasks:
+    - name: "Roda: sudo apt-get update"
+      become: yes
+      apt:
+        upgrade: yes
+        update_cache: yes
+        cache_valid_time: 86400 #Um dia
+
+    - name: "Download e install packages-microsoft-prod"
+      shell: "rm -rf packages-microsoft-prod.deb && wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb && sudo dpkg -i packages-microsoft-prod.deb || true"
+  
+    - name: Adicionando dotnet-sdk no cache apt
+      apt:
+        name: dump
+        update_cache: yes
+      become: yes
+
+    - name: "Instala pacotes"
+      apt:
+        name: "{{ item }}"
+        state: latest
+      become: yes # roda com sudo
+      with_items:
+        - nginx
+        - apt-transport-https
+        - dotnet-sdk-5.0
+        - dotnet-runtime-5.0
+
+    - name: "clone projeto"
+      ansible.builtin.git:
+        repo: 'https://github.com/Didox/mvc_csharp_simples.git'
+        dest: /home/ubuntu/mvc_csharp_simples
+        clone: yes
+        update: yes
+
+    - name: Adicionar no bashrc
+      lineinfile: dest=~/.bashrc line='export API_URL=https://localhost:5001' state=present
+
+    - name: Aplicar o bashrc
+      shell: source ~/.bashrc
+      args:
+        executable: /bin/bash
+
+    - name: "fazendo build do projeto"
+      shell: "cd mvc_csharp_simples && dotnet build"
+    
+    - name: "startando VPS"
+      shell: "cd mvc_csharp_simples && nohup dotnet run &"
+
+    - name: "Trocando nginx para VPS"
+      copy:
+        src: "nginx/default"
+        dest: "/etc/nginx/sites-available/default"
+      become: yes
+      notify:
+        - "restart nginx"
+
+# *** verifica se aplicação está de pé
+# sudo lsof -iTCP -sTCP:LISTEN -P | grep :5001
+
+# *** verifica log acesso
+# tail -f /var/log/nginx/access.log
+
+# *** verifica log error
+# tail -f /var/log/nginx/error.log

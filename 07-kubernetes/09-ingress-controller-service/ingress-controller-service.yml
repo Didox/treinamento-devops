@@ -1,0 +1,44 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: minimal-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: api.torneseumprogramador.com.br # vinculado com o ingress IP gerado pela cloud no LoadBalancer
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: nodeport-pod-nodejs
+            port:
+              number: 80
+  - host: admin.torneseumprogramador.com.br # vinculado com o ingress IP gerado pela cloud no LoadBalancer
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: nodeport-pod-nodejs
+            port:
+              number: 80
+
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: api-ingress
+#   annotations:
+#     nginx.ingress.kubernetes.io/rewrite-target: /
+# spec:
+#   rules:
+#     - host: api.torneseumprogramador.com.br
+#       http:
+#         paths:
+#           - path: /
+#             backend:
+#               serviceName: nodeport-pod-nodejs
+#               servicePort: 80

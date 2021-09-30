@@ -1,0 +1,27 @@
+- hosts: all
+  tasks:
+    - name: "Criando um arquivo a toa no servidor"
+      shell: "echo 'escrevendo algo no servidor' >> teste.txt"
+
+    - name: "Roda: sudo apt-get update"
+      become: true
+      apt:
+        upgrade: yes
+        update_cache: yes
+        cache_valid_time: 86400 #Um dia
+
+    - name: "Instala pacotes em lote"
+      apt:
+        name: "{{ item }}"
+        state: latest
+      become: yes # roda com sudo
+      with_items:
+        - php7.2
+        - apache2
+        - libapache2-mod-php7.2
+        - php-mysql
+        - php-curl
+        - mysql-server
+        - python3-pycurl
+        - python3-mysqldb
+        - unzip

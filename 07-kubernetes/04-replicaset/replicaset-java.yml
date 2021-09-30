@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: java-replicaset
+spec:
+  template:
+    metadata:
+      name: pod-java
+      labels:
+        app: lable-pod-java
+    spec:
+      containers:
+        - name: container-java
+          image: didox/validador-cpf-java-turma-devops
+          ports:
+            - containerPort: 8080
+          env:
+            - name: "DATABASE_URL"
+              value: "https://usuario@senha:mysql.server:3306"
+  replicas: 4
+  selector:
+    matchLabels:
+      app: lable-pod-java
+
+
+# $ kubectl logs -l app=lable-pod-java # log de todos os lables do replicaset
+# $ kubectl logs --tail=20 --follow=true -l app=lable-pod-java

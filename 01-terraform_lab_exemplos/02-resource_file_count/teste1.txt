@@ -1,0 +1,1 @@
+Olá alunos bem vindo ao terraform 1.0

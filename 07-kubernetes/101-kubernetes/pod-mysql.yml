@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: didox-mysql
+  labels:
+    app: label-pod-didox-mysql
+spec:
+  containers:
+    - name: container-pod-mysql
+      image: mysql:5.6
+      ports:
+        - containerPort: 3306
+      envFrom:
+      - configMapRef:
+          name: db-mysql-configmap
+      # poderia rodar um comando para restaurar a base de dados
+      # lifecycle:
+      #   postStart:
+      #     exec:
+      #       command: ["/bin/sh", "-c", "echo 'restaurando backup banco por wget'"
+
+# $ kubectl exec --stdin --tty didox-mysql -- /bin/bash
+# $ mysql -uroot -p'danilotestekub'

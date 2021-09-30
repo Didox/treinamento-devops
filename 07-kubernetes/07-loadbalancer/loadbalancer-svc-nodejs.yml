@@ -1,0 +1,13 @@
+# recurso utilizado para cloud - pagamos por cada IP gerado, cuidado
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: loadbalancer-svc-nodejs
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 3000
+  selector:
+    app: lable-pod-nodejs

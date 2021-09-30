@@ -1,0 +1,9 @@
+- hosts: all
+  tasks:
+    - name: Adicionar no bashrc
+      lineinfile: dest=~/.bashrc line='export API_URL=https://localhost:5001' state=present
+
+    - name: Aplicar o bashrc
+      shell: source ~/.bashrc
+      args:
+        executable: /bin/bash

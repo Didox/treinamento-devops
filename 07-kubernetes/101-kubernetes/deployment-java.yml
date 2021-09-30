@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: java-deployment
+spec:
+  template:
+    metadata:
+      name: pod-java
+      labels:
+        app: lable-pod-java
+    spec:
+      containers:
+        - name: container-java
+          image: didox/validador-cpf-java-turma-devops
+          ports:
+            - containerPort: 8080
+          env:
+            - name: "DATABASE_URLS"
+              value: "https://usuario@senha:mysql.server:3306"
+  replicas: 3
+  selector:
+    matchLabels:
+      app: lable-pod-java
+
+
+# $ kubectl apply -f deployment-java.yml
+# $ kubectl describe -f deployment-java.yml
+# $ kubectl delete -f deployment-java.yml
+# $ kubectl logs -l app=lable-pod-java # log de todos os lables do replicaset
+# $ kubectl logs --tail=20 --follow=true -l app=lable-pod-java
+# $ kubectl rollout history deployment
+# $ kubectl annotate deployment.apps/java-deployment kubernetes.io/change-cause="levantando mudando a variavel de ambiente"
+# $ kubectl rollout undo deployment.apps/java-deployment --to-revision=2
+# $ kubectl scale deployment.v1.apps/java-deployment --replicas=2
+
+# $ kubectl autoscale deployment.v1.apps/java-deployment --min=2 --max=5 --cpu-percent=80
+
+
+# $ kubectl get pod -o yaml > teste.yml # exportando yaml do pod do kubernets
+
+
+# $ kubectl apply -f deployment-site.yaml
+# $ kubectl delete -f deployment-site.yaml
+# $ kubectl get deployment
+# $ kubectl describe deployment site-deployment
+# $ kubectl rollout history deployment site-deployment
+# $ kubectl annotate deployment.v1.apps/site-deployment kubernetes.io/change-cause="teste de comentário"
+# $ kubectl rollout undo deployment.v1.apps/site-deployment --to-revision=2
+# $ kubectl get rs
+# $ kubectl get rs -w
+# $ kubectl get pods -o wide
+# $ kubectl scale deployment.v1.apps/site-deployment --replicas=2
+# $ kubectl autoscale deployment.v1.apps/site-deployment --min=5 --max=8 --cpu-percent=80
+# $ kubectl get hpa # mostra status autoscale
+# $ kubectl delete hpa site-deployment
+# $ kubectl delete horizontalpodautoscaler --all
+# $ kubectl set image deployment.v1.apps/site-deployment nginx=nginx:latest
+# $ kubectl run didox-nginx-memoria --image=nginx --requests=cpu=500m,memory=500M --expose --port=80
+# $ kubectl autoscale deployment didox-nginx-memoria --cpu-percent=50 --min=1 --max=10

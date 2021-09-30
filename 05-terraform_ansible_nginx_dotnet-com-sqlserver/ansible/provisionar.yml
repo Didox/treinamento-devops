@@ -1,0 +1,76 @@
+- hosts: all
+
+  handlers:
+    - name: "restart nginx"
+      service:
+        name: nginx
+        state: restarted
+      become: yes
+
+  tasks:
+    - name: "Roda: sudo apt-get update"
+      become: true
+      apt:
+        upgrade: yes
+        update_cache: yes
+        cache_valid_time: 86400 #Um dia
+
+    - name: "Download e install packages-microsoft-prod"
+      shell: "rm -rf packages-microsoft-prod.deb && wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb && sudo dpkg -i packages-microsoft-prod.deb || true"
+  
+    - name: Adicionando dotnet-sdk no cache apt
+      apt:
+        name: dump
+        update_cache: yes
+      become: yes
+
+    - name: "Instala pacotes"
+      apt:
+        name: "{{ item }}"
+        state: latest
+      become: yes # roda com sudo
+      with_items:
+        - nginx
+        - apt-transport-https
+        - dotnet-sdk-5.0
+        - dotnet-runtime-5.0
+
+    - name: "clone projeto"
+      ansible.builtin.git:
+        repo: 'https://github.com/torneseumprogramador/admin-cms-tornese-mentoria.git'
+        dest: /home/ubuntu/admin-cms-tornese-mentoria
+        clone: yes
+        update: yes
+
+    - name: "fazendo build do projeto"
+      shell: "cd admin-cms-tornese-mentoria && dotnet build"
+    
+    - name: "Copia arquivo settings"
+      copy:
+        src: '/home/ubuntu/admin-cms-tornese-mentoria/appsettings.sample.json'
+        dest: '/home/ubuntu/admin-cms-tornese-mentoria/appsettings.json'
+        remote_src: yes
+      become: yes
+
+    - name: "Configura as senhas"
+      replace:
+        path: '/home/ubuntu/admin-cms-tornese-mentoria/appsettings.json'
+        regexp: "{{ item.regex }}"
+        replace: "{{ item.value }}"
+      with_items:
+        - { regex: 'Server=localhost;Database=cms_tornese_comunidade;Uid=sa;Pwd=!1#2a3d4c5g6v', value: 'Server=localhost;Database=terraform-20210922184640030500000001;Uid=demouser;Pwd=YourPwdShouldBeLongAndSecure!' }
+      become: yes
+
+    - name: "Criando migrations no banco de dados"
+      shell: "dotnet tool install --global dotnet-ef && dotnet ef database update"
+
+    - name: "startando VPS"
+      shell: "cd admin-cms-tornese-mentoria && nohup dotnet run &"
+
+    - name: "Trocando nginx para VPS"
+      copy:
+        src: "nginx/default"
+        dest: "/etc/nginx/sites-available/default"
+      become: yes
+      notify:
+        - "restart nginx"

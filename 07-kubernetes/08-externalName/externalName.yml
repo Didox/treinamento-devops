@@ -1,0 +1,11 @@
+# https://youtu.be/_MsdFRI12jY?t=3877 # para recurso interno com namespace diferente
+# https://kubernetes.io/docs/concepts/services-networking/service/
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+  namespace: prod
+spec:
+  type: ExternalName
+  externalName: my.database.example.com

@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: didox-nodejs
+  labels:
+    app: label-pod-didox-nodejs
+spec:
+  containers:
+    - name: container-pod-nodejs
+      image: didox/validador-cpf-nodejs-turma-devops
+      ports:
+        - containerPort: 3000
+      # envFrom:
+      # - configMapRef:
+      #     name: remote-mysql-configmap
+
+      env:
+        - name: "DATABASE_URL"
+          valueFrom:
+            configMapKeyRef:
+              name: remote-mysql-configmap
+              key: DATABASE_URL
+        - name: "USER"
+          valueFrom:
+            configMapKeyRef:
+              name: remote-mysql-configmap
+              key: USER
+        - name: "PASSWORD"
+          valueFrom:
+            configMapKeyRef:
+              name: db-mysql-configmap
+              key: MYSQL_PASSWORD
+
+      
+      # env:
+      #   - name: "DATABASE_URL"
+      #     value: "https://mysql.server:3306"
+      #   - name: "USER"
+      #     value: "didox124"
+      #   - name: "PASSWORD"
+      #     value: "d4i5dox1%2^4"
+
+# $ kubectl exec didox-nodejs -- printenv

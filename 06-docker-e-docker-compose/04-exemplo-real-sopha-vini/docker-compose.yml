@@ -1,0 +1,116 @@
+version: "3.4"
+
+x-app: &default-app
+  tty: true
+  stdin_open: true
+  command: bundle exec rails s
+  env_file:
+    - .env
+  environment:
+    LAUNCHY_DRY_RUN: "true"
+    BROWSER: /dev/null
+    BUNDLE_PATH: /bundle/vendor
+    WEB_CONCURRENCY: 0
+  build: .
+  depends_on: 
+    - database.zoom.local
+    - queue.zoom.local
+    - elasticsearch.zoom.local
+  volumes:
+    - .:/rails-docker
+    - bundle_path:/bundle
+services:
+  proxy.zoom.local:
+    container_name: zoom-proxy
+    build: ./nginx
+    ports:
+      - 81:80
+    depends_on:
+      - frontend.zoom.local
+    volumes:
+      - ./nginx:/etc/nginx
+  api.zoom.local:
+    <<: *default-app
+    container_name: zoom-api
+    ports:
+      - "3000:3000"
+    command: sh -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+
+  sidekiq.zoom.local:
+    <<: *default-app
+    container_name: sidekiq
+    command: "bundle exec sidekiq -C config/sidekiq.yml"
+
+  database.zoom.local:
+    container_name: zoom-db
+    image: postgis/postgis
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: zoompwd
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  frontend.zoom.local:
+    container_name: zoom-front
+    build: ./frontend
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    depends_on:
+      - api.zoom.local
+    volumes:
+      - ./frontend:/app
+
+  queue.zoom.local:
+    container_name: zoom-queue
+    image: redis
+    command: redis-server
+    volumes:
+      - redisdata:/data
+    ports:
+      - "6379:6379"
+    env_file:
+      - .env
+
+  elasticsearch.zoom.local:
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.5.3
+    container_name: elasticsearch1
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata1:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+
+  elasticsearch2:
+    container_name: elasticsearch2
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.5.3
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "discovery.zen.ping.unicast.hosts=elasticsearch.zoom.local"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata2:/usr/share/elasticsearch/data
+
+volumes:
+  bundle_path:
+  pgdata:
+  redisdata:
+  esdata1:
+    driver: local
+  esdata2:
+    driver: local
