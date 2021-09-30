@@ -1,5 +1,5 @@
 # ### dar nome para o master
-# ssh -i ~/projetos/devops/id_rsa_itau_treinamento ubuntu@ec2-54-226-188-130.compute-1.amazonaws.com
+# ssh -i ~/projetos/devops/id_rsa_itau_treinamento ubuntu@ec2-3-92-233-60.compute-1.amazonaws.com
 
 # sudo su -
 # hostname k8s-master 
@@ -8,7 +8,7 @@
 
 # source <(kubectl completion bash) # para deixar o kubeclt com auto complete
 
-# kubeadm init --apiserver-advertise-address $(hostname -i) 
+# kubeadm init --apiserver-advertise-address $(hostname -i | awk '{print $1;exit}')
 
 # caso trave com erro de timeout, olhar o security group do haproxy
 # systemctl status kubelet | less # verifica se o serviço está de pé
@@ -31,17 +31,9 @@
 # Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
 #   https://kubernetes.io/docs/concepts/cluster-administration/addons/
 
-# You can now join any number of the control-plane node running the following command on each as root:
-
-#   kubeadm join k8s-haproxy:6443 --token 0qlz9y.2qlm2zi6tuy7z27o --discovery-token-ca-cert-hash sha256:b73b7aada751542115ea476a6fd151fa9cc5dbbf9799f1bc7d05639a4d202c82  --control-plane --certificate-key 5a5f65c38762e6a8714101b71b1e59aa71e317ec0bb0c7d899e80253f89ded02
-
-# Please note that the certificate-key gives access to cluster sensitive data, keep it secret!
-# As a safeguard, uploaded-certs will be deleted in two hours; If necessary, you can use
-# "kubeadm init phase upload-certs --upload-certs" to reload certs afterward.
-
 # Then you can join any number of worker nodes by running the following on each as root:
 
-# kubeadm join k8s-haproxy:6443 --token 0qlz9y.2qlm2zi6tuy7z27o --discovery-token-ca-cert-hash sha256:b73b7aada751542115ea476a6fd151fa9cc5dbbf9799f1bc7d05639a4d202c82
+# kubeadm join 172.31.86.233:6443 --token yohexd.p2ubhuh8jfyvcqvq --discovery-token-ca-cert-hash sha256:a4e426bbc834338bdb62bebd885caa29bb4a206c4aac4494b2aee0ad4b4f649c 
 ####################################################
 
 

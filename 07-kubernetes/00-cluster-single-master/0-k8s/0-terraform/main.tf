@@ -25,25 +25,25 @@ resource "aws_instance" "maquina_master" {
   }
   vpc_security_group_ids = ["${aws_security_group.acessos_master.id}"]
   depends_on = [
-    aws_instance.maquina_nginx,
+    aws_instance.workers,
   ]
 }
 
-resource "aws_instance" "maquina_nginx" {
+resource "aws_instance" "workers" {
   ami           = "${data.aws_ami.ubuntu.id}"
   instance_type = "t2.micro"
   key_name      = "Itau_treinamento"
   tags = {
     Name = "maquina-cluster-kubernetes-${count.index}"
   }
-  vpc_security_group_ids = ["${aws_security_group.acessos.id}"]
+  vpc_security_group_ids = ["${aws_security_group.acessos_workers.id}"]
   count         = 2
 }
 
 
 resource "aws_security_group" "acessos_master" {
   name        = "acessos_master"
-  description = "acessos inbound traffic"
+  description = "acessos_workers inbound traffic"
 
   ingress = [
     {
@@ -64,8 +64,8 @@ resource "aws_security_group" "acessos_master" {
       protocol         = "tcp"
       cidr_blocks      = [
         "${chomp(data.http.myip.body)}/32",
-        "${aws_instance.maquina_nginx[0].private_ip}/32",
-        "${aws_instance.maquina_nginx[1].private_ip}/32",
+        "${aws_instance.workers[0].private_ip}/32",
+        "${aws_instance.workers[1].private_ip}/32",
       ]
       ipv6_cidr_blocks = ["::/0"]
       prefix_list_ids = null,
@@ -89,14 +89,14 @@ resource "aws_security_group" "acessos_master" {
   ]
 
   tags = {
-    Name = "allow_ssh"
+    Name = "acessos_master"
   }
 }
 
 
-resource "aws_security_group" "acessos" {
-  name        = "acessos"
-  description = "acessos inbound traffic"
+resource "aws_security_group" "acessos_workers" {
+  name        = "acessos_workers"
+  description = "acessos_workers inbound traffic"
 
   ingress = [
     {
@@ -127,7 +127,7 @@ resource "aws_security_group" "acessos" {
   ]
 
   tags = {
-    Name = "allow_ssh"
+    Name = "acessos_workers"
   }
 }
 
@@ -135,14 +135,14 @@ resource "aws_security_group" "acessos" {
 # terraform refresh para mostrar o ssh
 output "maquina_master" {
   value = [
-    "maquina master - ${aws_instance.maquina_master.public_ip} - ssh -i ~/projetos/devops/id_rsa_itau_treinamento ubuntu@${aws_instance.maquina_master.public_dns}"
+    "master - ${aws_instance.maquina_master.public_ip} - ssh -i ~/projetos/devops/id_rsa_itau_treinamento ubuntu@${aws_instance.maquina_master.public_dns}"
   ]
 }
 
 # terraform refresh para mostrar o ssh
 output "aws_instance_e_ssh" {
   value = [
-    for key, item in aws_instance.maquina_nginx :
-      "maquina ${key+1} - ${item.public_ip} - ssh -i ~/projetos/devops/id_rsa_itau_treinamento ubuntu@${item.public_dns}"
+    for key, item in aws_instance.workers :
+      "worker ${key+1} - ${item.public_ip} - ssh -i ~/projetos/devops/id_rsa_itau_treinamento ubuntu@${item.public_dns}"
   ]
 }

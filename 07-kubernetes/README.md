@@ -60,7 +60,8 @@ kubectl delete services --all
 # $ kubectl rollout undo deployment.v1.apps/site-deployment --to-revision=2
 # $ kubectl get rs
 # $ kubectl get rs -w
-# $ kubectl get pods -o wide
+# $ kubectl get pods -o wide # w = watch para acompanhar a criação
+# $ kubectl get pods -o wide -w # w = watch para acompanhar a criação
 # $ kubectl scale deployment.v1.apps/site-deployment --replicas=2
 # $ kubectl autoscale deployment.v1.apps/site-deployment --min=5 --max=8 --cpu-percent=80
 # $ kubectl get hpa # mostra status autoscale

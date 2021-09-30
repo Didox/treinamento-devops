@@ -8,7 +8,7 @@
 
 # source <(kubectl completion bash) # para deixar o kubeclt com auto complete
 
-# kubeadm init --apiserver-advertise-address $(hostname -i) 
+# kubeadm init --apiserver-advertise-address $(hostname -i | awk '{print $1;exit}')
 
 # caso trave com erro de timeout, olhar o security group do haproxy
 # systemctl status kubelet | less # verifica se o serviço está de pé
