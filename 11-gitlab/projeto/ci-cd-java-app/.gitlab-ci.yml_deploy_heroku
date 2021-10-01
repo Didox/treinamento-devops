@@ -1,0 +1,107 @@
+stages:
+- build
+- tdd
+- dev
+- bdd
+- qa
+- prod
+
+build:
+  image: openjdk
+  stage: build
+  script:
+  - ./mvnw package
+tdd:
+  image: openjdk
+  dependencies:
+  - build
+  stage: tdd
+  script:
+  - ./test.sh
+dev:
+  image: ruby
+  stage: dev
+  dependencies:
+  - tdd
+  script:
+  - gem install dpl
+  - dpl --provider=heroku --app=dev-accenture --api-key=$HEROKU_PRODUCTION_API_KEY
+  only:
+  - main
+
+
+# imagens selenium java
+# https://hub.docker.com/u/selenium?page=1 
+# bdd:
+#   # image: openjdk
+#   # image: selenium/standalone-chrome
+
+#   # dependencies:
+#   # - tdd
+
+#   # definindo runner-didox
+#   tags:
+#   - runner-didox
+
+#   stage: bdd
+#   script:
+#   - cd bdd && ./test.sh
+
+
+qa:
+  image: ruby
+  stage: qa
+  dependencies:
+  - dev
+  script:
+  - gem install dpl
+  - dpl --provider=heroku --app=qa-accenture --api-key=$HEROKU_PRODUCTION_API_KEY
+  only:
+  - main
+prod:
+  image: ruby
+  stage: prod
+  dependencies:
+  - qa
+  script:
+  - gem install dpl
+  - dpl --provider=heroku --app=prod-accenture --api-key=$HEROKU_PRODUCTION_API_KEY
+  only:
+  - main
+
+
+
+
+# agora para buildar o app com o docker vamos baixar o gitlabrunner
+# assim vamos preparar o nosso executor de tarefas 
+# https://docs.gitlab.com/runner/install/docker.html
+
+# Windows, Linux
+# docker run -d --name gitlab-runner --restart always  -v /srv/gitlab-runner/config:/etc/gitlab-runner  -v /var/run/docker.sock:/var/run/docker.sock  gitlab/gitlab-runner:latest
+# Macos
+# docker run -d --name gitlab-runner --restart always  -v /Users/Shared/gitlab-runner/config:/etc/gitlab-runner  -v /var/run/docker.sock:/var/run/docker.sock  gitlab/gitlab-runner:latest
+
+# docker volume create gitlab-runner-config
+# docker run -d --name gitlab-runner --restart always -v /var/run/docker.sock:/var/run/docker.sock -v gitlab-runner-config:/etc/gitlab-runner gitlab/gitlab-runner:latest
+
+# depois de levantar a imagem configurar o runner com sua maquina aqui
+# https://gitlab.com/Didox/ci-cd-java-app-treinamento/-/settings/ci_cd
+# Copiar a chave do gitlab
+# Install GitLab Runner and ensure it's running.
+# entrar no container local
+# docker exec -it gitlab-runner bash
+# rodar o "gitlab-runner register" dentro do container
+# colocar o site https://gitlab.com/ e o token do gitlab
+# colocar o nome do meu runner "runner-didox"
+# no tipo colocar uma imagem docker "docker"
+# na imagem do executor vc precisa colocar o java, vem padrão com ruby, colocar sua imagem do java
+# openjdk
+# depois ir no git lab e cadastrar uma tag para o executor de tarefas "executor-tarefa-java"
+
+
+# para acessar a imagem docker e configurar o servidor de build
+# $ docker exec -it gitlab-runner bash
+# instalando heroku no runner
+# curl https://cli-assets.heroku.com/install.sh | sh
+# heroku login -i
+# heroku git:remote -a dev-accenture
