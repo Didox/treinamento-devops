@@ -1,0 +1,66 @@
+# imagem docker com java
+# image: docker:stable
+# image: zuunr/docker-maven-pipeline
+stages:
+- pre-build
+- build
+- tdd
+- bdd
+- deploy-dev
+- deploy-qa
+- deploy-prod
+
+# verifica se temos ao docker
+# services:
+# - docker:dind
+
+# before_script:
+# - docker info
+# - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
+
+pre-build:
+  stage: pre-build
+  script:
+  - echo "teste"
+
+build:
+  stage: build
+  dependencies:
+  - pre-build
+  script:
+  - echo "teste"
+
+tdd:
+  stage: tdd
+  dependencies:
+  - build
+  script:
+  - echo "teste"
+
+bdd:
+  stage: bdd
+  dependencies:
+  - tdd
+  script:
+  - echo "teste"
+
+dev:
+  stage: deploy-dev
+  dependencies:
+  - bdd
+  script:
+  - echo "teste"
+
+qa:
+  stage: deploy-qa
+  dependencies:
+  - dev
+  script:
+  - echo "teste"
+
+prod:
+  stage: deploy-prod
+  dependencies:
+  - qa
+  script:
+  - echo "teste"

@@ -1,0 +1,12 @@
+image: openjdk
+
+build:
+  stage: build
+  script:
+  - ./mvnw package
+  - docker build -t didox/validador-cpf-java-turma-devops -f Dockerfile .
+  - docker login
+  - docker tag didox/validador-cpf-java-turma-devops hub.docker.com/r/didox/validador-cpf-java-turma-devops
+  - docker push didox/validador-cpf-java-turma-devops
+
+# este dá erro pois o comando do docker não existe, pois a imagem padrão de build não foi configurada

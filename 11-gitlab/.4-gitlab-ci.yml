@@ -1,0 +1,8 @@
+image: openjdk
+
+build:
+  stage: build
+  script:
+  - ./mvnw package
+  
+# este passa o build do java

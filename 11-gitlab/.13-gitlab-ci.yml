@@ -1,0 +1,40 @@
+image: docker:latest
+
+services:
+  - docker:dind
+
+before_script:
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
+
+stages:
+- build
+- tdd
+- buld-docker
+
+build:
+  image: openjdk
+  stage: build
+  script:
+  - ./mvnw package
+
+tdd:
+  image: openjdk
+  stage: tdd
+  dependencies:
+  - build
+  script:
+  - ./test.sh
+
+buld-docker:
+  stage: buld-docker
+  dependencies:
+  - tdd
+  script:
+  - docker build -t didox/validador-cpf-java-turma-devops -f Dockerfile .
+  - docker tag didox/validador-cpf-java-turma-devops hub.docker.com/r/didox/validador-cpf-java-turma-devops
+  - docker push didox/validador-cpf-java-turma-devops
+
+
+
+# para acessar a imagem docker e configurar o servidor de build
+# $ docker exec -it gitlab-runner bash

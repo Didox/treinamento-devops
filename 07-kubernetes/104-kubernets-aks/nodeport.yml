@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodeport-svc-javaapp
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      nodePort: 30001 #até 32767
+  selector:
+    app: label-pod-javapp

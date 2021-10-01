@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: javaapp-deployment
+spec:
+  template:
+    metadata:
+      name: pod-javapp
+      labels:
+        app: label-pod-javapp
+    spec:
+      containers:
+        - name: container-javaapp
+          image: didox/validador-cpf-java-turma-devops:v0.0.3
+          ports:
+            - containerPort: 8080
+  replicas: 2
+  selector:
+    matchLabels:
+      app: label-pod-javapp

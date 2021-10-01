@@ -1,0 +1,6 @@
+build:
+  stage: build
+  script:
+  - ./mvnw package && java -jar target/validarCpf.jar
+ 
+# Erro no java home, precisa ter uma imagem com java 

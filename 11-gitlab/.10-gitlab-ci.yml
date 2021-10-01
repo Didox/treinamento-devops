@@ -1,0 +1,37 @@
+# imagem docker com java
+image: docker:stable
+# image: zuunr/docker-maven-pipeline
+stages:
+- pre-build
+- build
+- test
+- deploy
+
+# verifica se temos ao docker
+services:
+- docker:dind
+
+before_script:
+- docker info
+- docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
+
+build:
+  tags:
+  - executor-tarefa-java
+  stage: pre-build
+  script:
+  - ./mvnw package
+  - docker build -t didox/validador-cpf-java-turma-devops -f Dockerfile .
+  - docker tag didox/validador-cpf-java-turma-devops hub.docker.com/r/didox/validador-cpf-java-turma-devops
+  - docker push didox/validador-cpf-java-turma-devops
+
+build-project:
+  stage: build
+  dependencies:
+  - build
+  script:
+  - echo "teste"
+
+
+# para acessar a imagem docker e configurar o servidor de build
+# $ docker exec -it gitlab-runner bash

@@ -1,0 +1,26 @@
+# imagem docker com java
+image: docker:stable
+# image: zuunr/docker-maven-pipeline
+
+# verifica se temos ao docker
+services:
+- docker:dind
+
+before_script:
+- docker info
+- docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
+# dentro do gitlab para colocar as variáveis
+# https://gitlab.com/Didox/ci-cd-java-app-treinamento/-/settings/ci_cd
+# item Variables
+# adicionar seu user e pass
+
+build:
+  stage: build
+  script:
+  - ./mvnw package
+  - docker build -t didox/validador-cpf-java-turma-devops -f Dockerfile .
+  - docker tag didox/validador-cpf-java-turma-devops hub.docker.com/r/didox/validador-cpf-java-turma-devops
+  - docker push didox/validador-cpf-java-turma-devops
+
+# agora para buildar o app com o docker vamos baixar o gitlabrunner
+# docker pull gitlab/gitlabrunner:latest

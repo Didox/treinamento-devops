@@ -1,0 +1,7 @@
+build:
+  script:
+  - echo "Como fazer o build do sistema"
+  - echo "Comando 2"
+build2:
+  script:
+  - echo "Como fazer o tdd do sistema"

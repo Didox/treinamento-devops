@@ -1,0 +1,66 @@
+# deploy heroku doc
+# http://www.obsis.unb.br/gitlab/help/ci/examples/test-and-deploy-ruby-application-to-heroku.md
+# pegar o ID do heroku aqui:
+# https://dashboard.heroku.com/account
+# cadastrar a chave com o ID do heroku aqui:
+# https://gitlab.com/Didox/ci-cd-java-app-treinamento/-/settings/ci_cd
+# HEROKU_PRODUCTION_API_KEY
+
+stages:
+- build
+- tdd
+- dev
+- bdd
+- qa
+- prod
+
+build:
+  image: openjdk
+  stage: build
+  script:
+  - ./mvnw package
+tdd:
+  image: openjdk
+  dependencies:
+  - build
+  stage: tdd
+  script:
+  - ./test.sh
+dev:
+  image: ruby
+  stage: dev
+  dependencies:
+  - tdd
+  script:
+  - gem install dpl
+  - dpl --provider=heroku --app=dev-accenture --api-key=$HEROKU_PRODUCTION_API_KEY
+  only:
+  - main
+qa:
+  image: ruby
+  stage: qa
+  dependencies:
+  - dev
+  script:
+  - gem install dpl
+  - dpl --provider=heroku --app=qa-accenture --api-key=$HEROKU_PRODUCTION_API_KEY
+  only:
+  - main
+prod:
+  image: ruby
+  stage: prod
+  dependencies:
+  - qa
+  script:
+  - gem install dpl
+  - dpl --provider=heroku --app=prod-accenture --api-key=$HEROKU_PRODUCTION_API_KEY
+  only:
+  - main
+  # https://docs.gitlab.com/ee/ci/yaml/#whenmanual
+  # TODO - testar
+  when: manual
+
+
+
+
+

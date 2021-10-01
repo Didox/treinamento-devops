@@ -1,0 +1,49 @@
+# imagem docker com java
+image: docker:stable
+# image: zuunr/docker-maven-pipeline
+
+# verifica se temos ao docker
+services:
+- docker:dind
+
+before_script:
+- docker info
+- docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
+# dentro do gitlab para colocar as variáveis
+# https://gitlab.com/Didox/ci-cd-java-app-treinamento/-/settings/ci_cd
+# item Variables
+# adicionar seu user e pass
+
+build:
+  stage: build
+  script:
+  - ./mvnw package
+  - docker build -t didox/validador-cpf-java-turma-devops -f Dockerfile .
+  - docker tag didox/validador-cpf-java-turma-devops hub.docker.com/r/didox/validador-cpf-java-turma-devops
+  - docker push didox/validador-cpf-java-turma-devops
+
+# agora para buildar o app com o docker vamos baixar o gitlabrunner
+# assim vamos preparar o nosso executor de tarefas 
+# https://docs.gitlab.com/runner/install/docker.html
+
+# Windows, Linux
+# docker run -d --name gitlab-runner --restart always  -v /srv/gitlab-runner/config:/etc/gitlab-runner  -v /var/run/docker.sock:/var/run/docker.sock  gitlab/gitlab-runner:latest
+# Macos
+# docker run -d --name gitlab-runner --restart always  -v /Users/Shared/gitlab-runner/config:/etc/gitlab-runner  -v /var/run/docker.sock:/var/run/docker.sock  gitlab/gitlab-runner:latest
+
+# docker volume create gitlab-runner-config
+# docker run -d --name gitlab-runner --restart always -v /var/run/docker.sock:/var/run/docker.sock -v gitlab-runner-config:/etc/gitlab-runner gitlab/gitlab-runner:latest
+
+# depois de levantar a imagem configurar o runner com sua maquina aqui
+# https://gitlab.com/Didox/ci-cd-java-app-treinamento/-/settings/ci_cd
+# Copiar a chave do gitlab
+# Install GitLab Runner and ensure it's running.
+# entrar no container local
+# docker exec -it gitlab-runner bash
+# rodar o gitlab-runner register dentro do container
+# colocar o site https://gitlab.com/ e o token do gitlab
+# colocar o nome do meu runner "runner-didox"
+# no tipo colocar uma imagem docker "docker"
+# na imagem do executor vc precisa colocar o java, vem padrão com ruby, colocar sua imagem do java
+# didox/validador-cpf-java-turma-devops
+# depois ir no git lab e cadastrar uma tag para o executor de tarefas "executor-tarefa-java"

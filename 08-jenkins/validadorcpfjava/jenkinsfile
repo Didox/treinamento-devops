@@ -1,0 +1,65 @@
+pipeline {
+    agent any
+
+
+    stages {
+        stage('Build') {
+            steps {
+                // Get some code from a GitHub repository
+                git url: 'https://github.com/heltonscampos/projeto-final-concrete.git', branch: 'main'
+                sh './mvnw package'
+                echo 'Building..'
+            }
+        }
+        stage('Docker image') {
+            steps {
+                sh "/usr/local/bin/docker build -t alexandreponte/validadorcpfjavagoku -f Dockerfile ."
+                echo 'building docker image..'
+            }
+        }
+        stage('Docker image Push') {
+            steps {
+                sh "/usr/local/bin/docker push alexandreponte/validadorcpfjavagoku"
+                echo 'pushing docker image..'
+            }
+        }
+        stage('TDD') {
+            steps {
+                sh './mvnw test'
+                echo 'Testing....'
+                sh 'nohup ./start.sh &'
+                echo ' Starting....'
+            }
+        }
+  //      stage('BDD') {
+    //        steps {
+      //          git url: 'https://github.com/alexandreponte2/testeBDDjavamac.git', branch: 'main'
+        //        sh './mvnw test'
+          //  }
+       // }
+        stage('K8s-DEV') {
+            steps {
+                git url: 'https://github.com/alexandreponte2/javapods.git', branch: 'main'
+                sh '/Users/alexandre.s.ponte/kubectl get nodes -o wide'
+                sh '/Users/alexandre.s.ponte/kubectl apply -f deployment-java-dev.yml'
+                sh '/Users/alexandre.s.ponte/kubectl apply -f nodeport-svc-java-dev.yml'
+            }
+        }
+        stage('K8s-QA') {
+            steps {
+                git url: 'https://github.com/alexandreponte2/javapods.git', branch: 'main'
+                sh '/Users/alexandre.s.ponte/kubectl get nodes -o wide'
+                sh '/Users/alexandre.s.ponte/kubectl apply -f deployment-java-qa.yml'
+                sh '/Users/alexandre.s.ponte/kubectl apply -f nodeport-svc-java-qa.yml'
+            }
+        }
+        stage('K8s-PROD') {
+            steps {
+                git url: 'https://github.com/alexandreponte2/javapods.git', branch: 'main'
+                sh '/Users/alexandre.s.ponte/kubectl get nodes -o wide'
+                sh '/Users/alexandre.s.ponte/kubectl apply -f deployment-java-prod.yml'
+                sh '/Users/alexandre.s.ponte/kubectl apply -f nodeport-svc-java-prod.yml'
+            }
+        }
+    }
+}

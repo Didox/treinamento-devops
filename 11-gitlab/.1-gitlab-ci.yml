@@ -1,0 +1,6 @@
+job:
+  script:
+  - echo "E ai alunos da concrete"
+
+# validar syntaxe
+# https://gitlab.com/Didox/ci-cd-java-app-treinamento/-/ci/lint

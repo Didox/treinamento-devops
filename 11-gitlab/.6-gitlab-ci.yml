@@ -1,0 +1,20 @@
+# image: openjdk
+image: docker:stable
+
+# verifica se temos ao docker
+services:
+- docker:dind
+
+before_script:
+- docker info
+
+build:
+  stage: build
+  script:
+  - ./mvnw package
+  - docker build -t didox/validador-cpf-java-turma-devops -f Dockerfile .
+  - docker login
+  - docker tag didox/validador-cpf-java-turma-devops hub.docker.com/r/didox/validador-cpf-java-turma-devops
+  - docker push didox/validador-cpf-java-turma-devops
+
+# agora tenho o docker mais não o java
