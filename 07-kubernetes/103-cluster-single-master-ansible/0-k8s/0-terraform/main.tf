@@ -27,7 +27,7 @@ resource "aws_instance" "workers" {
     Name = "maquina-cluster-kubernetes-${count.index}"
   }
   vpc_security_group_ids = ["${aws_security_group.acessos_workers.id}"]
-  count         = 3
+  count         = 2
 }
 
 

@@ -16,3 +16,9 @@ baixar o csv e colocar as informações da conta no configure do aws cli
 comando:
 aws configure
 
+
+## multiplos terminais
+Iterm
+tilix
+https://gnunn1.github.io/tilix-web/
+

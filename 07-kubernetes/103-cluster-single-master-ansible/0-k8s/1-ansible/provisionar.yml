@@ -1,5 +1,5 @@
 # ### dar nome para o master
-# ssh -i ~/projetos/devops/id_rsa_itau_treinamento ubuntu@ec2-3-92-233-60.compute-1.amazonaws.com
+# ssh -i ~/projetos/devops/id_rsa_itau_treinamento ubuntu@ec2-54-162-34-26.compute-1.amazonaws.com
 
 # sudo su -
 # hostname k8s-master 
@@ -9,6 +9,22 @@
 # source <(kubectl completion bash) # para deixar o kubeclt com auto complete
 
 # kubeadm init --apiserver-advertise-address $(hostname -i | awk '{print $1;exit}')
+
+# weave = pod network, para comunicação entre os clusters
+# kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+# kubectl get pod -n kube-system -w
+
+
+# sudo su -
+# hostname k8s-worker-1 
+# echo "k8s-worker-1" > /etc/hostname
+# bash
+
+# sudo su -
+# hostname k8s-worker-2 
+# echo "k8s-worker-2" > /etc/hostname
+# bash
+
 
 # caso trave com erro de timeout, olhar o security group do haproxy
 # systemctl status kubelet | less # verifica se o serviço está de pé
@@ -33,12 +49,9 @@
 
 # Then you can join any number of worker nodes by running the following on each as root:
 
-# kubeadm join 172.31.86.233:6443 --token yohexd.p2ubhuh8jfyvcqvq --discovery-token-ca-cert-hash sha256:a4e426bbc834338bdb62bebd885caa29bb4a206c4aac4494b2aee0ad4b4f649c 
+# kubeadm join 172.31.85.136:6443 --token lnw6kq.09gpkirwxw8l3gu0 --discovery-token-ca-cert-hash sha256:f12f42b3c0a598fba9765fa4c8d211f0f14c30dd236740cac25a43785326fa78 
 ####################################################
 
-
-# kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
-# kubectl get pod -n kube-system -w
 
 # kubectl get nodes -o wide # lista os nos com seus respectivos IPs
 # kubectl get all --all-namespaces # llista todos os pods do kubernetes
