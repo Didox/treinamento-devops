@@ -1,5 +1,7 @@
 https://istio.io/latest/docs/setup/install/istioctl/
 
+# source <(kubectl completion bash) # para deixar o kubeclt com auto complete
+
 curl -L https://istio.io/downloadIstio | sh - 
 export PATH="$PATH:/root/istio-1.11.3/bin"
 
@@ -121,8 +123,50 @@ agora pode testar
 
 kubectl exec "$(kubectl get pod -l app=ratings -o jsonpath='{.items[0].metadata.name}')" -c ratings -- curl -sS productpage:9080/productpage | grep -o "<title>.*</title>" # esta a aplicação
 
-istioctl analyze # analisa métricas
+kubectl apply -f samples/bookinfo/networking/bookinfo-gateway.yaml # para ver a aplicação de fora o cluster aplicar o ingress controller
 
+kubectl get gateway # para ver o mesmo criado
+kubectl describe gateway bookinfo-gateway # para ver as especificações
+
+vim samples/bookinfo/networking/bookinfo-gateway.yaml # para analsar as rotas da aplicação
+
+kubectl get svc -n istio-system # para ver o ingress gateway
+<!-- 
+istio-ingressgateway   LoadBalancer   10.97.189.252   <pending>     15021:31646/TCP,80:31350/TCP,443:32417/TCP,31400:31379/TCP,15443:31287/TCP 
+
+vamos utilizar o da porta 80
+15021:31646/TCP,80:31350/
+
+ou seja a porta 31350 pois não estamos configurados no EKS
+
+ou seja acessar:
+http://54.162.34.26:31350/productpage # não se esqueça de habilitar a porta 31350 tcp no security group do cluster
+IPv4	Custom TCP	TCP	31350	0.0.0.0/0
+ -->
+
+<!-- Agora analizar as méricas com kiali -->
+kubectl get svc -n istio-system | grep kiali # aqui podemos criar um nodeport para expor ou rodar o comando abaixo
+kubectl port-forward svc/kiali 20001:20001 -n istio-system --address 0.0.0.0 # para expor para qualqur IP
+<!-- 
+Liberar a porta na AWS e acessar
+http://54.162.34.26:20001 # se tiver senha, a padrão é admin/admin
+ -->
+
+<!-- Agora analizar as méricas com grafana -->
+kubectl get svc -n istio-system | grep grafana # aqui podemos criar um nodeport para expor ou rodar o comando abaixo
+kubectl port-forward svc/grafana 3000:3000 -n istio-system --address 0.0.0.0 # para expor para qualqur IP
+<!-- 
+Liberar a porta na AWS e acessar
+http://54.162.34.26:3000 # se tiver senha, a padrão é admin/admin
+ -->
+
+<!-- Agora analizar as méricas com prometheus -->
+kubectl get svc -n istio-system | grep prometheus # aqui podemos criar um nodeport para expor ou rodar o comando abaixo
+kubectl port-forward svc/prometheus 9090:9090 -n istio-system --address 0.0.0.0 # para expor para qualqur IP
+<!-- 
+Liberar a porta na AWS e acessar
+http://54.162.34.26:9090 # se tiver senha, a padrão é admin/admin
+ -->
 
 
 

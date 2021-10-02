@@ -27,7 +27,7 @@ resource "aws_instance" "workers" {
     Name = "maquina-cluster-kubernetes-${count.index}"
   }
   vpc_security_group_ids = ["${aws_security_group.acessos_workers.id}"]
-  count         = 2
+  count                  = 2
 }
 
 
@@ -43,9 +43,9 @@ resource "aws_security_group" "acessos_master" {
       protocol         = "tcp"
       cidr_blocks      = ["${chomp(data.http.myip.body)}/32"]
       ipv6_cidr_blocks = ["::/0"]
-      prefix_list_ids = null,
-      security_groups: null,
-      self: null
+      prefix_list_ids  = null,
+      security_groups : null,
+      self : null
     },
     {
       cidr_blocks      = []
@@ -54,11 +54,63 @@ resource "aws_security_group" "acessos_master" {
       ipv6_cidr_blocks = []
       prefix_list_ids  = []
       protocol         = "-1"
-      security_groups  = [
+      security_groups = [
         "${aws_security_group.acessos_workers.id}",
       ]
+      self    = false
+      to_port = 0
+    },
+    {
+      cidr_blocks      = [
+        "0.0.0.0/0",
+      ]
+      description      = ""
+      from_port        = 20001
+      ipv6_cidr_blocks = []
+      prefix_list_ids  = []
+      protocol         = "tcp"
+      security_groups  = []
       self             = false
-      to_port          = 0
+      to_port          = 20001
+    },
+    {
+      cidr_blocks      = [
+        "0.0.0.0/0",
+      ]
+      description      = ""
+      from_port        = 3000
+      ipv6_cidr_blocks = []
+      prefix_list_ids  = []
+      protocol         = "tcp"
+      security_groups  = []
+      self             = false
+      to_port          = 3000
+    },
+    {
+      cidr_blocks      = [
+        "0.0.0.0/0",
+      ]
+      description      = ""
+      from_port        = 31350
+      ipv6_cidr_blocks = []
+      prefix_list_ids  = []
+      protocol         = "tcp"
+      security_groups  = []
+      self             = false
+      to_port          = 31350
+    },
+    {
+      cidr_blocks      = [
+        "0.0.0.0/0",
+      ]
+      description      = ""
+      from_port        = 9090
+      ipv6_cidr_blocks = []
+      prefix_list_ids  = []
+      protocol         = "tcp"
+      security_groups  = []
+      self             = false
+      to_port          = 9090
     },
   ]
 
@@ -69,10 +121,10 @@ resource "aws_security_group" "acessos_master" {
       protocol         = "-1"
       cidr_blocks      = ["0.0.0.0/0"]
       ipv6_cidr_blocks = ["::/0"],
-      prefix_list_ids = null,
-      security_groups: null,
-      self: null,
-      description: "Libera dados da rede interna"
+      prefix_list_ids  = null,
+      security_groups : null,
+      self : null,
+      description : "Libera dados da rede interna"
     }
   ]
 
@@ -93,9 +145,22 @@ resource "aws_security_group" "acessos_workers" {
       protocol         = "tcp"
       cidr_blocks      = ["${chomp(data.http.myip.body)}/32"]
       ipv6_cidr_blocks = ["::/0"]
-      prefix_list_ids = null,
-      security_groups: null,
-      self: null
+      prefix_list_ids  = null,
+      security_groups : null,
+      self : null
+    },
+    {
+      cidr_blocks      = []
+      description      = ""
+      from_port        = 0
+      ipv6_cidr_blocks = []
+      prefix_list_ids  = []
+      protocol         = "-1"
+      security_groups  = [
+        "sg-03d14421ddaf2f77e",
+      ]
+      self             = false
+      to_port          = 0
     },
   ]
 
@@ -106,10 +171,10 @@ resource "aws_security_group" "acessos_workers" {
       protocol         = "-1"
       cidr_blocks      = ["0.0.0.0/0"]
       ipv6_cidr_blocks = ["::/0"],
-      prefix_list_ids = null,
-      security_groups: null,
-      self: null,
-      description: "Libera dados da rede interna"
+      prefix_list_ids  = null,
+      security_groups : null,
+      self : null,
+      description : "Libera dados da rede interna"
     }
   ]
 
@@ -122,7 +187,10 @@ resource "aws_security_group" "acessos_workers" {
 # terraform refresh para mostrar o ssh
 output "master" {
   value = [
-    "master - ${aws_instance.master.private_ip} - ssh -i ~/projetos/devops/id_rsa_itau_treinamento ubuntu@${aws_instance.master.public_dns}"
+    "master",
+    "private: ${aws_instance.master.private_ip}",
+    "public: ${aws_instance.master.public_ip}",
+    "ssh -i ~/projetos/devops/id_rsa_itau_treinamento ubuntu@${aws_instance.master.public_dns}"
   ]
 }
 
@@ -130,6 +198,6 @@ output "master" {
 output "aws_instance_e_ssh" {
   value = [
     for key, item in aws_instance.workers :
-      "worker ${key+1} - ${item.private_ip} - ssh -i ~/projetos/devops/id_rsa_itau_treinamento ubuntu@${item.public_dns}"
+    "worker ${key + 1} - private - ${item.private_ip} - public - ${item.public_ip} - ssh -i ~/projetos/devops/id_rsa_itau_treinamento ubuntu@${item.public_dns}"
   ]
 }

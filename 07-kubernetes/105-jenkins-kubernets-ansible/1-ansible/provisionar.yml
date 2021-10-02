@@ -1,0 +1,35 @@
+- hosts: all
+  become: true
+
+  tasks:
+    - name: "Download pacote jenkins"
+      shell: wget -q -O - https://jenkins-ci.org/debian/jenkins-ci.org.key | sudo apt-key add -
+
+    - name: "Add pacote jenkins"
+      shell: sudo sh -c 'echo deb http://pkg.jenkins-ci.org/debian binary/ > /etc/apt/sources.list.d/jenkins.list'
+    
+    - name: "Update apt"
+      shell: "apt-get update"
+
+    - name: "Instala java"
+      shell: "apt install default-jdk -y"
+   
+    - name: "Instala jenkins"
+      shell: "apt-get install jenkins -y"
+
+    - name: Espera 30 segundos
+      wait_for: timeout=30
+
+    ## outra dorma reduzida de se fazer
+    # - shell: cat /var/lib/jenkins/secrets/initialAdminPassword
+    #   register: ps
+    # - debug: var=ps.stdout_lines
+
+    - shell: cat /var/lib/jenkins/secrets/initialAdminPassword
+      register: ps
+    - debug:
+        msg: "Segredo do jenkins: '{{ ps.stdout_lines }}' "
+        # msg: "Segredo do jenkins: '{{ ps.stderr_lines }}' " # quando quiser ver o erro
+    
+
+    
