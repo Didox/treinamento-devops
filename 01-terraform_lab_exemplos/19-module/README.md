@@ -1,4 +1,8 @@
+https://www.youtube.com/watch?v=WDOUmcnipxw
+
+
 *** Forma de agrupar dados criados no HCL isolando recursos por nome
+
 
 ```tf
 module "ec2_instance" {
