@@ -27,4 +27,5 @@ cd ../2-terraform-ami/
 ~/terraform/terraform init
 ~/terraform/terraform fmt
 ~/terraform/terraform apply -var="resource_id=${ID_MAQUINA/\",/}" -auto-approve 
+# ~/terraform/terraform apply -var="resource_id=${ID_MAQUINA/\",/} versao=0.0.2" -auto-approve 
 ~/terraform/terraform output
