@@ -22,3 +22,28 @@ Iterm
 tilix
 https://gnunn1.github.io/tilix-web/
 
+
+
+
+
+# # ver os processos pela porta
+# sudo lsof -iTCP -sTCP:LISTEN -P | grep :5001
+
+# # ver os processos do node
+# ps aux | grep node
+
+# # matar ao processo com número PID
+# kill -9 PID
+
+# sudo su -
+# mysql -u root
+
+# use treinamento_database;
+
+# alter table usuarios add column email varchar(150);
+# alter table usuarios add column descricao text;
+
+# update usuarios set email='danilo@gmail.com' where id=1;
+
+# danilo@gmail.com
+# danilo 

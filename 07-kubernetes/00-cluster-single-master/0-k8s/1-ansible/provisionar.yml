@@ -6,6 +6,8 @@
 # echo "k8s-master" > /etc/hostname
 # bash
 
+# ou hostnamectl set-hostname <nome>
+
 # source <(kubectl completion bash) # para deixar o kubeclt com auto complete
 
 # kubeadm init --apiserver-advertise-address $(hostname -i | awk '{print $1;exit}')
