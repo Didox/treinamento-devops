@@ -19,6 +19,8 @@ docker attach app-imersao-docker-nodejs
 
 # entra dentro do container
 docker exec -it app-imersao-docker-nodejs bash
+docker exec -it app-imersao-docker-nodejs /bin/sh
+docker exec -it app-imersao-docker-nodejs /bin/bash
 
 # roda comando dentro do container
 docker exec -it app-imersao-docker-nodejs ls -la

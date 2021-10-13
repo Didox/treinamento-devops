@@ -11,8 +11,8 @@ resource "aws_security_group" "acesso_mysql" {
       cidr_blocks      = ["0.0.0.0/0"]
       ipv6_cidr_blocks = ["::/0"]
       prefix_list_ids = null,
-      security_groups: null,
-      self: null
+      security_groups = null,
+      self            = null
     }
   ]
 
