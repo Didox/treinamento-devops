@@ -1,0 +1,47 @@
+- hosts: all
+
+  handlers:
+    - name: "restart nginx"
+      service:
+        name: nginx
+        state: restarted
+      become: yes
+
+  tasks:
+    - name: "Roda: sudo apt-get update"
+      become: yes
+      apt:
+        upgrade: yes
+        update_cache: yes
+        cache_valid_time: 86400 #Um dia
+
+    - name: "Instala pacotes"
+      apt:
+        name: "{{ item }}"
+        state: latest
+      become: yes # roda com sudo
+      with_items:
+        - nginx
+    
+    - name: "Copia o site em html"
+      copy:
+        src: "layout-aula-contrudelas"
+        dest: "/home/ubuntu/"
+      become: yes
+
+    - name: "Trocando nginx para ler html"
+      copy:
+        src: "nginx/default"
+        dest: "/etc/nginx/sites-available/default"
+      become: yes
+      notify:
+        - "restart nginx"
+
+# *** verifica se aplicação está de pé
+# sudo lsof -iTCP -sTCP:LISTEN -P | grep :5001
+
+# *** verifica log acesso
+# tail -f /var/log/nginx/access.log
+
+# *** verifica log error
+# tail -f /var/log/nginx/error.log
