@@ -1,0 +1,26 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    @model WebTddBdd.Models.Cliente;
+}
+
+<div class="text-center">
+    <h1 class="display-4">Valida CPF</h1>
+
+    @using (Html.BeginForm("ValidateCPF", "Home"))
+    {
+        <fieldset>
+            <legend>Formulário de Solicitação de  Orçamento</legend>
+            <ol>
+                <li>
+                    @Html.LabelFor(m => m.Nome)
+                    @Html.TextBoxFor(m => m.Nome)
+                </li>
+                <li>
+                    @Html.LabelFor(m => m.CPF)
+                    @Html.TextBoxFor(m => m.CPF)
+                </li>
+            </ol>
+            <input type="submit" value="Validar" />
+        </fieldset>
+    }
+</div>
