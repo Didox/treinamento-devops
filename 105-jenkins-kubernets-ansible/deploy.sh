@@ -22,10 +22,10 @@ echo $"Agora somente abrir a URL: http://$(~/terraform/terraform output | grep p
 ID_MAQUINA=$(~/terraform/terraform output | grep id | awk '{print $2;exit}')
 echo ${ID_MAQUINA/\",/}
 
-cd ../2-terraform-ami/
+# cd ../2-terraform-ami/
 
-~/terraform/terraform init
-~/terraform/terraform fmt
-~/terraform/terraform apply -var="resource_id=${ID_MAQUINA/\",/}" -auto-approve 
-# ~/terraform/terraform apply -var="resource_id=${ID_MAQUINA/\",/} versao=0.0.2" -auto-approve 
-~/terraform/terraform output
+# ~/terraform/terraform init
+# ~/terraform/terraform fmt
+# ~/terraform/terraform apply -var="resource_id=${ID_MAQUINA/\",/}" -auto-approve 
+# # ~/terraform/terraform apply -var="resource_id=${ID_MAQUINA/\",/} versao=0.0.2" -auto-approve 
+# ~/terraform/terraform output

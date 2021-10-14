@@ -3,17 +3,21 @@
 
   tasks:
     - name: "Download pacote jenkins"
-      shell: wget -q -O - https://jenkins-ci.org/debian/jenkins-ci.org.key | sudo apt-key add -
+      shell: wget -qO - https://pkg.jenkins.io/debian-stable/jenkins.io.key | apt-key add -
 
-    - name: "Add pacote jenkins"
-      shell: sudo sh -c 'echo deb http://pkg.jenkins-ci.org/debian binary/ > /etc/apt/sources.list.d/jenkins.list'
-    
     - name: "Update apt"
       shell: "apt-get update"
 
     - name: "Instala java"
       shell: "apt install default-jdk -y"
    
+    # https://www.jenkins.io/doc/book/installing/linux/
+    - name: "Add pacote jenkins"
+      shell: sudo sh -c 'echo deb http://pkg.jenkins-ci.org/debian binary/ > /etc/apt/sources.list.d/jenkins.list'
+    
+    - name: "Update apt"
+      shell: "apt-get update"
+
     - name: "Instala jenkins"
       shell: "apt-get install jenkins -y"
 
