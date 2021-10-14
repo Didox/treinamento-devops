@@ -12,7 +12,7 @@ echo "Aguardando criação de maquinas ..."
 sleep 30 # 30 segundos
 
 cd ../1-ansible
-ansible-playbook -i hosts provisionar.yml -u ubuntu --private-key ~/projetos/devops/id_rsa_itau_treinamento
+ansible-playbook -i hosts provisionar.yml -u ubuntu --private-key ~/Desktop/devops/treinamentoItau
 
 cd ../0-terraform
 ~/terraform/terraform output
