@@ -19,7 +19,7 @@ data "aws_ami" "ubuntu" {
 resource "aws_instance" "maquina_master" {
   ami           = "${data.aws_ami.ubuntu.id}"
   instance_type = "t2.medium"
-  key_name      = "Itau_treinamento"
+  key_name      = "treinamento-turma1_itau"
   tags = {
     Name = "maquina-cluster-kubernetes-master"
   }
@@ -32,7 +32,7 @@ resource "aws_instance" "maquina_master" {
 resource "aws_instance" "workers" {
   ami           = "${data.aws_ami.ubuntu.id}"
   instance_type = "t2.micro"
-  key_name      = "Itau_treinamento"
+  key_name      = "treinamento-turma1_itau"
   tags = {
     Name = "maquina-cluster-kubernetes-${count.index}"
   }

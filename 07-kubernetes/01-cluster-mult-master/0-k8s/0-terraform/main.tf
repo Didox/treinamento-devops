@@ -9,7 +9,7 @@ data "http" "myip" {
 resource "aws_instance" "k8s_proxy" {
   ami           = "ami-09e67e426f25ce0d7"
   instance_type = "t2.micro"
-  key_name      = "Itau_treinamento"
+  key_name      = "treinamento-turma1_itau"
   tags = {
     Name = "k8s-haproxy"
   }
@@ -19,7 +19,7 @@ resource "aws_instance" "k8s_proxy" {
 resource "aws_instance" "k8s_masters" {
   ami           = "ami-09e67e426f25ce0d7"
   instance_type = "t2.medium"
-  key_name      = "Itau_treinamento"
+  key_name      = "treinamento-turma1_itau"
   count         = 3
   tags = {
     Name = "k8s-master-${count.index}"
@@ -33,7 +33,7 @@ resource "aws_instance" "k8s_masters" {
 resource "aws_instance" "k8s_workers" {
   ami           = "ami-09e67e426f25ce0d7"
   instance_type = "t2.micro"
-  key_name      = "Itau_treinamento"
+  key_name      = "treinamento-turma1_itau"
   count         = 3
   tags = {
     Name = "k8s_workers-${count.index}"

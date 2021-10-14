@@ -9,7 +9,7 @@ data "http" "myip" {
 resource "aws_instance" "master" {
   ami           = "ami-09e67e426f25ce0d7"
   instance_type = "t2.large"
-  key_name      = "Itau_treinamento"
+  key_name      = "treinamento-turma1_itau"
   tags = {
     Name = "maquina-cluster-kubernetes-master"
   }
@@ -22,7 +22,7 @@ resource "aws_instance" "master" {
 resource "aws_instance" "workers" {
   ami           = "ami-09e67e426f25ce0d7"
   instance_type = "t2.medium"
-  key_name      = "Itau_treinamento"
+  key_name      = "treinamento-turma1_itau"
   tags = {
     Name = "maquina-cluster-kubernetes-${count.index}"
   }

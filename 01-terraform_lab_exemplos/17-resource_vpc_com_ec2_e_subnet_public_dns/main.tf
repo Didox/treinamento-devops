@@ -5,7 +5,7 @@ provider "aws" {
 resource "aws_instance" "web" {
   ami                     = data.aws_ami.ubuntu.id
   instance_type           = "t3.micro"
-  key_name                = "Itau_treinamento" # key chave publica cadastrada na AWS 
+  key_name                = "treinamento-turma1_itau" # key chave publica cadastrada na AWS 
   subnet_id               =  aws_subnet.my_subnet.id # vincula a subnet direto e gera o IP automático
   private_ip              = "172.17.0.100"
   vpc_security_group_ids  = [
