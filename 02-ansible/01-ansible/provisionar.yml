@@ -49,7 +49,14 @@
         remote_src: yes
       become: yes
 
-    - shell: ls -la /var/www
+    - name: "Copia arquivo WP"
+      copy:
+        src: '/var/www/wordpress/wp-config-sample.php'
+        dest: '/var/www/wordpress/wp-config.php'
+        remote_src: yes
+      become: yes
+
+    - shell: ls -la /var/www/wordpress
       register: ps
     - debug:
         msg: " '{{ ps.stdout_lines }}' "
