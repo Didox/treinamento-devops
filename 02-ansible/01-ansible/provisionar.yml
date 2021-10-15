@@ -1,3 +1,28 @@
 - hosts: all
   tasks:
-    - shell: "echo 'escrevendo algo no servidor' >> teste.txt"
+    # com estado
+    # - name: "Criando um arquivo a toa no servidor"
+    #   copy: 
+    #     content: "teste danilo" 
+    #     dest: "/home/ubuntu/mais_um.txt"
+    #     backup: yes
+    #     owner: ubuntu
+    #     group: ubuntu
+    #     mode: 777
+
+    # sem estado
+    # - name: "Criando um arquivo a toa no servidor"
+    #   shell: "echo 'escrevendo algo no servidor' >> teste.txt"
+  
+    - name: "Roda: sudo apt update"
+      become: yes
+      apt:
+        upgrade: yes
+        update_cache: yes
+        cache_valid_time: 86400 #Um dia
+    
+    - name: Instalando apache com sudo no servidor
+      apt:
+        name: apache2
+        state: latest
+      become: yes # permite rodar como sudo

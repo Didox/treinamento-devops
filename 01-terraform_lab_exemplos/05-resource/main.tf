@@ -78,7 +78,6 @@ resource "aws_instance" "web" {
   instance_type = "t2.micro"
   root_block_device {
     encrypted = true
-    # kms_key_id = "arn:aws:kms:sa-east-1:534566538491:key/a8a4c8b6-f519-42cb-b58a-b8e9112bf0e5" # na aws pegar a chave no "key management services", copiar o arm e colar nesta linha
     volume_size = 8
   }
   tags = {
