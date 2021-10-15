@@ -47,7 +47,6 @@
         src: "/tmp/wordpress.tar.gz"
         dest: "/var/www"
         remote_src: yes
-      become: yes
 
     - name: "Copia arquivo WP"
       copy:
@@ -56,7 +55,18 @@
         remote_src: yes
       become: yes
 
-    - shell: ls -la /var/www/wordpress
+    - name: "Configura o wp-config com as senhas"
+      replace:
+        path: '/var/www/wordpress/wp-config.php'
+        regexp: "{{ item.regex }}"
+        replace: "{{ item.value }}"
+      with_items:
+        - { regex: 'nome_do_banco_de_dados_aqui', value: 'banco_wordpress' }
+        - { regex: 'nome_de_usuario_aqui', value: 'root' }
+        - { regex: 'senha_aqui', value: 'root' }
+      become: yes
+
+    - shell: cat /var/www/wordpress/wp-config.php
       register: ps
     - debug:
         msg: " '{{ ps.stdout_lines }}' "
