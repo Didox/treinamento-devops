@@ -1,4 +1,10 @@
 - hosts: all
+  handlers:
+    - name: "restart apache"
+      service:
+        name: apache2
+        state: restarted
+      become: yes
   tasks:
     #### com estado
     # - name: "Criando um arquivo a toa no servidor"
@@ -65,6 +71,14 @@
         - { regex: 'nome_de_usuario_aqui', value: 'root' }
         - { regex: 'senha_aqui', value: 'root' }
       become: yes
+
+    - name: "Trocando pasta do render do apache para o wordpress"
+      copy:
+        src: "apache/000-default.conf"
+        dest: "/etc/apache2/sites-available/000-default.conf"
+      become: yes
+      notify:
+        - "restart apache"
 
     - shell: cat /var/www/wordpress/wp-config.php
       register: ps
