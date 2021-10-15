@@ -1,6 +1,6 @@
 - hosts: all
   tasks:
-    # com estado
+    #### com estado
     # - name: "Criando um arquivo a toa no servidor"
     #   copy: 
     #     content: "teste danilo" 
@@ -10,7 +10,7 @@
     #     group: ubuntu
     #     mode: 777
 
-    # sem estado
+    #### sem estado
     # - name: "Criando um arquivo a toa no servidor"
     #   shell: "echo 'escrevendo algo no servidor' >> teste.txt"
   
@@ -21,8 +21,18 @@
         update_cache: yes
         cache_valid_time: 86400 #Um dia
     
-    - name: Instalando apache com sudo no servidor
+    - name: "Instala pacotes em lote"
       apt:
-        name: apache2
+        name: "{{ item }}"
         state: latest
-      become: yes # permite rodar como sudo
+      become: yes # roda com sudo
+      with_items:
+        - php7.2
+        - apache2
+        - libapache2-mod-php7.2
+        - php-mysql
+        - php-curl
+        - mysql-server
+        - python3-pycurl
+        - python3-mysqldb
+        - unzip
