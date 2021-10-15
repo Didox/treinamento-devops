@@ -36,3 +36,9 @@
         - python3-pycurl
         - python3-mysqldb
         - unzip
+
+    - shell: mysql --version
+      register: ps
+    - debug:
+        msg: "Verifica instalação: '{{ ps.stdout_lines }}' "
+    
