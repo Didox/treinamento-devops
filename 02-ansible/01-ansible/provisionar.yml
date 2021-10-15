@@ -72,6 +72,16 @@
         - { regex: 'senha_aqui', value: 'root' }
       become: yes
 
+    #### Altera direto no apache
+    # - name: "altera apache"
+    #   replace:
+    #     path: '/etc/apache2/sites-available/000-default.conf'
+    #     regexp: "{{ item.regex }}"
+    #     replace: "{{ item.value }}"
+    #   with_items:
+    #     - { regex: '/var/www/html', value: '/var/www/wordpress' }
+    #   become: yes
+
     - name: "Trocando pasta do render do apache para o wordpress"
       copy:
         src: "apache/000-default.conf"
@@ -80,9 +90,30 @@
       notify:
         - "restart apache"
 
-    - shell: cat /var/www/wordpress/wp-config.php
-      register: ps
-    - debug:
-        msg: " '{{ ps.stdout_lines }}' "
+    - name: "Lavanta serviço do mysql"
+      become: yes
+      service:
+        name: mysql
+        state: started
+
+    - name: "Criando senha root mysql"
+      become: yes
+      mysql_user:
+        name: root
+        host: localhost
+        password: root
+        priv: "*.*:ALL,GRANT"
+
+    - name: "Cria o banco de dados MySQL"
+      mysql_db:
+        name: banco_wordpress
+        login_user: root
+        login_password: root
+        state: present
+
+    # - shell: cat /var/www/wordpress/wp-config.php
+    #   register: ps
+    # - debug:
+    #     msg: " '{{ ps.stdout_lines }}' "
 
     
