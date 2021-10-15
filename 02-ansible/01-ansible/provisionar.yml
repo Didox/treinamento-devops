@@ -37,8 +37,14 @@
         - python3-mysqldb
         - unzip
 
-    - shell: mysql --version
+    - name: "Fazendo downlaod do wordpress"
+      get_url:
+        url: "https://br.wordpress.org/latest-pt_BR.tar.gz"
+        dest: "/tmp/wordpress.tar.gz"
+
+    - shell: ls -la /tmp/wordpress.tar.gz
       register: ps
     - debug:
-        msg: "Verifica instalação: '{{ ps.stdout_lines }}' "
+        msg: "Verifica se fez o download: '{{ ps.stdout_lines }}' "
+
     
