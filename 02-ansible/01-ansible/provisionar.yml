@@ -41,10 +41,17 @@
       get_url:
         url: "https://br.wordpress.org/latest-pt_BR.tar.gz"
         dest: "/tmp/wordpress.tar.gz"
+    
+    - name: "Fazendo descompactação dos arquivos do WP"
+      unarchive:
+        src: "/tmp/wordpress.tar.gz"
+        dest: "/var/www"
+        remote_src: yes
+      become: yes
 
-    - shell: ls -la /tmp/wordpress.tar.gz
+    - shell: ls -la /var/www
       register: ps
     - debug:
-        msg: "Verifica se fez o download: '{{ ps.stdout_lines }}' "
+        msg: " '{{ ps.stdout_lines }}' "
 
     
