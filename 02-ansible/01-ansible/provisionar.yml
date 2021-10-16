@@ -96,20 +96,20 @@
         name: mysql
         state: started
 
-    - name: "Criando senha root mysql"
-      become: yes
-      mysql_user:
-        name: root
-        host: localhost
-        password: root
-        priv: "*.*:ALL,GRANT"
+    # - name: "Criando senha root mysql"
+    #   become: yes
+    #   mysql_user:
+    #     name: root
+    #     host: localhost
+    #     password: root
+    #     priv: "*.*:ALL,GRANT"
 
-    - name: "Cria o banco de dados MySQL"
-      mysql_db:
-        name: banco_wordpress
-        login_user: root
-        login_password: root
-        state: present
+    # - name: "Cria o banco de dados MySQL"
+    #   mysql_db:
+    #     name: banco_wordpress
+    #     login_user: root
+    #     login_password: root
+    #     state: present
 
     # - shell: cat /var/www/wordpress/wp-config.php
     #   register: ps
