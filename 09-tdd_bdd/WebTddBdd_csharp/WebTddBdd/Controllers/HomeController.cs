@@ -21,21 +21,21 @@ namespace WebTddBdd.Controllers
         [HttpPost]
         public IActionResult ValidateCPF([FromForm] Cliente cliente)
         {
-            var listaDynamic = new List<dynamic>();
+            // var listaDynamic = new List<dynamic>();
 
-            listaDynamic.Add("string")
-            listaDynamic.Add("string")
-            listaDynamic.Add("string")
-            listaDynamic.Add("string")
+            // listaDynamic.Add("string")
+            // listaDynamic.Add("string")
+            // listaDynamic.Add("string")
+            // listaDynamic.Add("string")
 
-            var lista = new List<Cliente>();
+            // var lista = new List<Cliente>();
 
-            lista.Add(new Cliente() {
-                Id = 0,
-                Nome = "Willian"
-            })
-            lista[0].Nome
-            lista[0].Id
+            // lista.Add(new Cliente() {
+            //     Id = 0,
+            //     Nome = "Willian"
+            // })
+            // lista[0].Nome
+            // lista[0].Id
 
             ViewBag.isCPFValid = cliente.ValidaCpf();
             ViewBag.nome = cliente.Nome;
