@@ -1,0 +1,1 @@
+USER=root PASSWORD=root DATABASE_URL='mysql://localhost:3306/SpringWebYoutubeTest?useTimezone=true&serverTimezone=UTC'  ./mvnw package
