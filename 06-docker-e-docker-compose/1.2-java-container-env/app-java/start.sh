@@ -1,6 +1,6 @@
-export USER='bad3b77b0a262d'
-export PASSWORD='040e170e'
-export DATABASE_URL='mysql://um_host_de_base.com/heroku_7f94424f56f1693?reconnect=true'
+export USER='root' 
+export PASSWORD='root' 
+export DATABASE_URL='mysql://localhost:3306/SpringWebYoutubeTest?useTimezone=true&serverTimezone=UTC'
 
 # ./mvnw spring-boot:run
 
