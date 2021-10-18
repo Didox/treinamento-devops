@@ -3,8 +3,8 @@ services:
   sistema_concrete_nginx:
     container_name: sistema_concrete_nginx_container
     build:
-      dockerfile: /Users/danilo/Desktop/devops/docker/nginx/Dockerfile
-      context: /Users/danilo/Desktop/devops/docker/nginx/
+      dockerfile: nginx/Dockerfile
+      context: nginx/
     image: nginx_didox
     ports: 
       - "3000:80"
