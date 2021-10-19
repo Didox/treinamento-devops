@@ -27,7 +27,7 @@ resource "aws_instance" "workers" {
     Name = "k8s-node-${count.index}"
   }
   vpc_security_group_ids = [aws_security_group.acessos_workers_single_master.id]
-  count         = 2
+  count         = 3
 }
 
 resource "aws_security_group" "acessos_master_single_master" {
