@@ -7,7 +7,11 @@ metadata:
 spec:
   type: NodePort
   ports:
-    - port: 3000
+    - port: 80
       nodePort: 30001 # 30000 ~ 32767
   selector:
-    app: lable-pod-nodejs
+    app: didox-nginx
+
+# kubectl apply -f node-port-nginx.yml
+# kubectl describe -f node-port-nginx.yml
+# kubectl delete -f node-port-nginx.yml

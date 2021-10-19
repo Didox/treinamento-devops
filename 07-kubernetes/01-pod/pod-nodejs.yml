@@ -2,6 +2,8 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: didox-nginx
+  labels:
+    app: didox-nginx
 spec:
   containers:
     - name: container-pod-nginx
@@ -11,3 +13,4 @@ spec:
 
 # kubectl apply -f pod-nginx.yml
 # kubectl describe -f pod-nginx.yml
+# kubectl delete -f pod-nginx.yml

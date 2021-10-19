@@ -1,9 +1,19 @@
 # ### dar nome para o master
-# ssh -i ~/projetos/devops/id_rsa_itau_treinamento ubuntu@ec2-54-226-188-130.compute-1.amazonaws.com
+# ssh -i ~/Desktop/devops/treinamentoItau ubuntu@ec2-54-226-188-130.compute-1.amazonaws.com
 
 # sudo su -
 # hostname k8s-master 
 # echo "k8s-master" > /etc/hostname
+# bash
+
+# sudo su -
+# hostname k8s-node-0
+# echo "k8s-node-0" > /etc/hostname
+# bash
+
+# sudo su -
+# hostname k8s-node-1
+# echo "k8s-node-1" > /etc/hostname
 # bash
 
 # ou hostnamectl set-hostname <nome>
@@ -172,10 +182,10 @@
 
 
 
-# ansible-playbook -i hosts provisionar.yml -u ubuntu --private-key ~/projetos/devops/id_rsa_itau_treinamento
-# ssh -i ~/projetos/devops/id_rsa_itau_treinamento ubuntu@ec2-54-174-235-197.compute-1.amazonaws.com
-# ssh -i ~/projetos/devops/id_rsa_itau_treinamento ubuntu@ec2-50-16-162-135.compute-1.amazonaws.com
-# ssh -i ~/projetos/devops/id_rsa_itau_treinamento ubuntu@ec2-54-173-115-181.compute-1.amazonaws.com
+# ansible-playbook -i hosts provisionar.yml -u ubuntu --private-key ~/Desktop/devops/treinamentoItau
+# ssh -i ~/Desktop/devops/treinamentoItau ubuntu@ec2-54-174-235-197.compute-1.amazonaws.com
+# ssh -i ~/Desktop/devops/treinamentoItau ubuntu@ec2-50-16-162-135.compute-1.amazonaws.com
+# ssh -i ~/Desktop/devops/treinamentoItau ubuntu@ec2-54-173-115-181.compute-1.amazonaws.com
 
 # *** verifica log error
 # vim /etc/haproxy/haproxy.cfg

@@ -190,7 +190,7 @@ output "master" {
     "master",
     "private: ${aws_instance.master.private_ip}",
     "public: ${aws_instance.master.public_ip}",
-    "ssh -i ~/projetos/devops/id_rsa_itau_treinamento ubuntu@${aws_instance.master.public_dns}"
+    "ssh -i ~/Desktop/devops/treinamentoItau ubuntu@${aws_instance.master.public_dns}"
   ]
 }
 
@@ -198,6 +198,6 @@ output "master" {
 output "aws_instance_e_ssh" {
   value = [
     for key, item in aws_instance.workers :
-    "worker ${key + 1} - private - ${item.private_ip} - public - ${item.public_ip} - ssh -i ~/projetos/devops/id_rsa_itau_treinamento ubuntu@${item.public_dns}"
+    "worker ${key + 1} - private - ${item.private_ip} - public - ${item.public_ip} - ssh -i ~/Desktop/devops/treinamentoItau ubuntu@${item.public_dns}"
   ]
 }

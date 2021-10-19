@@ -1,1 +1,1 @@
-docker build -t didox/crud-java-login -f Dockerfile .
+docker build -t didox/crud-java-login:v0.0.1 -f Dockerfile .
