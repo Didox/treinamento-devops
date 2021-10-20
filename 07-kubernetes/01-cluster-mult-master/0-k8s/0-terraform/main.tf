@@ -13,7 +13,7 @@ resource "aws_instance" "k8s_proxy" {
   tags = {
     Name = "k8s-haproxy"
   }
-  vpc_security_group_ids = ["${aws_security_group.acessos.id}"]
+  vpc_security_group_ids = [aws_security_group.acessos.id]
 }
 
 resource "aws_instance" "k8s_masters" {
@@ -132,7 +132,18 @@ resource "aws_security_group" "acessos" {
       ]
       self             = false
       to_port          = 0
-    }
+    },
+    {
+      cidr_blocks      = []
+      description      = ""
+      from_port        = 0
+      ipv6_cidr_blocks = []
+      prefix_list_ids  = []
+      protocol         = "tcp"
+      security_groups  = []
+      self             = true
+      to_port          = 65535
+    },
   ]
 
   egress = [
