@@ -4,7 +4,6 @@ metadata:
   name: mysql-configmap
 data:
   USER: root
-  PASSWORD: password_mysql
   DATABASE_URL: mysql://mysql:3306/SpringWebYoutubeTest?useTimezone=true&serverTimezone=UTC
   # DATABASE_URL: mysql://10.111.41.255:3306/SpringWebYoutubeTest?useTimezone=true&serverTimezone=UTC # caso esteja vinculando um clusterIP na mão
         
