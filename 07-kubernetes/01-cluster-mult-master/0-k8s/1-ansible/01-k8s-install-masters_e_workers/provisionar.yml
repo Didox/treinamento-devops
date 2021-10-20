@@ -1,3 +1,40 @@
+- hosts: all
+  - ec2-k8s-proxy
+  handlers:
+    - name: "restart haproxy"
+      service:
+        name: haproxy
+        state: restarted
+      become: yes
+
+  tasks:
+    - name: "Configura hostname haproxy"
+      shell: hostname k8s-proxy && echo "k8s-proxy" > /etc/hostname
+      become: yes
+    
+    - name: "Roda: sudo apt-get update"
+      become: yes
+      apt:
+        upgrade: yes
+        update_cache: yes
+        cache_valid_time: 86400 #Um dia
+
+    - name: "Instala pacotes"
+      apt:
+        name: "{{ item }}"
+        state: latest
+      become: yes # roda com sudo
+      with_items:
+        - haproxy
+
+    - name: "Trocando haproxy"
+      copy:
+        src: "haproxy/haproxy.cfg"
+        dest: "/etc/haproxy/haproxy.cfg"
+      become: yes
+      notify:
+        - "restart haproxy"
+# ---
 - hosts:
   - ec2-k8s-m1
   tasks:
@@ -41,8 +78,12 @@
       become: yes
 # ---
 - hosts:
-  - ec2-k8s-m
-  - ec2-k8s-w
+  - ec2-k8s-m1
+  - ec2-k8s-m3
+  - ec2-k8s-m2
+  - ec2-k8s-w1
+  - ec2-k8s-w2
+  - ec2-k8s-w3
 
   tasks:
     - name: install packages required by docker
@@ -152,4 +193,8 @@
 # # tail -f /var/log/haproxy.log
 
 # # tail -f /var/log/nginx/error.log
+
+# ansible-playbook -i hosts provisionar.yml -u ubuntu --private-key ~/Desktop/devops/treinamentoItau
+# ssh -i ~/Desktop/devops/treinamentoItau ubuntu@ec2-54-152-41-46.compute-1.amazonaws.com
+# systemctl status haproxy | less
 
