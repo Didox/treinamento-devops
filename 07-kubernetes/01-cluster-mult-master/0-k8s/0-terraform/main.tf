@@ -24,7 +24,7 @@ resource "aws_instance" "k8s_masters" {
   tags = {
     Name = "k8s-master-${count.index}"
   }
-  vpc_security_group_ids = ["${aws_security_group.acessos_master.id}"]
+  vpc_security_group_ids = [aws_security_group.acessos_master.id]
   depends_on = [
     aws_instance.k8s_workers,
   ]
@@ -38,7 +38,7 @@ resource "aws_instance" "k8s_workers" {
   tags = {
     Name = "k8s_workers-${count.index}"
   }
-  vpc_security_group_ids = ["${aws_security_group.acessos.id}"]
+  vpc_security_group_ids = [aws_security_group.acessos.id]
 }
 
 
