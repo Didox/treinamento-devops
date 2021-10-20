@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-javadb
+  labels:
+    app: pod-javadb
+spec:
+  containers:
+    - name: container-pod-javadb
+      image: didox/crud-java-login:v0.0.1
+      ports:
+        - containerPort: 8080
