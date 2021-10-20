@@ -32,6 +32,11 @@ kubectl delete pods --all
 # apaga todos os servicos
 kubectl delete services --all 
 
+# valida yml
+npm install -g yaml-lint
+sudo apt install npm
+npx yaml-lint yamllint pod.yml
+
 
 
 
