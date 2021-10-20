@@ -26,33 +26,36 @@
 # kubectl get nodes -o wide
 
 ####################################################
-# Your Kubernetes control-plane has initialized successfully!
+Your Kubernetes control-plane has initialized successfully!
 
-# To start using your cluster, you need to run the following as a regular user:
+To start using your cluster, you need to run the following as a regular user:
 
-#   mkdir -p $HOME/.kube
-#   sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-#   sudo chown $(id -u):$(id -g) $HOME/.kube/config
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
-# Alternatively, if you are the root user, you can run:
+Alternatively, if you are the root user, you can run:
 
-#   export KUBECONFIG=/etc/kubernetes/admin.conf
+  export KUBECONFIG=/etc/kubernetes/admin.conf
 
-# You should now deploy a pod network to the cluster.
-# Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
-#   https://kubernetes.io/docs/concepts/cluster-administration/addons/
+You should now deploy a pod network to the cluster.
+Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+  https://kubernetes.io/docs/concepts/cluster-administration/addons/
 
-# You can now join any number of the control-plane node running the following command on each as root:
+You can now join any number of the control-plane node running the following command on each as root:
 
-#   kubeadm join k8s-haproxy:6443 --token 0qlz9y.2qlm2zi6tuy7z27o --discovery-token-ca-cert-hash sha256:b73b7aada751542115ea476a6fd151fa9cc5dbbf9799f1bc7d05639a4d202c82  --control-plane --certificate-key 5a5f65c38762e6a8714101b71b1e59aa71e317ec0bb0c7d899e80253f89ded02
+  kubeadm join k8s-haproxy:6443 --token vzs27d.ld5cvhdw912y9w71 \
+	--discovery-token-ca-cert-hash sha256:1ce552632ddd7480a4d3bb669fb4d62c7bcf1c95b451e59d5503ec6dd43c33a9 \
+	--control-plane --certificate-key b04713698b04c39f476bf7e8a1f977d1097f3641c3aa850741b5acea7a8fa187
 
-# Please note that the certificate-key gives access to cluster sensitive data, keep it secret!
-# As a safeguard, uploaded-certs will be deleted in two hours; If necessary, you can use
-# "kubeadm init phase upload-certs --upload-certs" to reload certs afterward.
+Please note that the certificate-key gives access to cluster sensitive data, keep it secret!
+As a safeguard, uploaded-certs will be deleted in two hours; If necessary, you can use
+"kubeadm init phase upload-certs --upload-certs" to reload certs afterward.
 
-# Then you can join any number of worker nodes by running the following on each as root:
+Then you can join any number of worker nodes by running the following on each as root:
 
-# kubeadm join k8s-haproxy:6443 --token 0qlz9y.2qlm2zi6tuy7z27o --discovery-token-ca-cert-hash sha256:b73b7aada751542115ea476a6fd151fa9cc5dbbf9799f1bc7d05639a4d202c82
+kubeadm join k8s-haproxy:6443 --token vzs27d.ld5cvhdw912y9w71 \
+	--discovery-token-ca-cert-hash sha256:1ce552632ddd7480a4d3bb669fb4d62c7bcf1c95b451e59d5503ec6dd43c33a9
 ####################################################
 # kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
 # kubectl get pod -n kube-system -w
