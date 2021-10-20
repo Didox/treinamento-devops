@@ -97,40 +97,17 @@
 # echo "k8s-master-2" > /etc/hostname 
 # bash
 
-- hosts: all
-  tasks:
+# doc https://phoenixnap.com/kb/install-kubernetes-on-ubuntu
+# doc ansible https://kubernetes.io/blog/2019/03/15/kubernetes-setup-using-ansible-and-vagrant/
 
-    # doc https://phoenixnap.com/kb/install-kubernetes-on-ubuntu
-    # doc ansible https://kubernetes.io/blog/2019/03/15/kubernetes-setup-using-ansible-and-vagrant/
+# Rodar na maquina 1
+# - name: Initialize the Kubernetes cluster using kubeadm
+#   become: true
+#   command: sudo kubeadm init --control-plane-endpoint "172.31.92.187:6443" --upload-certs
 
-    - name: "Host para o haproxy"
-      copy:
-        src: "host/hosts"
-        dest: "/etc/hosts"
-      become: yes
-
-    # - name: Configure node ip
-    #   become: true
-    #   lineinfile:
-    #     path: /etc/default/kubelet
-    #     line: KUBELET_EXTRA_ARGS=--node-ip={{ node_ip }}
-
-    # - name: Restart kubelet
-    #   become: true
-    #   service:
-    #     name: kubelet
-    #     daemon_reload: yes
-    #     state: restarted
-
-    # Rodar na maquina 1
-    # - name: Initialize the Kubernetes cluster using kubeadm
-    #   become: true
-    #   command: sudo kubeadm init --control-plane-endpoint "172.31.92.187:6443" --upload-certs
-
-    # - name: Mostra keys config kubeadm
-    #   debug:
-    #     msg: kubeadm version #TODO Colocar comando que mostra configs
-
+# - name: Mostra keys config kubeadm
+#   debug:
+#     msg: kubeadm version #TODO Colocar comando que mostra configs
 
 # ansible-playbook -i hosts provisionar.yml -u ubuntu --private-key ~/Desktop/devops/treinamentoItau
 # ssh -i ~/Desktop/devops/treinamentoItau ubuntu@ec2-54-174-235-197.compute-1.amazonaws.com

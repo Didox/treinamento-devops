@@ -14,7 +14,10 @@
       become: yes
 
   tasks:
-
+    - name: "Configura hostname haproxy"
+      shell: hostname k8s-proxy && echo "k8s-proxy" > /etc/hostname
+      become: yes
+    
     - name: "Roda: sudo apt-get update"
       become: yes
       apt:

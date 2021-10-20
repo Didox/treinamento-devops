@@ -18,7 +18,7 @@ resource "aws_instance" "k8s_proxy" {
 
 resource "aws_instance" "k8s_masters" {
   ami           = "ami-09e67e426f25ce0d7"
-  instance_type = "t2.medium"
+  instance_type = "t2.large"
   key_name      = "treinamento-turma1_itau"
   count         = 3
   tags = {
@@ -32,7 +32,7 @@ resource "aws_instance" "k8s_masters" {
 
 resource "aws_instance" "k8s_workers" {
   ami           = "ami-09e67e426f25ce0d7"
-  instance_type = "t2.micro"
+  instance_type = "t2.medium"
   key_name      = "treinamento-turma1_itau"
   count         = 3
   tags = {
@@ -59,19 +59,6 @@ resource "aws_security_group" "acessos_master" {
       self: null
     },
     {
-      cidr_blocks      = [
-        "${var.ip_haproxy}/32",
-      ]
-      description      = "Libera haproxy"
-      from_port        = 0
-      ipv6_cidr_blocks = []
-      prefix_list_ids  = []
-      protocol         = "-1"
-      security_groups  = []
-      self             = false
-      to_port          = 0
-    },
-    {
       cidr_blocks      = []
       description      = "Libera acesso k8s_masters"
       from_port        = 0
@@ -90,7 +77,7 @@ resource "aws_security_group" "acessos_master" {
       prefix_list_ids  = []
       protocol         = "-1"
       security_groups  = [
-        "sg-056665ffa54f46217",
+        "sg-080839aec5b31b9a3",
       ]
       self             = false
       to_port          = 0
@@ -118,7 +105,7 @@ resource "aws_security_group" "acessos_master" {
 
 
 resource "aws_security_group" "acessos" {
-  name        = "k8s-acessos"
+  name        = "k8s-workers"
   description = "acessos inbound traffic"
 
   ingress = [
@@ -145,20 +132,7 @@ resource "aws_security_group" "acessos" {
       ]
       self             = false
       to_port          = 0
-    },
-    {
-      cidr_blocks      = []
-      description      = ""
-      from_port        = 0
-      ipv6_cidr_blocks = []
-      prefix_list_ids  = []
-      protocol         = "-1"
-      security_groups  = [
-        "sg-05152ffdef1105622", # acesso para o proprio grupo pois os workers precisam acessar o haproxy
-      ]
-      self             = true
-      to_port          = 0
-    },
+    }
   ]
 
   egress = [
@@ -180,25 +154,23 @@ resource "aws_security_group" "acessos" {
   }
 }
 
-
 output "k8s-masters" {
   value = [
     for key, item in aws_instance.k8s_masters :
-      "k8s-master ${key+1} - ${item.private_ip} - ssh -i ~/Desktop/devops/treinamentoItau ubuntu@${item.public_dns}"
+      "k8s-master ${key+1} - ${item.private_ip} - ssh -i ~/Desktop/devops/treinamentoItau ubuntu@${item.public_dns} -o ServerAliveInterval=60"
   ]
 }
-
 
 output "output-k8s_workers" {
   value = [
     for key, item in aws_instance.k8s_workers :
-      "k8s-workers ${key+1} - ${item.private_ip} - ssh -i ~/Desktop/devops/treinamentoItau ubuntu@${item.public_dns}"
+      "k8s-workers ${key+1} - ${item.private_ip} - ssh -i ~/Desktop/devops/treinamentoItau ubuntu@${item.public_dns} -o ServerAliveInterval=60"
   ]
 }
 
 output "output-k8s_proxy" {
   value = [
-    "k8s_proxy - ${aws_instance.k8s_proxy.private_ip} - ssh -i ~/Desktop/devops/treinamentoItau ubuntu@${aws_instance.k8s_proxy.public_dns}"
+    "k8s_proxy - ${aws_instance.k8s_proxy.private_ip} - ssh -i ~/Desktop/devops/treinamentoItau ubuntu@${aws_instance.k8s_proxy.public_dns} -o ServerAliveInterval=60"
   ]
 }
 
