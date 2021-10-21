@@ -184,11 +184,10 @@
 - hosts:
   - ec2-k8s-m1
   become: yes
-  tasks:
-    - name: "Inicia o cluster master"
-      shell: "kubeadm init --control-plane-endpoint "k8s-haproxy:6443" --upload-certs"
+  tasks:    
+    - shell: "kubeadm init --control-plane-endpoint 'k8s-haproxy:6443' --upload-certs"
       register: ps
-      debug:
+    - debug:
         msg: " '{{ ps.stdout_lines }}' "
 
     - name: "Colocando no path da maquina o conf do kubernetes"
