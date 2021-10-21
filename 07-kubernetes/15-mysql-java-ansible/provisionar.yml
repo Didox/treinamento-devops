@@ -21,12 +21,12 @@
     - name: "Aplicar nodeport"
       shell: kubectl apply -f /root/k8s-deploy/7.4-nodeport-javadb.yml
 
+    - name: "Aplicar hpa"
+      shell: kubectl apply -f /root/k8s-deploy/7.5-hpa.yaml
+
     - shell: "kubectl get pods | grep mysql"
       register: ps
     - debug:
         msg: " '{{ ps.stdout_lines }}' "
 
-# echo "create database SpringWebYoutubeTest;"| kubectl exec -it mysql-5fb6fb7fb4-9wdbn --tty -- mysql -uroot -ppassword_mysql 
-# cat /root/k8s-deploy/1.2-dump-mysql.sql  | kubectl exec -it mysql-5fb6fb7fb4-9wdbn --tty -- mysql -uroot -ppassword_mysql SpringWebYoutubeTest
-
-# # ansible-playbook -i hosts provisionar.yml -u ubuntu --private-key ~/Desktop/devops/treinamentoItau
+# ansible-playbook -i hosts provisionar.yml -u ubuntu --private-key ~/Desktop/devops/treinamentoItau

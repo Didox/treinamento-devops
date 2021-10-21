@@ -4,12 +4,12 @@
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: javadb-apache
+  name: javadb-hpa
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: javadb-apache
+    name: java-deployment
   minReplicas: 2
   maxReplicas: 10
   targetCPUUtilizationPercentage: 70 # com 70 % de CPU ele cria outro pod, também é possivel criar um para criar novos workers no cluster
