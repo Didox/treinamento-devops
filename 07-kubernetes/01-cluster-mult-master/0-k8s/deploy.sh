@@ -4,13 +4,16 @@
 # ID_M1_DNS=$(echo "$ID_M1_DNS" | cut -b 8-)
 # echo ${ID_M1_DNS}
 
-cd 0-terraform
-# ~/terraform/terraform init
-# ~/terraform/terraform fmt
-# ~/terraform/terraform apply -auto-approve
+#### idéia para buscar itens do debugger do ansible ####
+# | grep -oP "(kubeadm join.*?certificate-key.*?)'" | sed 's/\\//g' | sed "s/'//g" | sed "s/'t//g" | sed "s/,//g"
 
-# echo  "Aguardando a criação das maquinas ..."
-# sleep 5
+cd 0-terraform
+~/terraform/terraform init
+~/terraform/terraform fmt
+~/terraform/terraform apply -auto-approve
+
+echo  "Aguardando a criação das maquinas ..."
+sleep 5
 
 ID_M1=$(~/terraform/terraform output | grep 'k8s-master 1 -' | awk '{print $4;exit}')
 ID_M1_DNS=$(~/terraform/terraform output | grep 'k8s-master 1 -' | awk '{print $9;exit}' | cut -b 8-)

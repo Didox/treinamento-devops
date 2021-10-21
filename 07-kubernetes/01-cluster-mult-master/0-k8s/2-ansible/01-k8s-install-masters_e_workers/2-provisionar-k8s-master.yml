@@ -25,7 +25,7 @@
   tasks:
     - name: "Configura weavenet para reconhecer os nós master e workers"
       shell: kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
-  
+
 
 # ansible-playbook -i hosts 2-provisionar-k8s-master.yml -u ubuntu --private-key ~/Desktop/devops/treinamentoItau
 
