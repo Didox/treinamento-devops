@@ -180,6 +180,22 @@
         src: "host/hosts"
         dest: "/etc/hosts"
       become: yes
+# ---
+- hosts:
+  - ec2-k8s-m1
+  become: yes
+  tasks:
+    - name: "Inicia o cluster master"
+      shell: "kubeadm init --control-plane-endpoint "k8s-haproxy:6443" --upload-certs"
+      register: ps
+      debug:
+        msg: " '{{ ps.stdout_lines }}' "
+
+    - name: "Colocando no path da maquina o conf do kubernetes"
+      shell: "mkdir -p $HOME/.kube && sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config && sudo chown $(id -u):$(id -g) $HOME/.kube/config && export KUBECONFIG=/etc/kubernetes/admin.conf"
+
+  
+  
 
 # # ansible-playbook -i hosts provisionar.yml -u ubuntu --private-key ~/Desktop/devops/treinamentoItau
 # # ssh -i ~/Desktop/devops/treinamentoItau ubuntu@ec2-54-174-235-197.compute-1.amazonaws.com

@@ -69,19 +69,19 @@ resource "aws_security_group" "acessos_master" {
       self             = true
       to_port          = 0
     },
-    # {
-    #   cidr_blocks      = []
-    #   description      = "Libera acesso k8s_workers"
-    #   from_port        = 0
-    #   ipv6_cidr_blocks = []
-    #   prefix_list_ids  = []
-    #   protocol         = "-1"
-    #   security_groups  = [
-    #     "sg-080839aec5b31b9a3",
-    #   ]
-    #   self             = false
-    #   to_port          = 0
-    # },
+    {
+      cidr_blocks      = []
+      description      = "Libera acesso k8s_workers"
+      from_port        = 0
+      ipv6_cidr_blocks = []
+      prefix_list_ids  = []
+      protocol         = "-1"
+      security_groups  = [
+        "sg-082aca1fa06121961",
+      ]
+      self             = false
+      to_port          = 0
+    },
   ]
 
   egress = [
