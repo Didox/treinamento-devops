@@ -78,6 +78,7 @@ resource "aws_security_group" "acessos_master" {
       protocol         = "-1"
       security_groups  = [
         "sg-082aca1fa06121961",
+        //aws_security_group.acessos_master.id
       ]
       self             = false
       to_port          = 0
@@ -189,9 +190,6 @@ output "security-group-workers-e-haproxy" {
   value = aws_security_group.acessos.id
 }
 
-output "security-group-master" {
-  value = aws_security_group.acessos_master.id
-}
 
 
 # terraform refresh para mostrar o ssh

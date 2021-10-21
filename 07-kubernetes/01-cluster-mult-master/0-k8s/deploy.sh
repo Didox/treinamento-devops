@@ -9,7 +9,6 @@
 
 cd 0-terraform
 ~/terraform/terraform init
-~/terraform/terraform fmt
 ~/terraform/terraform apply -auto-approve
 
 echo  "Aguardando a criação das maquinas ..."
@@ -141,7 +140,7 @@ echo "
       shell: $K8S_JOIN_MASTER
 
     - name: \"Colocando no path da maquina o conf do kubernetes\"
-      shell: mkdir -p $HOME/.kube && sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config && sudo chown $(id -u):$(id -g) $HOME/.kube/config && export KUBECONFIG=/etc/kubernetes/admin.conf
+      shell: mkdir -p \$HOME/.kube && sudo cp -i /etc/kubernetes/admin.conf \$HOME/.kube/config && sudo chown $(id -u):$(id -g) \$HOME/.kube/config && export KUBECONFIG=/etc/kubernetes/admin.conf
 #---
 - hosts:
   - ec2-k8s-w1
