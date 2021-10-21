@@ -3,7 +3,10 @@
 ANSIBLE_OUT=$(ansible-playbook -i hosts provisionar.yml -u ubuntu --private-key ~/Desktop/devops/treinamentoItau)
 echo $ANSIBLE_OUT
 
+## Mac ##
 MYSQL_POD_NAME=$(echo $ANSIBLE_OUT | grep -oE "(mysql-.*? )" )
+## Linux ##
+# MYSQL_POD_NAME=$(echo $ANSIBLE_OUT | grep -oP "(mysql-.*? )" )
 
 cat <<EOF > restore-dump-mysql.yml
 - hosts: all
