@@ -1,4 +1,4 @@
-- hosts: all
+- hosts:
   - ec2-k8s-proxy
   handlers:
     - name: "restart haproxy"

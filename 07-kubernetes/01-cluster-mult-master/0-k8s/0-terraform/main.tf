@@ -69,19 +69,19 @@ resource "aws_security_group" "acessos_master" {
       self             = true
       to_port          = 0
     },
-    {
-      cidr_blocks      = []
-      description      = "Libera acesso k8s_workers"
-      from_port        = 0
-      ipv6_cidr_blocks = []
-      prefix_list_ids  = []
-      protocol         = "-1"
-      security_groups  = [
-        "sg-080839aec5b31b9a3",
-      ]
-      self             = false
-      to_port          = 0
-    },
+    # {
+    #   cidr_blocks      = []
+    #   description      = "Libera acesso k8s_workers"
+    #   from_port        = 0
+    #   ipv6_cidr_blocks = []
+    #   prefix_list_ids  = []
+    #   protocol         = "-1"
+    #   security_groups  = [
+    #     "sg-080839aec5b31b9a3",
+    #   ]
+    #   self             = false
+    #   to_port          = 0
+    # },
   ]
 
   egress = [
@@ -184,5 +184,14 @@ output "output-k8s_proxy" {
     "k8s_proxy - ${aws_instance.k8s_proxy.private_ip} - ssh -i ~/Desktop/devops/treinamentoItau ubuntu@${aws_instance.k8s_proxy.public_dns} -o ServerAliveInterval=60"
   ]
 }
+
+output "security-group-workers-e-haproxy" {
+  value = aws_security_group.acessos.id
+}
+
+output "security-group-master" {
+  value = aws_security_group.acessos_master.id
+}
+
 
 # terraform refresh para mostrar o ssh
