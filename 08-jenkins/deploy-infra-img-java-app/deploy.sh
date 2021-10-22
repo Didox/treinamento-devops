@@ -1,6 +1,6 @@
 #!/bin/bash
 
-/root/ubuntu/treinamento-devops/08-jenkins/deploy-infra-img-java-app/terraform
+cd 08-jenkins/deploy-infra-img-java-app/terraform
 /home/ubuntu/terraform init
 /home/ubuntu/terraform apply -auto-approve
 

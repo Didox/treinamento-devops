@@ -4,17 +4,17 @@ pipeline {
     stages {
         stage('Clone repo') {
             steps {
-                git 'https://github.com/Didox/treinamento-devops'
+                git url: 'https://github.com/Didox/treinamento-devops', branch: 'main'
             }
         }
         stage('Build EC2') {
             steps {
-                sh "./root/ubuntu/treinamento-devops/08-jenkins/deploy-infra-img-java-app/deploy.sh"
+                sh "./var/lib/jenkins/workspace/InfraPipeline/08-jenkins/deploy-infra-img-java-app/deploy.sh"
             }
         }
         stage('Test Nginx') {
             steps {
-                sh "./root/ubuntu/treinamento-devops/08-jenkins/deploy-infra-img-java-app/test.sh"
+                sh "./var/lib/jenkins/workspace/InfraPipeline/08-jenkins/deploy-infra-img-java-app/test.sh"
             }
         }
         stage('Build AMI') {
