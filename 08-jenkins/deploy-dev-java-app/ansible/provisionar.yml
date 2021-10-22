@@ -27,13 +27,13 @@
 
     - name: "clone projeto"
       ansible.builtin.git:
-        repo: 'https://github.com/Didox/spring-app-validar-cpf-treinamento-concrete'
-        dest: /home/ubuntu/spring-app-validar-cpf-treinamento-concrete
+        repo: 'https://github.com/Didox/spring-mvc_java'
+        dest: /home/ubuntu/spring-mvc_java
         clone: yes
         update: yes
 
     - name: "fazendo build do projeto"
-      shell: "cd spring-app-validar-cpf-treinamento-concrete && nohup mvn spring-boot:start &"
+      shell: "cd spring-mvc_java && nohup mvn spring-boot:start &"
     
     - name: "Trocando nginx para VPS"
       copy:
