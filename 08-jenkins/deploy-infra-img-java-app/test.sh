@@ -1,9 +1,11 @@
 #!/bin/bash
 cd 08-jenkins/deploy-infra-img-java-app/terraform
 
-echo "http://$(/home/ubuntu/terraform output | grep public_ip | awk '{print $2;exit}')" | sed -e "s/\",//g"
+uri=$(/home/ubuntu/terraform output | grep public_ip | awk '{print $2;exit}' | sed -e "s/\",//g")
 
-body=$(curl "http://$(/home/ubuntu/terraform output | grep public_ip | awk '{print $2;exit}')" | sed -e "s/\",//g")
+echo $uri
+
+body=$(curl "http://$uri")
 
 regex='Welcome to nginx!'
 
