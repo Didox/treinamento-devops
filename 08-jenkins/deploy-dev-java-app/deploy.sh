@@ -2,7 +2,7 @@
 
 cd 08-jenkins/deploy-dev-java-app/terraform
 /home/ubuntu/terraform init
-/home/ubuntu/terraform apply -auto-approve
+TF_VAR_ami_dev='ami-061f0c171f96a3b0f' /home/ubuntu/terraform apply -auto-approve
 
 echo "Aguardando criação de maquinas ..."
 sleep 10 # 10 segundos
