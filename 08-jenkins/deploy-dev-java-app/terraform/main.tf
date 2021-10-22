@@ -16,13 +16,11 @@ resource "aws_instance" "dev_deploy_jenkins" {
   ami           = var.ami_dev
   instance_type = "t2.micro"
 
-  count = 3
-  # for_each = toset(["dev", "stage", "prod"])
-  name = "dev_deploy_jenkins_${count.index}"
+  for_each = toset(["dev", "stage", "prod"])
 
   key_name      = "chave-jenkins"
   tags = {
-    Name = "dev_deploy_jenkins_${count.index}"
+    Name = "dev_deploy_jenkins_${each.key}"
   }
   vpc_security_group_ids = [aws_security_group.acesso_jenkins_dev.id]
 }
