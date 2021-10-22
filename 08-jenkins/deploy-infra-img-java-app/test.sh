@@ -5,11 +5,11 @@ body="http://$(/home/ubuntu/terraform output | grep public_dns | awk '{print $2;
 
 regex='Welcome to nginx!'
 
-if [[ $url =~ $regex ]]
+if [[ $body =~ $regex ]]
 then 
-    echo "$url nginx está no ar"
+    echo "::::: nginx está no ar :::::"
     exit 0
 else
-    echo "$url nginx não está no ar"
+    echo "::::: nginx não está no ar :::::"
     exit 1
 fi
