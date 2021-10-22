@@ -7,7 +7,7 @@ echo $uri
 
 body=$(curl "http://$uri")
 
-regex='Welcome to nginx!'
+regex='ALLUNOS Welcome to nginx!'
 
 if [[ $body =~ $regex ]]
 then 
