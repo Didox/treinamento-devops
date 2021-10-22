@@ -1,7 +1,7 @@
 #!/bin/bash
 cd 08-jenkins/deploy-infra-img-java-app/terraform
 
-regex='Welcome to app!'
+regex='Validar CPF'
 
 uri=$(/home/ubuntu/terraform output | grep public_ip-0 | awk '{print $2;exit}' | sed -e "s/\",//g")
 body=$(curl "http://$uri")
