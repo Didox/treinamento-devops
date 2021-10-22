@@ -9,7 +9,7 @@ data "http" "myip" {
 resource "aws_instance" "dev_img_deploy_jenkins" {
   ami           = "ami-09e67e426f25ce0d7"
   instance_type = "t2.micro"
-  key_name      = "treinamento-turma1_itau"
+  key_name      = "chave-jenkins"
   tags = {
     Name = "dev_img_deploy_jenkins"
   }
