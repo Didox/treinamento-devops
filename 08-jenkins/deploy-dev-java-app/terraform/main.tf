@@ -75,7 +75,7 @@ resource "aws_security_group" "acesso_jenkins_dev" {
 
 output "dev_deploy_jenkins" {
   value = [
-    for key, item in aws_instance.k8s_workers :
+    for key, item in aws_instance.dev_deploy_jenkins :
       "public_ip-${key}: ${item.public_ip}"
   ]
 }
