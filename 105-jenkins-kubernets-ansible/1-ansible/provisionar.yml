@@ -5,9 +5,22 @@
     - name: "Download pacote jenkins"
       shell: wget -qO - https://pkg.jenkins.io/debian-stable/jenkins.io.key | apt-key add -
 
+    - name: "Configura hostname jenkins"
+      shell: hostname jenkins && echo "jenkins" > /etc/hostname
+      become: yes
+
     - name: "Update apt"
       shell: "apt-get update"
 
+    - name: "Instala mvn"
+      shell: "sudo apt install maven -y"
+
+    - name: "Instala unzip"
+      shell: "sudo apt install unzip -y"
+
+    - name: "Instala awscli"
+      shell: "apt install awscli -y"
+      
     - name: "Instala java"
       shell: "apt install default-jdk -y"
    
