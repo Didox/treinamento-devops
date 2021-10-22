@@ -1,0 +1,26 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clone repo') {
+            steps {
+                git 'https://github.com/Didox/treinamento-devops'
+            }
+        }
+        stage('Build EC2') {
+            steps {
+                sh "./root/ubuntu/treinamento-devops/08-jenkins/deploy-infra-img-java-app/deploy.sh"
+            }
+        }
+        stage('Test Nginx') {
+            steps {
+                sh "./root/ubuntu/treinamento-devops/08-jenkins/deploy-infra-img-java-app/test.sh"
+            }
+        }
+        stage('Build AMI') {
+            steps {
+                sh "ls -la"
+            }
+        }
+    }
+}
