@@ -67,7 +67,7 @@ resource "aws_security_group" "acesso_jenkins_dev_img" {
 # terraform refresh para mostrar o ssh
 output "dev_img_deploy_jenkins" {
   value = [
-    "public: ${aws_instance.dev_img_deploy_jenkins.public_ip}",
+    "public_ip: ${aws_instance.dev_img_deploy_jenkins.public_ip}",
     "public_dns: ${aws_instance.dev_img_deploy_jenkins.public_dns}",
     "ssh -i /var/lib/jenkins/.ssh/id_rsa ubuntu@${aws_instance.dev_img_deploy_jenkins.public_dns}"
   ]
