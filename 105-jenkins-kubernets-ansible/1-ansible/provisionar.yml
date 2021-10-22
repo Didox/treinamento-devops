@@ -23,6 +23,13 @@
       
     - name: "Instala java"
       shell: "apt install default-jdk -y"
+
+    # # TODO instalar terraform
+    # - name: "Instala ansible"
+    #   shell: "sudo apt install ansible -y"
+    
+    - name: "Instala ansible"
+      shell: "sudo apt install ansible -y"
    
     # https://www.jenkins.io/doc/book/installing/linux/
     - name: "Add pacote jenkins"
