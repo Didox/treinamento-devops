@@ -47,3 +47,5 @@ https://gnunn1.github.io/tilix-web/
 
 # danilo@gmail.com
 # danilo 
+
+ ssh -i chave.pem ubuntu@dns.com -o ServerAliveInterval=60
