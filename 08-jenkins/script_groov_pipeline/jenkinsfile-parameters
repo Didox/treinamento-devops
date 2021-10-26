@@ -1,0 +1,54 @@
+pipeline {
+    agent any
+
+    parameters {
+        string(name: 'VERSION', defaultValue: '', description: 'Um parametro para deploy')
+        choice(name: 'VERSION', choices: ['1.1.1', '1.1.2'])
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                sh "echo \"--- ${VERSION} ----\""
+                echo "Building.. ${VERSION}"
+            }
+        }
+        stage('Docker image') {
+            steps {
+                sh 'ls -la'
+                echo 'Building..'
+            }
+        }
+        stage('Docker image Push') {
+            steps {
+                sh 'ls -la'
+                echo 'Building..'
+            }
+        }
+        stage('TDD') {
+            steps {
+                sh 'ls -la'
+                echo 'Building..'
+            }
+        }
+        
+        stage('K8s-DEV') {
+            steps {
+                sh 'ls -la'
+                echo 'Building..'
+            }
+        }
+        stage('K8s-QA') {
+            steps {
+                sh 'ls -la'
+                echo 'Building..'
+            }
+        }
+        stage('K8s-PROD') {
+            steps {
+                sh 'ls -la'
+                echo 'Building..'
+            }
+        }
+    }
+}
