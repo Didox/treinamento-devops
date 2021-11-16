@@ -45,12 +45,12 @@
 
     - name: "Fazendo downlaod do wordpress"
       get_url:
-        url: "https://br.wordpress.org/latest-pt_BR.tar.gz"
-        dest: "/tmp/wordpress.tar.gz"
+        url: "https://br.wordpress.org/latest-pt_BR.zip"
+        dest: "/tmp/latest-pt_BR.zip"
     
     - name: "Fazendo descompactação dos arquivos do WP"
       unarchive:
-        src: "/tmp/wordpress.tar.gz"
+        src: "/tmp/latest-pt_BR.zip"
         dest: "/var/www"
         remote_src: yes
 
@@ -96,24 +96,25 @@
         name: mysql
         state: started
 
-    # - name: "Criando senha root mysql"
-    #   become: yes
-    #   mysql_user:
-    #     name: root
-    #     host: localhost
-    #     password: root
-    #     priv: "*.*:ALL,GRANT"
+    - name: "Criando senha root mysql"
+      become: yes
+      mysql_user:
+        name: root
+        host: localhost
+        password: root
+        priv: "*.*:ALL,GRANT"
+        state: present
 
-    # - name: "Cria o banco de dados MySQL"
-    #   mysql_db:
-    #     name: banco_wordpress
-    #     login_user: root
-    #     login_password: root
-    #     state: present
+    - name: "Cria o banco de dados MySQL"
+      mysql_db:
+        name: banco_wordpress
+        login_user: root
+        login_password: root
+        state: present
 
-    # - shell: cat /var/www/wordpress/wp-config.php
-    #   register: ps
-    # - debug:
-    #     msg: " '{{ ps.stdout_lines }}' "
+    - shell: cat /var/www/wordpress/wp-config.php
+      register: ps
+    - debug:
+        msg: " '{{ ps.stdout_lines }}' "
 
     

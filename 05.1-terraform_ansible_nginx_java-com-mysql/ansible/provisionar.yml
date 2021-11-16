@@ -1,0 +1,99 @@
+- hosts: all
+  environment:
+    DATABASE_URL: "{{ lookup('env', 'DATABASE_URL') }}"
+    PASSWORD: "{{ lookup('env', 'PASSWORD') }}"
+    USER: "{{ lookup('env', 'USER') }}"
+
+  handlers:
+    - name: "restart nginx"
+      service:
+        name: nginx
+        state: restarted
+      become: yes
+  tasks:
+    - name: "Roda: sudo apt-get update"
+      become: true
+      apt:
+        upgrade: yes
+        update_cache: yes
+
+    - name: "Instala pacotes"
+      apt:
+        name: "{{ item }}"
+        state: latest
+      become: yes # roda com sudo
+      with_items:
+        - nginx
+        - default-jre
+        - maven
+        - mysql-server
+        - python3-pycurl
+        - python3-mysqldb
+
+    - name: "clone projeto"
+      ansible.builtin.git:
+        repo: 'https://github.com/torneseumprogramador/spring-web-youtube'
+        dest: /home/ubuntu/spring-web-youtube
+        clone: yes
+        update: yes
+
+    - name: Adicionar USER no bashrc
+      lineinfile: dest=~/.bashrc line='export USER={{ lookup('env', 'USER') }}' state=present
+
+    - name: Adicionar PASSWORD no bashrc
+      lineinfile: dest=~/.bashrc line='export PASSWORD={{ lookup('env', 'PASSWORD') }}' state=present
+
+    - name: Adicionar DATABASE_URL no bashrc
+      lineinfile: dest=~/.bashrc line='export DATABASE_URL="{{ lookup('env', 'DATABASE_URL') }}"' state=present
+
+    - name: Aplicar o bashrc
+      shell: source ~/.bashrc
+      args:
+        executable: /bin/bash
+
+    - name: "Lavanta serviço do mysql"
+      become: yes
+      service:
+        name: mysql
+        state: started
+
+    - name: "Criando senha root mysql"
+      become: yes
+      mysql_user:
+        name: root
+        host: localhost
+        password: root
+        priv: "*.*:ALL,GRANT"
+        state: present
+  
+    - name: "Cria o banco de dados MySQL"
+      mysql_db:
+        name: SpringWebYoutube
+        login_user: root
+        login_password: root
+        state: present
+    
+    - name: "Copia dump mysql para servidor"
+      copy:
+        src: "sql/dump.sql"
+        dest: "/home/ubuntu/"
+      become: yes
+      notify:
+        - "restart nginx"
+
+    - name: "Restore dump mysql"
+      shell: "mysql -u root -p'root' SpringWebYoutube < /home/ubuntu/dump.sql"
+
+    - name: "Build Package"
+      shell: "cd spring-web-youtube && mvn package"
+
+    - name: "startando VPS"
+      shell: "cd spring-web-youtube && nohup mvn spring-boot:start &"
+
+    - name: "Trocando nginx para VPS"
+      copy:
+        src: "nginx/default"
+        dest: "/etc/nginx/sites-available/default"
+      become: yes
+      notify:
+        - "restart nginx"
