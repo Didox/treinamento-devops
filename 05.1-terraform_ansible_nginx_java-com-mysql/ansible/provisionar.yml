@@ -68,9 +68,9 @@
   
     - name: "Cria o banco de dados MySQL"
       mysql_db:
-        name: {{ lookup('env', 'DATABASE') }}
-        login_user: {{ lookup('env', 'USER') }}
-        login_password: {{ lookup('env', 'PASSWORD') }}
+        name: "{{ lookup('env', 'DATABASE') }}"
+        login_user: "{{ lookup('env', 'USER') }}"
+        login_password: "{{ lookup('env', 'PASSWORD') }}"
         state: present
     
     - name: "Copia dump mysql para servidor"
