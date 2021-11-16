@@ -20,7 +20,14 @@ resource "aws_instance" "maquina_nginx_java_mysql" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t2.medium"
   key_name      = "treinamento-turma1_itau"
+
   # subnet_id      = "subnet-12282387382372378"
+
+  # root_block_device {
+  #   encrypted = true
+  #   volume_size = 8
+  # }
+  
   tags = {
     Name = "maquina_ansible_com_nginx_java_mysql"
   }
