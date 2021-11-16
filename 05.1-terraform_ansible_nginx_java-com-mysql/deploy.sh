@@ -16,7 +16,7 @@ $HOST_DNS
 
 cd ../ansible
 
-USER=root PASSWORD=root DATABASE_URL='mysql://localhost:3306/SpringWebYoutube?useTimezone=true&serverTimezone=UTC' ansible-playbook -i hosts provisionar.yml -u ubuntu --private-key ~/Desktop/devops/treinamentoItau
+USER=root PASSWORD=root DATABASE=SpringWebYoutube ansible-playbook -i hosts provisionar.yml -u ubuntu --private-key ~/Desktop/devops/treinamentoItau
 
 echo  "Abrindo site no navegador"
 sleep 10

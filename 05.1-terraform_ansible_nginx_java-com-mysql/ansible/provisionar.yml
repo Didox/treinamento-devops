@@ -1,6 +1,6 @@
 - hosts: all
   environment:
-    DATABASE_URL: "{{ lookup('env', 'DATABASE_URL') }}"
+    DATABASE_URL: "mysql://localhost:3306/{{ lookup('env', 'DATABASE') }}?useTimezone=true&serverTimezone=UTC"
     PASSWORD: "{{ lookup('env', 'PASSWORD') }}"
     USER: "{{ lookup('env', 'USER') }}"
 
@@ -44,7 +44,7 @@
       lineinfile: dest=~/.bashrc line='export PASSWORD={{ lookup('env', 'PASSWORD') }}' state=present
 
     - name: Adicionar DATABASE_URL no bashrc
-      lineinfile: dest=~/.bashrc line='export DATABASE_URL="{{ lookup('env', 'DATABASE_URL') }}"' state=present
+      lineinfile: dest=~/.bashrc line='export DATABASE_URL="mysql://localhost:3306/{{ lookup('env', 'DATABASE') }}?useTimezone=true&serverTimezone=UTC"' state=present
 
     - name: Aplicar o bashrc
       shell: source ~/.bashrc
@@ -68,21 +68,19 @@
   
     - name: "Cria o banco de dados MySQL"
       mysql_db:
-        name: SpringWebYoutube
-        login_user: root
-        login_password: root
+        name: {{ lookup('env', 'DATABASE') }}
+        login_user: {{ lookup('env', 'USER') }}
+        login_password: {{ lookup('env', 'PASSWORD') }}
         state: present
     
     - name: "Copia dump mysql para servidor"
       copy:
-        src: "sql/dump.sql"
+        src: "sql/db_backup.sql"
         dest: "/home/ubuntu/"
       become: yes
-      notify:
-        - "restart nginx"
 
     - name: "Restore dump mysql"
-      shell: "mysql -u root -p'root' SpringWebYoutube < /home/ubuntu/dump.sql"
+      shell: "mysql -u {{ lookup('env', 'USER') }} -p'{{ lookup('env', 'PASSWORD') }}' {{ lookup('env', 'DATABASE') }} < /home/ubuntu/db_backup.sql"
 
     - name: "Build Package"
       shell: "cd spring-web-youtube && mvn package"
