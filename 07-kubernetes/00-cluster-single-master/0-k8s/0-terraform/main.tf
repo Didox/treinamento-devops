@@ -8,7 +8,7 @@ data "http" "myip" {
 
 resource "aws_instance" "maquina_master" {
   ami           = "ami-09e67e426f25ce0d7"
-  instance_type = "t2.medium"
+  instance_type = "t2.large"
   key_name      = "treinamento-turma1_itau"
   tags = {
     Name = "k8s-master"
@@ -21,10 +21,10 @@ resource "aws_instance" "maquina_master" {
 
 resource "aws_instance" "workers" {
   ami           = "ami-09e67e426f25ce0d7"
-  instance_type = "t2.micro"
+  instance_type = "t2.medium"
   key_name      = "treinamento-turma1_itau"
   tags = {
-    Name = "k8s-node-${count.index}"
+    Name = "k8s-node-${count.index + 1}"
   }
   vpc_security_group_ids = [aws_security_group.acessos_workers_single_master.id]
   count         = 3
@@ -32,7 +32,7 @@ resource "aws_instance" "workers" {
 
 resource "aws_security_group" "acessos_master_single_master" {
   name        = "acessos_master_single_master"
-  description = "acessos_workers_single_master inbound traffic"
+  description = "acessos_master_single_master inbound traffic"
 
   ingress = [
     {
@@ -54,7 +54,8 @@ resource "aws_security_group" "acessos_master_single_master" {
       prefix_list_ids  = []
       protocol         = "-1"
       security_groups  = [
-        "sg-0de8412f761f70f50",
+        # "${aws_security_group.acessos_workers_single_master.id}", não pode porque é circular
+        "sg-015a0fb8546987fea", # Id fixo do sg acima
       ]
       self             = false
       to_port          = 0
@@ -118,7 +119,7 @@ resource "aws_security_group" "acessos_workers_single_master" {
       prefix_list_ids  = []
       protocol         = "-1"
       security_groups  = [
-        "sg-0c8c7bdac4e2dbfb7",
+        "${aws_security_group.acessos_master_single_master.id}",
       ]
       self             = false
       to_port          = 0
@@ -148,12 +149,13 @@ resource "aws_security_group" "acessos_workers_single_master" {
 # terraform refresh para mostrar o ssh
 output "maquina_master" {
   value = [
-    "master - ${aws_instance.maquina_master.public_ip} - ssh -i ~/Desktop/devops/treinamentoItau ubuntu@${aws_instance.maquina_master.public_dns}"
+    "master - ${aws_instance.maquina_master.public_ip} - ssh -i ~/Desktop/devops/treinamentoItau ubuntu@${aws_instance.maquina_master.public_dns}",
+    "sg master - ${aws_security_group.acessos_workers_single_master.id}"
   ]
 }
 
 # terraform refresh para mostrar o ssh
-output "aws_instance_e_ssh" {
+output "maquina_workers" {
   value = [
     for key, item in aws_instance.workers :
       "worker ${key+1} - ${item.public_ip} - ssh -i ~/Desktop/devops/treinamentoItau ubuntu@${item.public_dns}"

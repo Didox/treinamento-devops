@@ -8,6 +8,9 @@ docker run -d -p 80:3000 --name app-imersao-docker-nodejs didox/app-imersao-dock
 ## Build watch Docker
 docker run -it -p 80:3000 --name app-imersao-docker-nodejs didox/app-imersao-docker-nodejs
 
+# Para start do docker
+docker start app-imersao-docker-nodejs
+
 # Para parar o docker
 docker stop app-imersao-docker-nodejs
 
