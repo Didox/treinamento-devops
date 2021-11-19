@@ -8,34 +8,34 @@
 # | grep -oP "(kubeadm join.*?certificate-key.*?)'" | sed 's/\\//g' | sed "s/'//g" | sed "s/'t//g" | sed "s/,//g"
 
 cd 0-terraform
-terraform init
-terraform apply -auto-approve
+~/terraform/terraform init
+~/terraform/terraform apply -auto-approve
 
 echo  "Aguardando a criação das maquinas ..."
 sleep 5
 
-ID_M1=$(terraform output | grep 'k8s-master 1 -' | awk '{print $4;exit}')
-ID_M1_DNS=$(terraform output | grep 'k8s-master 1 -' | awk '{print $9;exit}' | cut -b 8-)
+ID_M1=$(~/terraform/terraform output | grep 'k8s-master 1 -' | awk '{print $4;exit}')
+ID_M1_DNS=$(~/terraform/terraform output | grep 'k8s-master 1 -' | awk '{print $9;exit}' | cut -b 8-)
 
-ID_M2=$(terraform output | grep 'k8s-master 2 -' | awk '{print $4;exit}')
-ID_M2_DNS=$(terraform output | grep 'k8s-master 2 -' | awk '{print $9;exit}' | cut -b 8-)
+ID_M2=$(~/terraform/terraform output | grep 'k8s-master 2 -' | awk '{print $4;exit}')
+ID_M2_DNS=$(~/terraform/terraform output | grep 'k8s-master 2 -' | awk '{print $9;exit}' | cut -b 8-)
 
-ID_M3=$(terraform output | grep 'k8s-master 3 -' | awk '{print $4;exit}')
-ID_M3_DNS=$(terraform output | grep 'k8s-master 3 -' | awk '{print $9;exit}' | cut -b 8-)
-
-
-ID_HAPROXY=$(terraform output | grep 'k8s_proxy -' | awk '{print $3;exit}')
-ID_HAPROXY_DNS=$(terraform output | grep 'k8s_proxy -' | awk '{print $8;exit}' | cut -b 8-)
+ID_M3=$(~/terraform/terraform output | grep 'k8s-master 3 -' | awk '{print $4;exit}')
+ID_M3_DNS=$(~/terraform/terraform output | grep 'k8s-master 3 -' | awk '{print $9;exit}' | cut -b 8-)
 
 
-ID_W1=$(terraform output | grep 'k8s-workers 1 -' | awk '{print $4;exit}')
-ID_W1_DNS=$(terraform output | grep 'k8s-workers 1 -' | awk '{print $9;exit}' | cut -b 8-)
+ID_HAPROXY=$(~/terraform/terraform output | grep 'k8s_proxy -' | awk '{print $3;exit}')
+ID_HAPROXY_DNS=$(~/terraform/terraform output | grep 'k8s_proxy -' | awk '{print $8;exit}' | cut -b 8-)
 
-ID_W2=$(terraform output | grep 'k8s-workers 2 -' | awk '{print $4;exit}')
-ID_W2_DNS=$(terraform output | grep 'k8s-workers 2 -' | awk '{print $9;exit}' | cut -b 8-)
 
-ID_W3=$(terraform output | grep 'k8s-workers 3 -' | awk '{print $4;exit}')
-ID_W3_DNS=$(terraform output | grep 'k8s-workers 3 -' | awk '{print $9;exit}' | cut -b 8-)
+ID_W1=$(~/terraform/terraform output | grep 'k8s-workers 1 -' | awk '{print $4;exit}')
+ID_W1_DNS=$(~/terraform/terraform output | grep 'k8s-workers 1 -' | awk '{print $9;exit}' | cut -b 8-)
+
+ID_W2=$(~/terraform/terraform output | grep 'k8s-workers 2 -' | awk '{print $4;exit}')
+ID_W2_DNS=$(~/terraform/terraform output | grep 'k8s-workers 2 -' | awk '{print $9;exit}' | cut -b 8-)
+
+ID_W3=$(~/terraform/terraform output | grep 'k8s-workers 3 -' | awk '{print $4;exit}')
+ID_W3_DNS=$(~/terraform/terraform output | grep 'k8s-workers 3 -' | awk '{print $9;exit}' | cut -b 8-)
 
 echo "
 [ec2-k8s-proxy]
@@ -124,14 +124,14 @@ ff02::3 ip6-allhosts
 
 cd ../2-ansible/01-k8s-install-masters_e_workers
 
-ANSIBLE_OUT=$(ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i hosts provisionar.yml -u ubuntu --private-key ~/.ssh/Ubuntu-dev-bira.pem)
+ANSIBLE_OUT=$(ansible-playbook -i hosts provisionar.yml -u ubuntu --private-key ~/Desktop/devops/treinamentoItau)
 
 #### Mac ###
-#K8S_JOIN_MASTER=$(echo $ANSIBLE_OUT | grep -oE "(kubeadm join.*?certificate-key.*?)'" | sed 's/\\//g' | sed "s/'t//g" | sed "s/'//g" | sed "s/,//g")
-#K8S_JOIN_WORKER=$(echo $ANSIBLE_OUT | grep -oE "(kubeadm join.*?discovery-token-ca-cert-hash.*?)'" | head -n 1 | sed 's/\\//g' | sed "s/'t//g" | sed "s/'//g" | sed "s/'//g" | sed "s/,//g")
+K8S_JOIN_MASTER=$(echo $ANSIBLE_OUT | grep -oE "(kubeadm join.*?certificate-key.*?)'" | sed 's/\\//g' | sed "s/'t//g" | sed "s/'//g" | sed "s/,//g")
+K8S_JOIN_WORKER=$(echo $ANSIBLE_OUT | grep -oE "(kubeadm join.*?discovery-token-ca-cert-hash.*?)'" | head -n 1 | sed 's/\\//g' | sed "s/'t//g" | sed "s/'//g" | sed "s/'//g" | sed "s/,//g")
 #### Linix ###
-K8S_JOIN_MASTER=$(echo $ANSIBLE_OUT | grep -oP "(kubeadm join.*?certificate-key.*?)'" | sed 's/\\//g' | sed "s/'t//g" | sed "s/'//g" | sed "s/,//g")
-K8S_JOIN_WORKER=$(echo $ANSIBLE_OUT | grep -oP "(kubeadm join.*?discovery-token-ca-cert-hash.*?)'" | head -n 1 | sed 's/\\//g' | sed "s/'t//g" | sed "s/'//g" | sed "s/'//g" | sed "s/,//g")
+# K8S_JOIN_MASTER=$(echo $ANSIBLE_OUT | grep -oP "(kubeadm join.*?certificate-key.*?)'" | sed 's/\\//g' | sed "s/'t//g" | sed "s/'//g" | sed "s/,//g")
+# K8S_JOIN_WORKER=$(echo $ANSIBLE_OUT | grep -oP "(kubeadm join.*?discovery-token-ca-cert-hash.*?)'" | head -n 1 | sed 's/\\//g' | sed "s/'t//g" | sed "s/'//g" | sed "s/'//g" | sed "s/,//g")
 
 echo $K8S_JOIN_MASTER
 echo $K8S_JOIN_WORKER
@@ -171,13 +171,13 @@ cat <<EOF > 2-provisionar-k8s-master-auto-shell.yml
     - name: "Configura weavenet para reconhecer os nós master e workers"
       shell: kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=\$(kubectl version | base64 | tr -d '\n')"
 
-    - name: Espera 30 segundos
-      wait_for: timeout=30
+  - name: Espera 30 segundos
+    wait_for: timeout=30
 
-    - shell: kubectl get nodes -o wide
-      register: ps
-    - debug:
-        msg: " '{{ ps.stdout_lines }}' "
+  - shell: kubectl get nodes -o wide
+    register: ps
+  - debug:
+      msg: " '{{ ps.stdout_lines }}' "
 EOF
 
-ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i hosts 2-provisionar-k8s-master-auto-shell.yml -u ubuntu --private-key ~/.ssh/Ubuntu-dev-bira.pem
+ansible-playbook -i hosts 2-provisionar-k8s-master-auto-shell.yml -u ubuntu --private-key ~/Desktop/devops/treinamentoItau
