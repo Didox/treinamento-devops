@@ -70,6 +70,17 @@ resource "aws_security_group" "acessos_masters" {
   ingress = [
     {
       description      = "SSH from VPC"
+      from_port        = 30000
+      to_port          = 30000
+      protocol         = "tcp"
+      cidr_blocks      = ["${chomp(data.http.myip.body)}/32"]
+      ipv6_cidr_blocks = []
+      prefix_list_ids = null,
+      security_groups: null,
+      self: null
+    },
+    {
+      description      = "SSH from VPC"
       from_port        = 22
       to_port          = 22
       protocol         = "tcp"
