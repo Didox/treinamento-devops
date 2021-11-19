@@ -1,0 +1,8 @@
+levb_k8_masters = [
+  "levb-k8-master-node-0 - 3.238.17.65 ==> ssh -i ~/.ssh/keyPvtAccess.pub ubuntu@ec2-3-238-17-65.compute-1.amazonaws.com",
+]
+levb_k8_workers = [
+  "levb-k8-worker-node-0 - 34.205.39.77 ==> ssh -i ~/.ssh/keyPvtAccess.pub ubuntu@ec2-34-205-39-77.compute-1.amazonaws.com",
+  "levb-k8-worker-node-1 - 3.83.228.143 ==> ssh -i ~/.ssh/keyPvtAccess.pub ubuntu@ec2-3-83-228-143.compute-1.amazonaws.com",
+  "levb-k8-worker-node-2 - 54.221.119.231 ==> ssh -i ~/.ssh/keyPvtAccess.pub ubuntu@ec2-54-221-119-231.compute-1.amazonaws.com",
+]
