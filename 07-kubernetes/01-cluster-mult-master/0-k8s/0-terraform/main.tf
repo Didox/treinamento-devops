@@ -286,7 +286,7 @@ output "output-k8s_proxy" {
 }
 
 output "security-group-workers-e-haproxy" {
-  value = aws_security_group.acessos.id
+  value = aws_security_group.acessos_haproxy.id
 }
 
 
