@@ -1,7 +1,7 @@
 upstream loadbalancer {
-  server 54.226.188.130:30002;
-  server 54.87.42.52:30002;
-  server 54.196.208.93:30002;
+  server 54.226.188.130:30002; # control plane 1
+  server 54.87.42.52:30002; # control plane 2
+  server 54.196.208.93:30002; # control plane 3
 }
 server {
   location / {

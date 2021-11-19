@@ -1,10 +1,6 @@
-upstream loadbalancer {
-  server 54.226.188.130:30001;
-  server 54.87.42.52:30001;
-  server 54.196.208.93:30001;
-}
+
 server {
   location / {
-    proxy_pass http://loadbalancer;
+    proxy_pass http://54.226.188.130:30000; # IP DO CONTROL PLANE na porta do nodeport
   }
 }

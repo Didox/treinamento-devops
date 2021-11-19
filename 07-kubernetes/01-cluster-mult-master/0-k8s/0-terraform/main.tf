@@ -13,7 +13,7 @@ resource "aws_instance" "k8s_proxy" {
   tags = {
     Name = "k8s-haproxy"
   }
-  vpc_security_group_ids = [aws_security_group.acessos.id]
+  vpc_security_group_ids = [aws_security_group.acessos_haproxy.id]
 }
 
 resource "aws_instance" "k8s_masters" {
@@ -24,7 +24,7 @@ resource "aws_instance" "k8s_masters" {
   tags = {
     Name = "k8s-master-${count.index}"
   }
-  vpc_security_group_ids = [aws_security_group.acessos_master.id]
+  vpc_security_group_ids = [aws_security_group.acessos_masters.id]
   depends_on = [
     aws_instance.k8s_workers,
   ]
@@ -38,12 +38,12 @@ resource "aws_instance" "k8s_workers" {
   tags = {
     Name = "k8s_workers-${count.index}"
   }
-  vpc_security_group_ids = [aws_security_group.acessos.id]
+  vpc_security_group_ids = [aws_security_group.acessos_workers.id]
 }
 
 
-resource "aws_security_group" "acessos_master" {
-  name        = "k8s-acessos_master"
+resource "aws_security_group" "acessos_masters" {
+  name        = "k8s-acessos_masters"
   description = "acessos inbound traffic"
 
   ingress = [
@@ -71,6 +71,19 @@ resource "aws_security_group" "acessos_master" {
     },
     {
       cidr_blocks      = []
+      description      = "Libera acesso k8s_haproxy"
+      from_port        = 0
+      ipv6_cidr_blocks = []
+      prefix_list_ids  = []
+      protocol         = "-1"
+      security_groups  = [
+        "${aws_security_group.acessos.id}",
+      ]
+      self             = false
+      to_port          = 0
+    },
+    {
+      cidr_blocks      = []
       description      = "Libera acesso k8s_workers"
       from_port        = 0
       ipv6_cidr_blocks = []
@@ -78,7 +91,7 @@ resource "aws_security_group" "acessos_master" {
       protocol         = "-1"
       security_groups  = [
         "sg-082aca1fa06121961",
-        //aws_security_group.acessos_master.id
+        //aws_security_group.acessos_masters.id
       ]
       self             = false
       to_port          = 0
@@ -117,8 +130,81 @@ resource "aws_security_group" "acessos_master" {
   }
 }
 
+resource "aws_security_group" "acessos_haproxy" {
+  name        = "k8s-haproxy"
+  description = "acessos inbound traffic"
 
-resource "aws_security_group" "acessos" {
+  ingress = [
+    {
+      description      = "SSH from VPC"
+      from_port        = 22
+      to_port          = 22
+      protocol         = "tcp"
+      cidr_blocks      = ["${chomp(data.http.myip.body)}/32"]
+      ipv6_cidr_blocks = []
+      prefix_list_ids = null,
+      security_groups: null,
+      self: null
+    },
+    {
+      cidr_blocks      = []
+      description      = ""
+      from_port        = 0
+      ipv6_cidr_blocks = []
+      prefix_list_ids  = []
+      protocol         = "-1"
+      security_groups  = [
+        aws_security_group.acessos_masters.id,
+      ]
+      self             = false
+      to_port          = 0
+    },
+    {
+      cidr_blocks      = []
+      description      = ""
+      from_port        = 0
+      ipv6_cidr_blocks = []
+      prefix_list_ids  = []
+      protocol         = "-1"
+      security_groups  = [
+        aws_security_group.acessos_workers.id,
+      ]
+      self             = false
+      to_port          = 0
+    },
+    {
+      cidr_blocks      = []
+      description      = ""
+      from_port        = 0
+      ipv6_cidr_blocks = []
+      prefix_list_ids  = []
+      protocol         = "tcp"
+      security_groups  = []
+      self             = true
+      to_port          = 65535
+    },
+  ]
+
+  egress = [
+    {
+      from_port        = 0
+      to_port          = 0
+      protocol         = "-1"
+      cidr_blocks      = ["0.0.0.0/0"]
+      ipv6_cidr_blocks = [],
+      prefix_list_ids = null,
+      security_groups: null,
+      self: null,
+      description: "Libera dados da rede interna"
+    }
+  ]
+
+  tags = {
+    Name = "allow_haproxy_ssh"
+  }
+}
+
+resource "aws_security_group" "acessos_workers" {
   name        = "k8s-workers"
   description = "acessos inbound traffic"
 
@@ -142,7 +228,7 @@ resource "aws_security_group" "acessos" {
       prefix_list_ids  = []
       protocol         = "-1"
       security_groups  = [
-        aws_security_group.acessos_master.id,
+        aws_security_group.acessos_masters.id,
       ]
       self             = false
       to_port          = 0

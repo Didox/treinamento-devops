@@ -22,6 +22,7 @@ kubectl exec -it didox-nginx bash
 
 # Acessa o pod via ssh 
 kubectl exec --stdin --tty didox-nginx -- /bin/bash 
+kubectl exec --stdin --tty didox-nginx -- /bin/sh 
 
 # Edita pod
 kubectl edit pod didox-nginx

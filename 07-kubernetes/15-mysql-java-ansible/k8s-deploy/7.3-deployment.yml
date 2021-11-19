@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
         - name: container-pod-javadb
-          image: didox/crud-java-login:v0.0.1
+          image: didox/crud-java-login:v0.1.2
           env:
             - name: USER
               valueFrom:
@@ -33,7 +33,7 @@ spec:
           resources:
             requests:
               memory: "512Mi" # 512 MB
-              cpu: "0.5" # 1 milicors VCPU # este recurso tira do meu cluster este recurso #https://www.datacenters.com/news/what-is-a-vcpu-and-how-do-you-calculate-vcpu-to-cpu https://www.hyve.com/what-is-a-vmware-vcpu/
+              cpu: "0.5" # 0.5 milicors VCPU # este recurso tira do meu cluster este recurso #https://sysdig.com/blog/kubernetes-limits-requests/
             limits: # caso a aplicação precise de mais recurso, ele coloca este limite automático
               memory: "800Mi" # 800 MB
               cpu: "1"

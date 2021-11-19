@@ -6,6 +6,6 @@ spec:
   type: NodePort
   ports:
     - port: 8080
-      nodePort: 30002 # 30000 ~ 32767
+      nodePort: 30000 # 30000 ~ 32767
   selector:
     app: pod-javadb
