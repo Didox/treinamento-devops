@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodejs-deployment
+spec:
+  template:
+    metadata:
+      name: didox-nodejs
+      labels:
+        app: didox-nodejs
+    spec:
+      containers:
+        - name: container-pod-nodejs
+          image: didox/app-nodejs-validacao-cnpj
+          ports:
+            - containerPort: 3000
+
+          resources:
+            requests:
+              memory: "800Mi" # 512 MB
+              cpu: "1" # 0.5 milicors VCPU # este recurso tira do meu cluster este recurso #https://sysdig.com/blog/kubernetes-limits-requests/
+            limits: # caso a aplicação precise de mais recurso, ele coloca este limite automático
+              memory: "900Mi" # 800 MB
+              cpu: "2"
+
+  replicas: 2
+  selector:
+    matchLabels:
+      app: didox-nodejs
