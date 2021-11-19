@@ -4,7 +4,7 @@ ANSIBLE_OUT=$(ansible-playbook -i hosts provisionar.yml -u ubuntu --private-key 
 echo $ANSIBLE_OUT
 
 echo "Esperando criar os pods ..."
-sleep 30
+sleep 300
 
 ## Mac ##
 MYSQL_POD_NAME=$(echo $ANSIBLE_OUT | grep -oE "(mysql-.*? )" )

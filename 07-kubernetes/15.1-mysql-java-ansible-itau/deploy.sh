@@ -9,7 +9,7 @@ echo $ANSIBLE_OUT
 MYSQL_POD_NAME=$(echo $ANSIBLE_OUT | grep -oP "(mysql-.*? )" )
 
 echo "Esperando subir os pods ..."
-sleep 30
+sleep 300
 
 cat <<EOF > restore-dump-mysql.yml
 - hosts: all
