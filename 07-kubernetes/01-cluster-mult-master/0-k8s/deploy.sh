@@ -171,13 +171,13 @@ cat <<EOF > 2-provisionar-k8s-master-auto-shell.yml
     - name: "Configura weavenet para reconhecer os nós master e workers"
       shell: kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=\$(kubectl version | base64 | tr -d '\n')"
 
-  - name: Espera 30 segundos
-    wait_for: timeout=30
+    - name: Espera 30 segundos
+      wait_for: timeout=30
 
-  - shell: kubectl get nodes -o wide
-    register: ps
-  - debug:
-      msg: " '{{ ps.stdout_lines }}' "
+    - shell: kubectl get nodes -o wide
+      register: ps
+    - debug:
+        msg: " '{{ ps.stdout_lines }}' "
 EOF
 
 ansible-playbook -i hosts 2-provisionar-k8s-master-auto-shell.yml -u ubuntu --private-key ~/Desktop/devops/treinamentoItau
