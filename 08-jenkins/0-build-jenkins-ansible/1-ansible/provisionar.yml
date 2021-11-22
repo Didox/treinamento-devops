@@ -23,10 +23,6 @@
       
     - name: "Instala java"
       shell: "apt install default-jdk -y"
-
-    # # TODO instalar terraform
-    # - name: "Instala ansible"
-    #   shell: "sudo apt install ansible -y"
     
     - name: "Instala ansible"
       shell: "sudo apt install ansible -y"
@@ -44,7 +40,7 @@
     - name: Espera 30 segundos
       wait_for: timeout=30
 
-    ## outra dorma reduzida de se fazer
+    ## outra forma reduzida de se fazer
     # - shell: cat /var/lib/jenkins/secrets/initialAdminPassword
     #   register: ps
     # - debug: var=ps.stdout_lines
