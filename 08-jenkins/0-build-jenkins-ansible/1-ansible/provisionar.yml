@@ -46,10 +46,11 @@
     - name: "Copia chave privada"
       copy:
         src: "/home/ubuntu/.ssh/sua_chave.pem"
-        dest: "/home/ubuntu/.ssh/sua_chave.pem"
+        dest: "/var/lib/jenkins/.ssh/sua_chave.pem"
         owner: jenkins
         group: jenkins
         mode: '0400'
+        remote_src: false
 
     - name: "Instala jenkins"
       shell: "apt-get install jenkins -y"
