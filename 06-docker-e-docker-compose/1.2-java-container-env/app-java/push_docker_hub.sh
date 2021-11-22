@@ -1,2 +1,3 @@
-docker tag didox/crud-java-login:v0.0.1 hub.docker.com/r/didox/crud-java-login:v0.0.1
-docker push didox/crud-java-login:v0.0.1
+tag=$(git describe --tags $(git rev-list --tags --max-count=1))
+docker tag didox/crud-java-login:$tag hub.docker.com/r/didox/crud-java-login:$tag
+docker push didox/crud-java-login:$tag
