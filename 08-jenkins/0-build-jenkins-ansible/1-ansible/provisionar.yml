@@ -30,9 +30,26 @@
     # https://www.jenkins.io/doc/book/installing/linux/
     - name: "Add pacote jenkins"
       shell: sudo sh -c 'echo deb http://pkg.jenkins-ci.org/debian binary/ > /etc/apt/sources.list.d/jenkins.list'
-    
-    - name: "Update apt"
-      shell: "apt-get update"
+  
+    - name: "Install terraform passo 1"
+      shell: sudo apt-get update && sudo apt-get install -y gnupg software-properties-common curl
+
+    - name: "Install terraform passo 2"
+      shell: curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+
+    - name: "Install terraform passo 3"
+      shell: sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+
+    - name: "Install terraform passo 4"
+      shell: sudo apt-get update && sudo apt-get install terraform -y
+
+    - name: "Copia chave privada"
+      copy:
+        src: "/home/ubuntu/.ssh/sua_chave.pem"
+        dest: "/home/ubuntu/.ssh/sua_chave.pem"
+        owner: jenkins
+        group: jenkins
+        mode: '0400'
 
     - name: "Instala jenkins"
       shell: "apt-get install jenkins -y"
