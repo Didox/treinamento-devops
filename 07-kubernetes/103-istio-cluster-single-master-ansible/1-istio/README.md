@@ -171,7 +171,7 @@ http://54.162.34.26:9090 # se tiver senha, a padrão é admin/admin
 
 <!-- Agora analizar as tracing com jaeger -->
 kubectl get svc -n istio-system | grep jaeger # aqui podemos criar um nodeport para expor ou rodar o comando abaixo
-kubectl port-forward svc/jaeger-query 16686:16686 -n istio-system --address 0.0.0.0 # para expor para qualqur IP
+kubectl port-forward svc/jaeger-collector 16686:16686 -n istio-system --address 0.0.0.0 # para expor para qualqur IP
 <!-- 
 Liberar a porta na AWS e acessar
 http://54.162.34.26:16686 # se tiver senha, a padrão é admin/admin

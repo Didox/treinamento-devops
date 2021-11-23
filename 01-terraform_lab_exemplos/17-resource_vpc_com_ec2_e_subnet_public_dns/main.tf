@@ -26,6 +26,16 @@ resource "aws_eip_association" "eip_assoc" {
   allocation_id = aws_eip.example.id
 }
 
+# resource "aws_nat_gateway" "example" {
+#   allocation_id = aws_eip.example.id
+#   subnet_id     = aws_subnet.my_subnet_privada.id
+
+#   tags = {
+#     Name = "gw NAT"
+#   }
+#   depends_on = [aws_internet_gateway.gw.id]
+# }
+
 # terraform refresh para mostrar o ssh
 
 output "aws_instance_e_ssh" {
