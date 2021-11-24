@@ -28,6 +28,7 @@ resource "aws_security_group_rule" "front_k8s_ingress_https" {
   protocol          = "tcp"
   cidr_blocks       = ["0.0.0.0/0"]
   ipv6_cidr_blocks  = ["::/0"]
+  # source_security_group_id = aws_security_group.sg_k8s_front.id
   security_group_id = aws_security_group.sg_k8s_front.id
 }
 

@@ -83,3 +83,7 @@ npx yaml-lint yamllint pod.yml
 # $ kubectl exec -it nodejs-deployment-6fd74b494d-d5xm8 -- bash # entra dentro do meu POD
 # $ kubectl exec -it nodejs-deployment-6fd74b494d-d5xm8 -- apk add bash # starta container e entra no bash
 # $ kubectl get hpa # mostra a quantidade de máquinas que tenho no replicaset autoscale
+
+
+# Service exterrnal name to connect pod on RDS
+https://medium.com/@ManagedKube/kubernetes-access-external-services-e4fd643e5097
