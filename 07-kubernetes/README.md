@@ -87,3 +87,5 @@ npx yaml-lint yamllint pod.yml
 
 # Service exterrnal name to connect pod on RDS
 https://medium.com/@ManagedKube/kubernetes-access-external-services-e4fd643e5097
+https://kubernetes.io/docs/concepts/services-networking/service/
+https://www.magalix.com/blog/kubernetes-services-101-the-pods-interfaces
