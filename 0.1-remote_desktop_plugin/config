@@ -1,3 +1,5 @@
+CanonicalizeHostname yes
+
 Host *.sa-east-1.compute.amazonaws.com
     User ubuntu
     IdentityFile ~/.ssh/aws_gama.pem
