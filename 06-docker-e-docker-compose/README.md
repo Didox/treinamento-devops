@@ -61,3 +61,9 @@ docker push didox/SEU_APP
 
 # Publicar a imagem no docker hub, para o tag 
 docker push didox/SEU_APP:0.0.1
+
+# Remover imagem
+docker image rm didox/SUA_IMG
+
+# Ver imagens
+docker image ls
