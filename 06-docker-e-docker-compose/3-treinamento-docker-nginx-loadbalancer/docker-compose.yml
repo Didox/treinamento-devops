@@ -7,7 +7,7 @@ services:
       context: nginx/
     image: nginx_didox
     ports: 
-      - "3000:80"
+      - "80:80"
     depends_on:
       - sistema_concrete_java1
       - sistema_concrete_java2

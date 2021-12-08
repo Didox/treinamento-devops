@@ -14,7 +14,7 @@ resource "aws_instance" "web2" {
     volume_size = 8
   }
   tags = {
-    Name = "ec2-zerati-tf"
+    Name = "ec2-aluno-tf"
   }
 }
 
