@@ -19,3 +19,22 @@ resource "aws_instance" "web" {
     Name = "Maquina de Teste EC2"
   }
 }
+
+data http api {
+  url = "https://viacep.com.br/ws/09664000/json/unicode/"
+
+  request_headers = {
+    Accept = "application/json"
+  }
+}
+
+data "aws_vpc" "selected" {
+  filter {
+    name   = "tag:Name"
+    values = ["vpc-turma3-talyson-0"]
+  }
+}
+
+output api {
+  value       = jsondecode(data.http.api.body).bairro
+}
