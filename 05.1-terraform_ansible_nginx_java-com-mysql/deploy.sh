@@ -16,7 +16,12 @@ $HOST_DNS
 
 cd ../ansible
 
-ANSIBLE_HOST_KEY_CHECKING=False USER=root PASSWORD=root DATABASE=SpringWebYoutube ansible-playbook -i hosts provisionar.yml -u ubuntu --private-key ~/Desktop/devops/treinamentoItau
+export ANSIBLE_HOST_KEY_CHECKING=False 
+export USER=root
+export PASSWORD=root 
+export DATABASE=SpringWebYoutube 
+
+ansible-playbook -i hosts provisionar.yml -u ubuntu --private-key ~/Desktop/devops/treinamentoItau
 
 echo  "Abrindo site no navegador"
 sleep 10

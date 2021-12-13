@@ -60,13 +60,14 @@
     - name: "Criando senha root mysql"
       become: yes
       mysql_user:
-        name: "{{ lookup('env', 'ROOT') }}"
+        name: "{{ lookup('env', 'USER') }}"
         host: localhost
         password: "{{ lookup('env', 'PASSWORD') }}"
         priv: "*.*:ALL,GRANT"
         state: present
   
     - name: "Cria o banco de dados MySQL"
+      become: yes
       mysql_db:
         name: "{{ lookup('env', 'DATABASE') }}"
         login_user: "{{ lookup('env', 'USER') }}"
@@ -83,7 +84,7 @@
       shell: "mysql -u {{ lookup('env', 'USER') }} -p'{{ lookup('env', 'PASSWORD') }}' {{ lookup('env', 'DATABASE') }} < /home/ubuntu/db_backup.sql"
 
     - name: "Build Package"
-      shell: "cd spring-web-youtube && mvn package"
+      shell: "cd spring-web-youtube && mvn package -Dmaven.test.skip -DskipTests -Dmaven.javadoc.skip=true"
 
     - name: "startando VPS"
       shell: "cd spring-web-youtube && nohup mvn spring-boot:start &"
