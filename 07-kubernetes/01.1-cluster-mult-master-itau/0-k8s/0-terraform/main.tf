@@ -18,7 +18,7 @@ resource "aws_instance" "k8s_proxy" {
   root_block_device {
     delete_on_termination = true
     encrypted             = true
-    volume_size           = 32
+    volume_size           = 8
   }
   vpc_security_group_ids = [aws_security_group.acessos_haproxy.id]
 }
@@ -92,17 +92,6 @@ resource "aws_security_group" "acessos_masters" {
     },
     {
       cidr_blocks      = []
-      description      = "Libera acesso k8s_masters"
-      from_port        = 0
-      ipv6_cidr_blocks = []
-      prefix_list_ids  = []
-      protocol         = "-1"
-      security_groups  = []
-      self             = true
-      to_port          = 0
-    },
-    {
-      cidr_blocks      = []
       description      = "Libera acesso k8s_haproxy"
       from_port        = 0
       ipv6_cidr_blocks = []
@@ -113,20 +102,7 @@ resource "aws_security_group" "acessos_masters" {
       ]
       self             = false
       to_port          = 0
-    },
-    {
-      cidr_blocks      = [
-        "0.0.0.0/0",
-      ]
-      description      = ""
-      from_port        = 0
-      ipv6_cidr_blocks = []
-      prefix_list_ids  = []
-      protocol         = "tcp"
-      security_groups  = []
-      self             = false
-      to_port          = 65535
-    },
+    }
   ]
 
   egress = [
@@ -144,7 +120,7 @@ resource "aws_security_group" "acessos_masters" {
   ]
 
   tags = {
-    Name = "allow_ssh"
+    Name = "acessos_masters"
   }
 }
 
@@ -164,45 +140,34 @@ resource "aws_security_group" "acessos_haproxy" {
       security_groups: null,
       self: null
     },
-    {
-      cidr_blocks      = []
-      description      = ""
-      from_port        = 0
-      ipv6_cidr_blocks = []
-      prefix_list_ids  = []
-      protocol         = "-1"
-      security_groups  = [
-        # aws_security_group.acessos_masters.id,
-        "sg-00ec3d31d0cdf81b7",
-      ]
-      self             = false
-      to_port          = 0
-    },
-    {
-      cidr_blocks      = []
-      description      = ""
-      from_port        = 0
-      ipv6_cidr_blocks = []
-      prefix_list_ids  = []
-      protocol         = "-1"
-      security_groups  = [
-        #aws_security_group.acessos_workers.id,
-        "sg-0ef44b0c3d4e29c79",
-      ]
-      self             = false
-      to_port          = 0
-    },
-    {
-      cidr_blocks      = []
-      description      = ""
-      from_port        = 0
-      ipv6_cidr_blocks = []
-      prefix_list_ids  = []
-      protocol         = "tcp"
-      security_groups  = []
-      self             = true
-      to_port          = 65535
-    },
+    # {
+    #   cidr_blocks      = []
+    #   description      = ""
+    #   from_port        = 0
+    #   ipv6_cidr_blocks = []
+    #   prefix_list_ids  = []
+    #   protocol         = "-1"
+    #   security_groups  = [
+    #     # aws_security_group.acessos_masters.id,
+    #     "sg-00ec3d31d0cdf81b7",
+    #   ]
+    #   self             = false
+    #   to_port          = 0
+    # },
+    # {
+    #   cidr_blocks      = []
+    #   description      = ""
+    #   from_port        = 0
+    #   ipv6_cidr_blocks = []
+    #   prefix_list_ids  = []
+    #   protocol         = "-1"
+    #   security_groups  = [
+    #     #aws_security_group.acessos_workers.id,
+    #     "sg-0ef44b0c3d4e29c79",
+    #   ]
+    #   self             = false
+    #   to_port          = 0
+    # },
   ]
 
   egress = [
@@ -252,18 +217,7 @@ resource "aws_security_group" "acessos_workers" {
       ]
       self             = false
       to_port          = 0
-    },
-    {
-      cidr_blocks      = []
-      description      = ""
-      from_port        = 0
-      ipv6_cidr_blocks = []
-      prefix_list_ids  = []
-      protocol         = "tcp"
-      security_groups  = []
-      self             = true
-      to_port          = 65535
-    },
+    }
   ]
 
   egress = [
@@ -281,7 +235,7 @@ resource "aws_security_group" "acessos_workers" {
   ]
 
   tags = {
-    Name = "allow_ssh"
+    Name = "acessos_workers"
   }
 }
 
@@ -303,10 +257,6 @@ output "output-k8s_proxy" {
   value = [
     "k8s_proxy - ${aws_instance.k8s_proxy.private_ip} - ssh -i ~/Desktop/devops/treinamentoItau ubuntu@${aws_instance.k8s_proxy.public_dns} -o ServerAliveInterval=60"
   ]
-}
-
-output "security-group-workers-e-haproxy" {
-  value = aws_security_group.acessos_haproxy.id
 }
 
 
