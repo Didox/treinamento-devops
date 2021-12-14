@@ -211,8 +211,8 @@ resource "aws_security_group_rule" "acessos_haproxy_workers" {
   from_port        = 0
   to_port          = 0
   protocol         = "all"
-  source_security_group_id = aws_security_group.acessos_haproxy.id
-  security_group_id = aws_security_group.acessos_workers.id
+  source_security_group_id = aws_security_group.acessos_workers.id
+  security_group_id = aws_security_group.acessos_haproxy.id
 }
 resource "aws_security_group_rule" "acessos_haproxy_ssh" {
   type             = "ingress"
