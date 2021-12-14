@@ -157,7 +157,7 @@ resource "aws_security_group_rule" "acessos_master_rule_tcp" {
   to_port          = 30000
   protocol         = "tcp"
   cidr_blocks      = ["0.0.0.0/0"]
-  source_security_group_id = aws_security_group.acessos_masters.id
+  security_group_id = aws_security_group.acessos_masters.id
 }
 resource "aws_security_group_rule" "acessos_master_rule_ssh" {
   type             = "ingress"
@@ -166,7 +166,7 @@ resource "aws_security_group_rule" "acessos_master_rule_ssh" {
   to_port          = 22
   protocol         = "tcp"
   cidr_blocks      = ["0.0.0.0/0"]
-  source_security_group_id = aws_security_group.acessos_masters.id
+  security_group_id = aws_security_group.acessos_masters.id
 }
 resource "aws_security_group_rule" "acessos_master_hproxy" {
   type             = "ingress"
@@ -221,7 +221,7 @@ resource "aws_security_group_rule" "acessos_haproxy_ssh" {
   to_port          = 22
   protocol         = "tcp"
   cidr_blocks      = ["0.0.0.0/0"]
-  source_security_group_id = aws_security_group.acessos_haproxy.id
+  security_group_id = aws_security_group.acessos_haproxy.id
 }
 
 output "k8s-masters" {
