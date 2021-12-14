@@ -85,19 +85,6 @@ resource "aws_security_group" "acessos_masters" {
       prefix_list_ids = null,
       security_groups: null,
       self: null
-    },
-    {
-      cidr_blocks      = []
-      description      = "Libera acesso k8s_haproxy"
-      from_port        = 0
-      ipv6_cidr_blocks = []
-      prefix_list_ids  = []
-      protocol         = "-1"
-      security_groups  = [
-        "${aws_security_group.acessos_haproxy.id}",
-      ]
-      self             = false
-      to_port          = 0
     }
   ]
 
@@ -215,6 +202,16 @@ resource "aws_security_group_rule" "acessos_haproxy_master" {
   protocol         = "all"
   source_security_group_id = aws_security_group.acessos_haproxy.id
   security_group_id = aws_security_group.acessos_masters.id
+}
+
+resource "aws_security_group_rule" "acessos_haproxy_master_hproxy" {
+  type             = "ingress"
+  description      = "SG rule allowing Frontend SG to access Master SG."
+  from_port        = 0
+  to_port          = 0
+  protocol         = "all"
+  source_security_group_id = aws_security_group.acessos_masters.id
+  security_group_id = aws_security_group.acessos_haproxy.id
 }
 
 resource "aws_security_group_rule" "acessos_haproxy_workers" {
