@@ -63,30 +63,7 @@ resource "aws_security_group" "acessos_masters" {
   name        = "k8s-acessos_masters"
   description = "acessos inbound traffic"
   vpc_id = "vpc-01a2749453ce92707"
-  ingress = [
-    {
-      description      = "SSH from VPC"
-      from_port        = 30000
-      to_port          = 30000
-      protocol         = "tcp"
-      cidr_blocks      = ["0.0.0.0/0"]
-      ipv6_cidr_blocks = []
-      prefix_list_ids = null,
-      security_groups: null,
-      self: null
-    },
-    {
-      description      = "SSH from VPC"
-      from_port        = 22
-      to_port          = 22
-      protocol         = "tcp"
-      cidr_blocks      = ["0.0.0.0/0"]
-      ipv6_cidr_blocks = []
-      prefix_list_ids = null,
-      security_groups: null,
-      self: null
-    }
-  ]
+  ingress = []
 
   egress = [
     {
@@ -111,19 +88,7 @@ resource "aws_security_group" "acessos_haproxy" {
   name        = "k8s-haproxy"
   description = "acessos inbound traffic"
   vpc_id = "vpc-01a2749453ce92707"
-  ingress = [
-    {
-      description      = "SSH from VPC"
-      from_port        = 22
-      to_port          = 22
-      protocol         = "tcp"
-      cidr_blocks      = ["0.0.0.0/0"]
-      ipv6_cidr_blocks = []
-      prefix_list_ids = null,
-      security_groups: null,
-      self: null
-    }
-  ]
+  ingress = []
 
   egress = [
     {
@@ -148,32 +113,7 @@ resource "aws_security_group" "acessos_workers" {
   name        = "k8s-workers"
   description = "acessos inbound traffic"
   vpc_id = "vpc-01a2749453ce92707"
-  ingress = [
-    {
-      description      = "SSH from VPC"
-      from_port        = 22
-      to_port          = 22
-      protocol         = "tcp"
-      cidr_blocks      = ["0.0.0.0/0"]
-      ipv6_cidr_blocks = []
-      prefix_list_ids = null,
-      security_groups: null,
-      self: null
-    },
-    {
-      cidr_blocks      = []
-      description      = ""
-      from_port        = 0
-      ipv6_cidr_blocks = []
-      prefix_list_ids  = []
-      protocol         = "-1"
-      security_groups  = [
-        aws_security_group.acessos_masters.id,
-      ]
-      self             = false
-      to_port          = 0
-    }
-  ]
+  ingress = []
 
   egress = [
     {
@@ -194,16 +134,43 @@ resource "aws_security_group" "acessos_workers" {
   }
 }
 
-resource "aws_security_group_rule" "acessos_haproxy_master" {
+resource "aws_security_group_rule" "acessos_workers_rule_ssh" {
+  type             = "ingress"
+  description      = "SG rule allowing Frontend SG to access Master SG."
+  from_port        = 22
+  to_port          = 22
+  protocol         = "tcp"
+  cidr_blocks      = ["0.0.0.0/0"]
+  source_security_group_id = aws_security_group.acessos_workers.id
+}
+resource "aws_security_group_rule" "acessos_workers_masters" {
   type             = "ingress"
   description      = "SG rule allowing Frontend SG to access Master SG."
   from_port        = 0
   to_port          = 0
   protocol         = "all"
-  source_security_group_id = aws_security_group.acessos_haproxy.id
+  source_security_group_id = aws_security_group.acessos_workers.id
   security_group_id = aws_security_group.acessos_masters.id
 }
 
+resource "aws_security_group_rule" "acessos_master_rule_tcp" {
+  type             = "ingress"
+  description      = "SG rule allowing Frontend SG to access Master SG."
+  from_port        = 30000
+  to_port          = 30000
+  protocol         = "tcp"
+  cidr_blocks      = ["0.0.0.0/0"]
+  source_security_group_id = aws_security_group.acessos_masters.id
+}
+resource "aws_security_group_rule" "acessos_master_rule_ssh" {
+  type             = "ingress"
+  description      = "SG rule allowing Frontend SG to access Master SG."
+  from_port        = 22
+  to_port          = 22
+  protocol         = "tcp"
+  cidr_blocks      = ["0.0.0.0/0"]
+  source_security_group_id = aws_security_group.acessos_masters.id
+}
 resource "aws_security_group_rule" "acessos_haproxy_master_hproxy" {
   type             = "ingress"
   description      = "SG rule allowing Frontend SG to access Master SG."
@@ -214,6 +181,15 @@ resource "aws_security_group_rule" "acessos_haproxy_master_hproxy" {
   security_group_id = aws_security_group.acessos_haproxy.id
 }
 
+resource "aws_security_group_rule" "acessos_haproxy_master" {
+  type             = "ingress"
+  description      = "SG rule allowing Frontend SG to access Master SG."
+  from_port        = 0
+  to_port          = 0
+  protocol         = "all"
+  source_security_group_id = aws_security_group.acessos_haproxy.id
+  security_group_id = aws_security_group.acessos_masters.id
+}
 resource "aws_security_group_rule" "acessos_haproxy_workers" {
   type             = "ingress"
   description      = "SG rule allowing Frontend SG to access Master SG."
@@ -222,6 +198,15 @@ resource "aws_security_group_rule" "acessos_haproxy_workers" {
   protocol         = "all"
   source_security_group_id = aws_security_group.acessos_haproxy.id
   security_group_id = aws_security_group.acessos_workers.id
+}
+resource "aws_security_group_rule" "acessos_haproxy_ssh" {
+  type             = "ingress"
+  description      = "SG rule allowing Frontend SG to access Master SG."
+  from_port        = 22
+  to_port          = 22
+  protocol         = "tcp"
+  cidr_blocks      = ["0.0.0.0/0"]
+  source_security_group_id = aws_security_group.acessos_haproxy.id
 }
 
 output "k8s-masters" {
