@@ -2,10 +2,6 @@ provider "aws" {
   region = "sa-east-1"
 }
 
-data "http" "myip" {
-  url = "http://ipv4.icanhazip.com" # outra opção "https://ifconfig.me"
-}
-
 resource "aws_instance" "k8s_proxy" {
   ami           = "ami-0d6806446a46f9b9c"
   subnet_id = "subnet-08d1dcb60f40fe297"
@@ -73,7 +69,7 @@ resource "aws_security_group" "acessos_masters" {
       from_port        = 30000
       to_port          = 30000
       protocol         = "tcp"
-      cidr_blocks      = ["${chomp(data.http.myip.body)}/32"]
+      cidr_blocks      = ["0.0.0.0/0"]
       ipv6_cidr_blocks = []
       prefix_list_ids = null,
       security_groups: null,
@@ -139,35 +135,7 @@ resource "aws_security_group" "acessos_haproxy" {
       prefix_list_ids = null,
       security_groups: null,
       self: null
-    },
-    # {
-    #   cidr_blocks      = []
-    #   description      = ""
-    #   from_port        = 0
-    #   ipv6_cidr_blocks = []
-    #   prefix_list_ids  = []
-    #   protocol         = "-1"
-    #   security_groups  = [
-    #     # aws_security_group.acessos_masters.id,
-    #     "sg-00ec3d31d0cdf81b7",
-    #   ]
-    #   self             = false
-    #   to_port          = 0
-    # },
-    # {
-    #   cidr_blocks      = []
-    #   description      = ""
-    #   from_port        = 0
-    #   ipv6_cidr_blocks = []
-    #   prefix_list_ids  = []
-    #   protocol         = "-1"
-    #   security_groups  = [
-    #     #aws_security_group.acessos_workers.id,
-    #     "sg-0ef44b0c3d4e29c79",
-    #   ]
-    #   self             = false
-    #   to_port          = 0
-    # },
+    }
   ]
 
   egress = [
@@ -239,6 +207,26 @@ resource "aws_security_group" "acessos_workers" {
   }
 }
 
+resource "aws_security_group_rule" "acessos_haproxy_master" {
+  type             = "ingress"
+  description      = "SG rule allowing Frontend SG to access Master SG."
+  from_port        = 0
+  to_port          = 0
+  protocol         = "all"
+  source_security_group_id = aws_security_group.acessos_haproxy.id
+  security_group_id = aws_security_group.acessos_masters.id
+}
+
+resource "aws_security_group_rule" "acessos_haproxy_workers" {
+  type             = "ingress"
+  description      = "SG rule allowing Frontend SG to access Master SG."
+  from_port        = 0
+  to_port          = 0
+  protocol         = "all"
+  source_security_group_id = aws_security_group.acessos_haproxy.id
+  security_group_id = aws_security_group.acessos_workers.id
+}
+
 output "k8s-masters" {
   value = [
     for key, item in aws_instance.k8s_masters :
@@ -258,7 +246,3 @@ output "output-k8s_proxy" {
     "k8s_proxy - ${aws_instance.k8s_proxy.private_ip} - ssh -i ~/Desktop/devops/treinamentoItau ubuntu@${aws_instance.k8s_proxy.public_dns} -o ServerAliveInterval=60"
   ]
 }
-
-
-
-# terraform refresh para mostrar o ssh
