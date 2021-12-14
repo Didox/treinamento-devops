@@ -38,7 +38,13 @@ CREATE TABLE `administradores` (
 
 LOCK TABLES `administradores` WRITE;
 /*!40000 ALTER TABLE `administradores` DISABLE KEYS */;
-INSERT INTO `administradores` VALUES (1,'danilo@torneseumprogramador.com.br','Danilo','Criador do projeto','123456'),(4,'teste@danilo.com.br','Teste Danilo','teste observação danilo teste mais 1','teste123'),(5,'aluno@gmail.com','Aluno Silva','teste aluno','aluno'),(6,'aluno@m4u.com.br','Aluno M4U','aluno feito na live','aluno');
+
+INSERT INTO `administradores` VALUES 
+(1,'danilo@torneseumprogramador.com.br','Danilo','Criador do projeto','123456'),
+(4,'teste@danilo.com.br','Teste Danilo','teste observação danilo teste mais 1','teste123'),
+(5,'aluno@gmail.com','Aluno Silva','teste aluno','aluno'),
+(6,'aluno@m4u.com.br','Aluno M4U','aluno feito na live','aluno');
+
 /*!40000 ALTER TABLE `administradores` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
