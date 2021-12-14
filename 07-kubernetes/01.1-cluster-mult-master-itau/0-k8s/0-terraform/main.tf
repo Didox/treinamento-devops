@@ -186,6 +186,15 @@ resource "aws_security_group_rule" "acessos_haproxy_master_master {
   source_security_group_id = aws_security_group.acessos_masters.id
   security_group_id = aws_security_group.acessos_masters.id
 }
+resource "aws_security_group_rule" "acessos_haproxy_master_workers" {
+  type             = "ingress"
+  description      = "SG rule allowing Frontend SG to access Master SG."
+  from_port        = 0
+  to_port          = 0
+  protocol         = "all"
+  source_security_group_id = aws_security_group.acessos_masters.id
+  security_group_id = aws_security_group.acessos_workers.id
+}
 
 resource "aws_security_group_rule" "acessos_haproxy_master" {
   type             = "ingress"
