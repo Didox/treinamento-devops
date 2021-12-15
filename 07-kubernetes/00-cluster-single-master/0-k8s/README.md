@@ -32,33 +32,26 @@
 # sudo systemctl start kubelet # se precisar start do serviço
 
 ####################################################
-# Your Kubernetes control-plane has initialized successfully!
+Your Kubernetes control-plane has initialized successfully!
 
-# To start using your cluster, you need to run the following as a regular user:
+To start using your cluster, you need to run the following as a regular user:
 
-#   mkdir -p $HOME/.kube
-#   sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-#   sudo chown $(id -u):$(id -g) $HOME/.kube/config
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
-# Alternatively, if you are the root user, you can run:
+Alternatively, if you are the root user, you can run:
 
-#   export KUBECONFIG=/etc/kubernetes/admin.conf
+  export KUBECONFIG=/etc/kubernetes/admin.conf
 
-# You should now deploy a pod network to the cluster.
-# Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
-#   https://kubernetes.io/docs/concepts/cluster-administration/addons/
+You should now deploy a Pod network to the cluster.
+Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+  /docs/concepts/cluster-administration/addons/
 
-# You can now join any number of the control-plane node running the following command on each as root:
+You can now join any number of machines by running the following on each node
+as root:
 
-#   kubeadm join k8s-haproxy:6443 --token 0qlz9y.2qlm2zi6tuy7z27o --discovery-token-ca-cert-hash sha256:b73b7aada751542115ea476a6fd151fa9cc5dbbf9799f1bc7d05639a4d202c82  --control-plane --certificate-key 5a5f65c38762e6a8714101b71b1e59aa71e317ec0bb0c7d899e80253f89ded02
-
-# Please note that the certificate-key gives access to cluster sensitive data, keep it secret!
-# As a safeguard, uploaded-certs will be deleted in two hours; If necessary, you can use
-# "kubeadm init phase upload-certs --upload-certs" to reload certs afterward.
-
-# Then you can join any number of worker nodes by running the following on each as root:
-
-# kubeadm join k8s-haproxy:6443 --token 0qlz9y.2qlm2zi6tuy7z27o --discovery-token-ca-cert-hash sha256:b73b7aada751542115ea476a6fd151fa9cc5dbbf9799f1bc7d05639a4d202c82
+  kubeadm join <control-plane-host>:<control-plane-port> --token <token> --discovery-token-ca-cert-hash sha256:<hash>
 ####################################################
 
 
