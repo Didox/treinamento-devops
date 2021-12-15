@@ -58,6 +58,14 @@ kubeadm join k8s-haproxy:6443 --token vzs27d.ld5cvhdw912y9w71 \
 	--discovery-token-ca-cert-hash sha256:1ce552632ddd7480a4d3bb669fb4d62c7bcf1c95b451e59d5503ec6dd43c33a9
 ####################################################
 # kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+
+#  kubectl logs weave-net-6xxxp -c weave -n kube-system
+
+### caso dê problema de conflito de IP interno kubernetes com a rede externa VPC 
+
+# kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')&env.IPALLOC_RANGE=192.168.0.0/16" 
+
+
 # kubectl get pod -n kube-system -w
 
 # kubectl get nodes -o wide # lista os nos com seus respectivos IPs
