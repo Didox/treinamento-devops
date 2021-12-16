@@ -26,6 +26,31 @@
     
     - name: "Instala ansible"
       shell: "sudo apt install ansible -y"
+
+    - name: "Instala pacotes"
+      apt:
+        name: "{{ item }}"
+        state: latest
+      become: yes # roda com sudo
+      with_items:
+        - mysql-server
+        - python3-pycurl
+        - python3-mysqldb
+
+    - name: "Lavanta serviço do mysql"
+      become: yes
+      service:
+        name: mysql
+        state: started
+
+    - name: "Criando senha root mysql"
+      become: yes
+      mysql_user:
+        name: "root"
+        host: localhost
+        password: "root"
+        priv: "*.*:ALL,GRANT"
+        state: present
    
     # https://www.jenkins.io/doc/book/installing/linux/
     - name: "Add pacote jenkins"
