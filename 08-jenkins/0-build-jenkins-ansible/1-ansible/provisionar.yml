@@ -86,11 +86,8 @@
     - name: "Copia chave privada"
       copy:
         src: "/Users/danilo/Desktop/devops/treinamentoItau"
-        dest: "/home/ubuntu/.ssh/chave-privada.pem"
+        dest: "/var/lib/jenkins/chave-privada.pem"
         owner: jenkins
         group: jenkins
         mode: '0400'
         remote_src: false
-    
-
-    
