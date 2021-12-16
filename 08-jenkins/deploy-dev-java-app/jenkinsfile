@@ -17,40 +17,34 @@ pipeline {
                 sh "cd spring-app-validar-cpf-treinamento-concrete && mvn test"
             }
         }
-        stage('Build EC2') {
-            steps {
-                sh "08-jenkins/deploy-dev-java-app/deploy.sh"
-            }
-        }
         stage('Deploy DEV') {
             steps {
-                sh "ls -la #08-jenkins/deploy-dev-java-app/deploy.sh"
+                sh "08-jenkins/deploy-dev-java-app/deploy-dev.sh"
             }
         }
         stage('Test deploy dev') {
             steps {
-                sh "ls -la #08-jenkins/deploy-dev-java-app/test.sh"
+                sh "08-jenkins/deploy-dev-java-app/test-dev.sh"
             }
         }
         stage('Deploy Stage') {
             steps {
-                sh "ls -la #08-jenkins/deploy-dev-java-app/deploy.sh"
+                sh "08-jenkins/deploy-dev-java-app/deploy-stage.sh"
             }
         }
-        stage('Test deploy stage') {
+        stage('Test deploy dev') {
             steps {
-                sh "ls -la #08-jenkins/deploy-dev-java-app/test.sh"
+                sh "08-jenkins/deploy-dev-java-app/test-stage.sh"
             }
         }
-        // manual step
         stage('Deploy Prod') {
             steps {
-                sh "ls -la #08-jenkins/deploy-dev-java-app/deploy.sh"
+                sh "08-jenkins/deploy-dev-java-app/deploy-prod.sh"
             }
         }
-        stage('Test deploy prod') {
+        stage('Test deploy dev') {
             steps {
-                sh "ls -la #08-jenkins/deploy-dev-java-app/test.sh"
+                sh "08-jenkins/deploy-dev-java-app/test-prod.sh"
             }
         }
     }
