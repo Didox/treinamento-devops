@@ -7,7 +7,6 @@
 
     - name: "Configura hostname jenkins"
       shell: hostname jenkins && echo "jenkins" > /etc/hostname
-      become: yes
 
     - name: "Update apt"
       shell: "apt-get update"
@@ -31,23 +30,22 @@
       apt:
         name: "{{ item }}"
         state: latest
-      become: yes # roda com sudo
       with_items:
         - mysql-server
         - python3-pycurl
         - python3-mysqldb
 
     - name: "Lavanta serviço do mysql"
-      become: yes
       service:
         name: mysql
         state: started
 
     - name: "Criando senha root mysql"
-      become: yes
+      ignore_errors: yes
       mysql_user:
         name: "root"
         host: localhost
+        check_implicit_admin: yes
         password: "root"
         priv: "*.*:ALL,GRANT"
         state: present
@@ -68,15 +66,6 @@
     - name: "Install terraform passo 4"
       shell: sudo apt-get update && sudo apt-get install terraform -y
 
-    - name: "Copia chave privada"
-      copy:
-        src: "/home/ubuntu/.ssh/sua_chave.pem"
-        dest: "/var/lib/jenkins/.ssh/sua_chave.pem"
-        owner: jenkins
-        group: jenkins
-        mode: '0400'
-        remote_src: false
-
     - name: "Instala jenkins"
       shell: "apt-get install jenkins -y"
 
@@ -93,6 +82,15 @@
     - debug:
         msg: "Segredo do jenkins: '{{ ps.stdout_lines }}' "
         # msg: "Segredo do jenkins: '{{ ps.stderr_lines }}' " # quando quiser ver o erro
+
+    - name: "Copia chave privada"
+      copy:
+        src: "/Users/danilo/Desktop/devops/treinamentoItau"
+        dest: "/home/ubuntu/.ssh/chave-privada.pem"
+        owner: jenkins
+        group: jenkins
+        mode: '0400'
+        remote_src: false
     
 
     

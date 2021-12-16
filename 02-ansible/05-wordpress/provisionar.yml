@@ -70,6 +70,7 @@
         state: started
 
     - name: "Criando senha root mysql"
+      ignore_errors: yes
       become: yes
       mysql_user:
         name: root
