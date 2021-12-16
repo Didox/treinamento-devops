@@ -169,7 +169,7 @@ cat <<EOF > 2-provisionar-k8s-master-auto-shell.yml
   become: yes
   tasks:
     - name: "Configura weavenet para reconhecer os nós master e workers"
-      shell: kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')&env.IPALLOC_RANGE=192.168.0.0/16" ### caso dê problema de conflito de IP interno kubernetes com a rede externa VPC ###
+      shell: kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=\$(kubectl version | base64 | tr -d '\n')&env.IPALLOC_RANGE=192.168.0.0/16" ### caso dê problema de conflito de IP interno kubernetes com a rede externa VPC ###
       # shell: kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=\$(kubectl version | base64 | tr -d '\n')"
 
     - name: Espera 30 segundos
