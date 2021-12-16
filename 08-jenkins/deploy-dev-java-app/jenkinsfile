@@ -32,7 +32,7 @@ pipeline {
                 sh "08-jenkins/deploy-dev-java-app/deploy-stage.sh"
             }
         }
-        stage('Test deploy dev') {
+        stage('Test deploy Stage') {
             steps {
                 sh "08-jenkins/deploy-dev-java-app/test-stage.sh"
             }
@@ -42,7 +42,7 @@ pipeline {
                 sh "08-jenkins/deploy-dev-java-app/deploy-prod.sh"
             }
         }
-        stage('Test deploy dev') {
+        stage('Test deploy Prod') {
             steps {
                 sh "08-jenkins/deploy-dev-java-app/test-prod.sh"
             }
