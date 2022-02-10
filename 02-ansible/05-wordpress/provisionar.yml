@@ -78,6 +78,22 @@
         password: root
         priv: "*.*:ALL,GRANT"
         state: present
+        
+#     - name: "Alterando senha usuario SQL"
+#       become: yes
+#       ignore_errors: yes
+#       mysql_user:  
+#         name: "root"
+#         host: "{{ item }}" 
+#         password: "{{ lookup('env', 'PASSWORD') }}"
+#         priv: "*.*:ALL,GRANT"
+#         state: present
+#         check_implicit_admin: true
+#       with_items:  
+#       - '%'
+#       - 127.0.0.1  
+#       - ::1  
+#       - localhost
   
     - name: "Cria o banco de dados MySQL"
       mysql_db:
