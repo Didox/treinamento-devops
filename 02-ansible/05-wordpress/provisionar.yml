@@ -69,20 +69,38 @@
         name: mysql
         state: started
 
-    # - name: "Criando senha root mysql"
-    #   become: yes
-    #   mysql_user:
-    #     name: root
-    #     host: localhost
-    #     password: root
-    #     priv: "*.*:ALL,GRANT"
+    - name: "Criando senha root mysql"
+      ignore_errors: yes
+      become: yes
+      mysql_user:
+        name: root
+        host: localhost
+        password: root
+        priv: "*.*:ALL,GRANT"
+        state: present
+        
+#     - name: "Alterando senha usuario SQL"
+#       become: yes
+#       ignore_errors: yes
+#       mysql_user:  
+#         name: "root"
+#         host: "{{ item }}" 
+#         password: "{{ lookup('env', 'PASSWORD') }}"
+#         priv: "*.*:ALL,GRANT"
+#         state: present
+#         check_implicit_admin: true
+#       with_items:  
+#       - '%'
+#       - 127.0.0.1  
+#       - ::1  
+#       - localhost
   
-    # - name: "Cria o banco de dados MySQL"
-    #   mysql_db:
-    #     name: banco_wordpress
-    #     login_user: root
-    #     login_password: root
-    #     state: present
+    - name: "Cria o banco de dados MySQL"
+      mysql_db:
+        name: banco_wordpress
+        login_user: root
+        login_password: root
+        state: present
 
     - name: "Copiando novo tema WP"
       copy:

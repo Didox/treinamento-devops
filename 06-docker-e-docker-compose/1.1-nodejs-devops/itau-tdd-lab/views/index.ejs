@@ -1,0 +1,77 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
+
+    <title>Validador CNPJ</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/album/">
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="https://getbootstrap.com/docs/4.0/examples/album/album.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <header>
+      <div class="collapse bg-dark" id="navbarHeader">
+        <div class="container">
+          <div class="row">
+          </div>
+        </div>
+      </div>
+      <div class="navbar navbar-dark bg-dark box-shadow">
+        <div class="container d-flex justify-content-between">
+          <a href="#" class="navbar-brand d-flex align-items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+            <strong>Um App</strong>
+          </a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main role="main">
+
+      <section class="jumbotron text-center">
+        <div class="container">
+          <h1 class="jumbotron-heading">Um validador de CNPJ</h1>
+          <p class="lead text-muted">Um script feito com alunos para ilustrar um processo devops</p>
+          <p>
+            <form>
+              <div class="form-group">
+                <label for="cnpj">Digite o CNPJ</label>
+                <input type="text" class="form-control" id="cnpj" value="<%= cnpj %>" name="cnpj" placeholder="Digite o CNPJ">
+              </div>
+              <% if (validado !== ""){ %>
+                <% if (validado){ %>
+                  <div class="alert alert-success" role="alert">
+                    CNPJ validado com sucesso
+                  </div>
+                <% } else { %>
+                  <div class="alert alert-danger" role="alert">
+                    CNPJ não é válido
+                  </div>
+                <% } %>
+              <% } %>
+
+              <button type="submit" class="btn btn-primary">Validar CNPJ</button>
+            </form>
+          </p>
+        </div>
+      </section>
+
+    </main>
+
+  </body>
+</html>

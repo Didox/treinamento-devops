@@ -1,0 +1,44 @@
+- hosts: all
+  become: true
+
+  handlers:
+  - name: "restart nginx"
+    service:
+      name: nginx
+      state: restarted
+    become: yes
+
+  tasks:
+    - name: "Roda: sudo apt update"
+      become: yes
+      apt:
+        upgrade: yes
+        update_cache: yes
+        cache_valid_time: 86400 #Um dia
+    
+    - name: "Instala pacotes em lote"
+      apt:
+        name: "{{ item }}"
+        state: latest
+      become: yes # roda com sudo
+      with_items:
+        - default-jdk
+        - maven
+
+    - name: "clone projeto"
+      ansible.builtin.git:
+        repo: 'https://github.com/Didox/spring-mvc_java'
+        dest: /home/ubuntu/spring-mvc_java
+        clone: yes
+        update: yes
+
+    - name: "fazendo build do projeto"
+      shell: "cd spring-mvc_java && nohup mvn spring-boot:start &"
+    
+    - name: "Trocando nginx para VPS"
+      copy:
+        src: "nginx/default"
+        dest: "/etc/nginx/sites-available/default"
+      become: yes
+      notify:
+        - "restart nginx"

@@ -1,0 +1,99 @@
+- hosts: all
+  environment:
+    DATABASE_URL: "mysql://localhost:3306/{{ lookup('env', 'DATABASE') }}?useTimezone=true&serverTimezone=UTC"
+    PASSWORD: "{{ lookup('env', 'PASSWORD') }}"
+    USER: "{{ lookup('env', 'USER') }}"
+
+  handlers:
+    - name: "restart nginx"
+      service:
+        name: nginx
+        state: restarted
+      become: yes
+  tasks:
+    - name: "Roda: sudo apt-get update"
+      become: true
+      apt:
+        upgrade: yes
+        update_cache: yes
+
+    - name: "Instala pacotes"
+      apt:
+        name: "{{ item }}"
+        state: latest
+      become: yes # roda com sudo
+      with_items:
+        - nginx
+        - default-jre
+        - maven
+        - mysql-server
+        - python3-pycurl
+        - python3-mysqldb
+
+    - name: "clone projeto"
+      ansible.builtin.git:
+        repo: 'https://github.com/torneseumprogramador/spring-web-youtube'
+        dest: /home/ubuntu/spring-web-youtube
+        clone: yes
+        update: yes
+
+    - name: Adicionar USER no bashrc
+      lineinfile: dest=~/.bashrc line='export USER={{ lookup('env', 'USER') }}' state=present
+
+    - name: Adicionar PASSWORD no bashrc
+      lineinfile: dest=~/.bashrc line='export PASSWORD={{ lookup('env', 'PASSWORD') }}' state=present
+
+    - name: Adicionar DATABASE_URL no bashrc
+      lineinfile: dest=~/.bashrc line='export DATABASE_URL="mysql://localhost:3306/{{ lookup('env', 'DATABASE') }}?useTimezone=true&serverTimezone=UTC"' state=present
+
+    - name: Aplicar o bashrc
+      shell: source ~/.bashrc
+      args:
+        executable: /bin/bash
+
+    - name: "Lavanta serviço do mysql"
+      become: yes
+      service:
+        name: mysql
+        state: started
+
+    - name: "Criando senha root mysql"
+      ignore_errors: yes
+      become: yes
+      mysql_user:
+        name: "{{ lookup('env', 'USER') }}"
+        host: localhost
+        password: "{{ lookup('env', 'PASSWORD') }}"
+        priv: "*.*:ALL,GRANT"
+        state: present
+  
+    - name: "Cria o banco de dados MySQL"
+      become: yes
+      mysql_db:
+        name: "{{ lookup('env', 'DATABASE') }}"
+        login_user: "{{ lookup('env', 'USER') }}"
+        login_password: "{{ lookup('env', 'PASSWORD') }}"
+        state: present
+    
+    - name: "Copia dump mysql para servidor"
+      copy:
+        src: "sql/db_backup.sql"
+        dest: "/home/ubuntu/"
+      become: yes
+
+    - name: "Restore dump mysql"
+      shell: "mysql -u {{ lookup('env', 'USER') }} -p'{{ lookup('env', 'PASSWORD') }}' {{ lookup('env', 'DATABASE') }} < /home/ubuntu/db_backup.sql"
+
+    - name: "Build Package"
+      shell: "cd spring-web-youtube && mvn package -Dmaven.test.skip -DskipTests -Dmaven.javadoc.skip=true"
+
+    - name: "startando VPS"
+      shell: "cd spring-web-youtube && nohup mvn spring-boot:start &"
+
+    - name: "Trocando nginx para VPS"
+      copy:
+        src: "nginx/default"
+        dest: "/etc/nginx/sites-available/default"
+      become: yes
+      notify:
+        - "restart nginx"

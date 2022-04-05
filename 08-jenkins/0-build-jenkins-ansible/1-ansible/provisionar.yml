@@ -1,0 +1,93 @@
+- hosts: all
+  become: true
+
+  tasks:
+    - name: "Download pacote jenkins"
+      shell: wget -qO - https://pkg.jenkins.io/debian-stable/jenkins.io.key | apt-key add -
+
+    - name: "Configura hostname jenkins"
+      shell: hostname jenkins && echo "jenkins" > /etc/hostname
+
+    - name: "Update apt"
+      shell: "apt-get update"
+
+    - name: "Instala mvn"
+      shell: "sudo apt install maven -y"
+
+    - name: "Instala unzip"
+      shell: "sudo apt install unzip -y"
+
+    - name: "Instala awscli"
+      shell: "apt install awscli -y"
+      
+    - name: "Instala java"
+      shell: "apt install default-jdk -y"
+    
+    - name: "Instala ansible"
+      shell: "sudo apt install ansible -y"
+
+    - name: "Instala pacotes"
+      apt:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - mysql-server
+        - python3-pycurl
+        - python3-mysqldb
+
+    - name: "Lavanta serviço do mysql"
+      service:
+        name: mysql
+        state: started
+
+    - name: "Criando senha root mysql"
+      ignore_errors: yes
+      mysql_user:
+        name: "root"
+        host: localhost
+        check_implicit_admin: yes
+        password: "root"
+        priv: "*.*:ALL,GRANT"
+        state: present
+   
+    # https://www.jenkins.io/doc/book/installing/linux/
+    - name: "Add pacote jenkins"
+      shell: sudo sh -c 'echo deb http://pkg.jenkins-ci.org/debian binary/ > /etc/apt/sources.list.d/jenkins.list'
+  
+    - name: "Install terraform passo 1"
+      shell: sudo apt-get update && sudo apt-get install -y gnupg software-properties-common curl
+
+    - name: "Install terraform passo 2"
+      shell: curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+
+    - name: "Install terraform passo 3"
+      shell: sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+
+    - name: "Install terraform passo 4"
+      shell: sudo apt-get update && sudo apt-get install terraform -y
+
+    - name: "Instala jenkins"
+      shell: "apt-get install jenkins -y"
+
+    - name: Espera 30 segundos
+      wait_for: timeout=30
+
+    ## outra forma reduzida de se fazer
+    # - shell: cat /var/lib/jenkins/secrets/initialAdminPassword
+    #   register: ps
+    # - debug: var=ps.stdout_lines
+
+    - shell: cat /var/lib/jenkins/secrets/initialAdminPassword
+      register: ps
+    - debug:
+        msg: "Segredo do jenkins: '{{ ps.stdout_lines }}' "
+        # msg: "Segredo do jenkins: '{{ ps.stderr_lines }}' " # quando quiser ver o erro
+
+    - name: "Copia chave privada"
+      copy:
+        src: "/Users/danilo/Desktop/devops/treinamentoItau"
+        dest: "/var/lib/jenkins/chave-privada.pem"
+        owner: jenkins
+        group: jenkins
+        mode: '0400'
+        remote_src: false

@@ -27,3 +27,7 @@ output "amanda" {
 output "email_da_amanda" {
     value = var.usuarios["Amanda"].email
 }
+
+output "departamento_do_lucas" {
+    value = var.usuarios["Lucas"].departamento
+}

@@ -6,44 +6,33 @@ data "http" "myip" {
   url = "http://ipv4.icanhazip.com" # outra opção "https://ifconfig.me"
 }
 
-data "aws_ami" "ubuntu" {
-  most_recent = true
-  owners = ["099720109477"] # ou ["099720109477"] ID master com permissão para busca
-
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-*"] # exemplo de como listar um nome de AMI - 'aws ec2 describe-images --region us-east-1 --image-ids ami-09e67e426f25ce0d7' https://docs.aws.amazon.com/cli/latest/reference/ec2/describe-images.html
-  }
-}
-
 resource "aws_instance" "maquina_master" {
-  ami           = "${data.aws_ami.ubuntu.id}"
-  instance_type = "t2.medium"
-  key_name      = "Itau_treinamento"
+  ami           = "ami-09e67e426f25ce0d7"
+  instance_type = "t2.large"
+  key_name      = "treinamento-turma1_itau"
   tags = {
-    Name = "maquina-cluster-kubernetes-master"
+    Name = "k8s-master"
   }
-  vpc_security_group_ids = ["${aws_security_group.acessos_master.id}"]
+  vpc_security_group_ids = [aws_security_group.acessos_master_single_master.id]
   depends_on = [
     aws_instance.workers,
   ]
 }
 
 resource "aws_instance" "workers" {
-  ami           = "${data.aws_ami.ubuntu.id}"
-  instance_type = "t2.micro"
-  key_name      = "Itau_treinamento"
+  ami           = "ami-09e67e426f25ce0d7"
+  instance_type = "t2.medium"
+  key_name      = "treinamento-turma1_itau"
   tags = {
-    Name = "maquina-cluster-kubernetes-${count.index}"
+    Name = "k8s-node-${count.index + 1}"
   }
-  vpc_security_group_ids = ["${aws_security_group.acessos_workers.id}"]
-  count         = 2
+  vpc_security_group_ids = [aws_security_group.acessos_workers_single_master.id]
+  count         = 3
 }
 
-
-resource "aws_security_group" "acessos_master" {
-  name        = "acessos_master"
-  description = "acessos_workers inbound traffic"
+resource "aws_security_group" "acessos_master_single_master" {
+  name        = "acessos_master_single_master"
+  description = "acessos_master_single_master inbound traffic"
 
   ingress = [
     {
@@ -58,19 +47,43 @@ resource "aws_security_group" "acessos_master" {
       self: null
     },
     {
-      description      = "Libera porta kubernetes"
-      from_port        = 6443
-      to_port          = 6443
+      description      = "Liberando app nodejs para o mundo"
+      from_port        = 30000
+      to_port          = 30000
       protocol         = "tcp"
-      cidr_blocks      = [
-        "${chomp(data.http.myip.body)}/32",
-        "${aws_instance.workers[0].private_ip}/32",
-        "${aws_instance.workers[1].private_ip}/32",
+      cidr_blocks      = ["0.0.0.0/0"]
+      ipv6_cidr_blocks = ["::/0"]
+      prefix_list_ids = null,
+      security_groups: null,
+      self: null
+    },
+    {
+      cidr_blocks      = []
+      description      = ""
+      from_port        = 0
+      ipv6_cidr_blocks = []
+      prefix_list_ids  = []
+      protocol         = "-1"
+      security_groups  = [
+        # "${aws_security_group.acessos_workers_single_master.id}", não pode porque é circular
+        "sg-015a0fb8546987fea", # security group do acessos_workers_single_master
+        # "sg-292334788sh232u22", # security group do nginx
       ]
-      ipv6_cidr_blocks = ["::/0"]
-      prefix_list_ids = null,
-      security_groups: null,
-      self: null
+      self             = false
+      to_port          = 0
+    },
+    {
+      cidr_blocks      = [
+        "0.0.0.0/0",
+      ]
+      description      = ""
+      from_port        = 0
+      ipv6_cidr_blocks = []
+      prefix_list_ids  = []
+      protocol         = "tcp"
+      security_groups  = []
+      self             = false
+      to_port          = 65535
     },
   ]
 
@@ -89,14 +102,14 @@ resource "aws_security_group" "acessos_master" {
   ]
 
   tags = {
-    Name = "acessos_master"
+    Name = "acessos_master_single_master"
   }
 }
 
 
-resource "aws_security_group" "acessos_workers" {
-  name        = "acessos_workers"
-  description = "acessos_workers inbound traffic"
+resource "aws_security_group" "acessos_workers_single_master" {
+  name        = "acessos_workers_single_master"
+  description = "acessos_workers_single_master inbound traffic"
 
   ingress = [
     {
@@ -110,6 +123,19 @@ resource "aws_security_group" "acessos_workers" {
       security_groups: null,
       self: null
     },
+    {
+      cidr_blocks      = []
+      description      = ""
+      from_port        = 0
+      ipv6_cidr_blocks = []
+      prefix_list_ids  = []
+      protocol         = "-1"
+      security_groups  = [
+        "${aws_security_group.acessos_master_single_master.id}",
+      ]
+      self             = false
+      to_port          = 0
+    },
   ]
 
   egress = [
@@ -127,7 +153,7 @@ resource "aws_security_group" "acessos_workers" {
   ]
 
   tags = {
-    Name = "acessos_workers"
+    Name = "acessos_workers_single_master"
   }
 }
 
@@ -135,14 +161,15 @@ resource "aws_security_group" "acessos_workers" {
 # terraform refresh para mostrar o ssh
 output "maquina_master" {
   value = [
-    "master - ${aws_instance.maquina_master.public_ip} - ssh -i ~/projetos/devops/id_rsa_itau_treinamento ubuntu@${aws_instance.maquina_master.public_dns}"
+    "master - ${aws_instance.maquina_master.public_ip} - ssh -i ~/Desktop/devops/treinamentoItau ubuntu@${aws_instance.maquina_master.public_dns} -o ServerAliveInterval=60",
+    "sg master - ${aws_security_group.acessos_workers_single_master.id}"
   ]
 }
 
 # terraform refresh para mostrar o ssh
-output "aws_instance_e_ssh" {
+output "maquina_workers" {
   value = [
     for key, item in aws_instance.workers :
-      "worker ${key+1} - ${item.public_ip} - ssh -i ~/projetos/devops/id_rsa_itau_treinamento ubuntu@${item.public_dns}"
+      "worker ${key+1} - ${item.public_ip} - ssh -i ~/Desktop/devops/treinamentoItau ubuntu@${item.public_dns} -o ServerAliveInterval=60"
   ]
 }

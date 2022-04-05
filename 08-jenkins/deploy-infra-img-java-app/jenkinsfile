@@ -1,0 +1,31 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clone repo') {
+            steps {
+                git url: 'https://github.com/Didox/treinamento-devops', branch: 'main'
+            }
+        }
+        stage('Build EC2') {
+            steps {
+                sh "08-jenkins/deploy-infra-img-java-app/deploy.sh"
+            }
+        }
+        stage('Test Nginx') {
+            steps {
+                sh "08-jenkins/deploy-infra-img-java-app/test.sh"
+            }
+        }
+        stage('Build AMI') {
+            steps {
+                sh "08-jenkins/deploy-infra-img-java-app/package-ami.sh"
+            }
+        }
+        stage('Destroy Test EC2') {
+            steps {
+                sh "08-jenkins/deploy-infra-img-java-app/destroy.sh"
+            }
+        }
+    }
+}

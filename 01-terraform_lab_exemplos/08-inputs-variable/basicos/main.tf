@@ -16,18 +16,18 @@ variable "vai_meu" {
   description = "Vai meu?"
 }
 
-// output <name>
-output "pais" {
-  value       = var.pais
-  description = "Seu país"
-}
+# // output <name>
+# output "pais" {
+#   value       = var.pais
+#   description = "Seu país"
+# }
 
-output "idade" {
-  value       = var.idade
-  description = "Sua idade"
-}
+# output "idade" {
+#   value       = var.idade
+#   description = "Sua idade"
+# }
 
-output "vai_meu" {
-  value       = var.vai_meu
-  description = "rápido, pedala !"
-}
+# output "vai_meu" {
+#   value       = var.vai_meu
+#   description = "rápido, pedala !"
+# }

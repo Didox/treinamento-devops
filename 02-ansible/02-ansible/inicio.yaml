@@ -1,0 +1,4 @@
+- hosts: all
+  tasks:
+    - name: "Criando um arquivo a toa no servidor"
+      shell: "echo 'escrevendo algo no servidor' >> teste.txt"

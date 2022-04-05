@@ -1,0 +1,51 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clone repo infra') {
+            steps {
+                git url: 'https://github.com/Didox/treinamento-devops', branch: 'main'
+            }
+        }
+        stage('Clone app dev') {
+            steps {
+                sh "rm -rf spring-app-validar-cpf-treinamento-concrete && git clone https://github.com/Didox/spring-app-validar-cpf-treinamento-concrete"
+            }
+        }
+        stage('Test App') {
+            steps {
+                sh "cd spring-app-validar-cpf-treinamento-concrete && mvn test"
+            }
+        }
+        stage('Deploy DEV') {
+            steps {
+                sh "08-jenkins/deploy-dev-java-app/deploy-dev.sh"
+            }
+        }
+        stage('Test deploy dev') {
+            steps {
+                sh "08-jenkins/deploy-dev-java-app/test-dev.sh"
+            }
+        }
+        stage('Deploy Stage') {
+            steps {
+                sh "08-jenkins/deploy-dev-java-app/deploy-stage.sh"
+            }
+        }
+        stage('Test deploy Stage') {
+            steps {
+                sh "08-jenkins/deploy-dev-java-app/test-stage.sh"
+            }
+        }
+        stage('Deploy Prod') {
+            steps {
+                sh "08-jenkins/deploy-dev-java-app/deploy-prod.sh"
+            }
+        }
+        stage('Test deploy Prod') {
+            steps {
+                sh "08-jenkins/deploy-dev-java-app/test-prod.sh"
+            }
+        }
+    }
+}

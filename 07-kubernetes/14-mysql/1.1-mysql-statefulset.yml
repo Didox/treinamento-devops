@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysqlstatefulset
+spec:
+  selector:
+    matchLabels:
+      app: mysqlstatefulset
+  serviceName: mysqlstatefulset
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mysqlstatefulset
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:latest
+          env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: db-mysql-secret
+                key: MYSQL_ROOT_PASSWORD
+          ports:
+          - containerPort: 3306
+            name: mysql
+          volumeMounts:
+          - name: mysql-persistent-storage
+            mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql-pv-claim
+---
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: "mysql-pv-volume"
+# spec:
+#   storageClassName: manual
+#   capacity:
+#     storage: 5Gi
+#   accessModes:
+#     - ReadWriteOnce
+#   persistentVolumeReclaimPolicy: Recycle
+#   awsElasticBlockStore:
+#     volumeID: vol-0ab8a666e780408d8
+#     fsType: ext4
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-pv-volume
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pv-claim
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

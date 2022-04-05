@@ -5,7 +5,7 @@ provider "aws" {
 resource "aws_instance" "maquina_wp" {
   ami = "${var.amis["us-east-1-ubuntu18"]}"
   instance_type = "${var.instance_type.micro}"
-  key_name = "Itau_treinamento"
+  key_name = "treinamento-turma1_itau"
   tags = {
     Name = "maquina_ansible_com_worpress"
   }

@@ -1,0 +1,78 @@
+- hosts: all
+
+  handlers:
+    - name: "restart nginx"
+      service:
+        name: nginx
+        state: restarted
+      become: yes
+
+  tasks:
+    - name: "Roda: sudo apt-get update"
+      become: yes
+      apt:
+        upgrade: yes
+        update_cache: yes
+        cache_valid_time: 86400 #Um dia
+
+    - name: "Instala pacotes"
+      apt:
+        name: "{{ item }}"
+        state: latest
+      become: yes # roda com sudo
+      with_items:
+        - nginx
+
+    - name: install packages required by docker
+      become: true
+      apt:
+        update_cache: yes
+        state: latest
+        name:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - gpg-agent
+        - software-properties-common
+
+    - name: add docker GPG key
+      become: true
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: add docker apt repo
+      become: true
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu bionic stable
+        state: present
+
+    - name: install docker
+      become: true
+      apt:
+        update_cache: yes
+        state: latest
+        name:
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+
+    - name: "Restart docker"
+      shell: sudo systemctl restart docker
+      become: yes
+
+    - name: "Fazer pull do docker"
+      shell: "docker pull didox/app-nodejs-validacao-cnpj"
+      become: yes
+
+    - name: "Roda o container"
+      shell: "docker run -d -p 3000:3000 --name app-nodejs-validacao-cnpj didox/app-nodejs-validacao-cnpj"
+      become: yes
+    
+    - name: "Trocando nginx para ler a VPS"
+      copy:
+        src: "nginx/default"
+        dest: "/etc/nginx/sites-available/default"
+      become: yes
+      notify:
+        - "restart nginx"

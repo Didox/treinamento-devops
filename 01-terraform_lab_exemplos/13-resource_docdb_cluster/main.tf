@@ -6,7 +6,7 @@ provider "aws" {
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/docdb_cluster_instance
 
 resource "aws_docdb_cluster_instance" "cluster_instances" {
-  count              = 1 # replicas da instancia princial
+  count              = 2 # replicas da instancia princial
   identifier         = "docdb-cluster-replica-${count.index}"
   cluster_identifier = aws_docdb_cluster.docdb.id
   instance_class     = "db.r5.large"

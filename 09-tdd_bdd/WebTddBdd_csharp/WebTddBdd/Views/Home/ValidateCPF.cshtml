@@ -1,0 +1,16 @@
+﻿@{
+    bool isCPFValid = ((bool)ViewBag.isCPFValid);
+}
+
+<div class="text-center">
+    <h1 class="display-4">Olá @ViewBag.nome</h1>
+
+    @if (isCPFValid)
+    {
+        <h1 class="alert alert-success">CPF válido</h1>
+    }
+    else
+    {
+        <h1 class="alert alert-danger">CPF inválido</h1>
+    }
+</div>

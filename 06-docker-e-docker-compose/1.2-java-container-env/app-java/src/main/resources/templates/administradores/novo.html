@@ -1,0 +1,36 @@
+<div th:replace="compartilhado/top"></div>
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <h1 class="h3 mb-2 text-gray-800">Novo Administrador</h1>
+        <p class="mb-4">
+            Aqui iremos cadastrar um novo administrador
+        </p>
+
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4" style="padding: 30px;">
+            <form method="POST" action="/administradores/criar" onsubmit="return confirm('Confirma ação')">
+                <div class="form-group">
+                    <label for="nome">Nome</label>
+                    <input type="text" class="form-control" required id="nome" name="nome" placeholder="Digite o seu nome">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" required id="email" name="email" placeholder="Digite o seu email">
+                </div>
+                <div class="form-group">
+                    <label for="senha">Senha</label>
+                    <input type="password" class="form-control" required id="senha" name="senha" placeholder="Digite o seu senha">
+                </div>
+                <div class="form-group">
+                    <label for="observacao">Observação</label>
+                    <textarea class="form-control" id="observacao" name="observacao" placeholder="Digite o seu observação"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Enviar</button>
+            </form>
+        </div>
+
+    </div>
+    <!-- /.container-fluid -->
+<div th:replace="compartilhado/baixo"></div>

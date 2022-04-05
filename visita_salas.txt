@@ -1,0 +1,7 @@
+Sala 1 - 3
+Sala 2 - 2
+Sala 3 - 5
+Sala 4 - 8
+Sala 5 - 3
+Sala 6 - 8
+Sala 7 - 5

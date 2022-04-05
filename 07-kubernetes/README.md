@@ -22,6 +22,7 @@ kubectl exec -it didox-nginx bash
 
 # Acessa o pod via ssh 
 kubectl exec --stdin --tty didox-nginx -- /bin/bash 
+kubectl exec --stdin --tty didox-nginx -- /bin/sh 
 
 # Edita pod
 kubectl edit pod didox-nginx
@@ -31,6 +32,11 @@ kubectl delete pods --all
 
 # apaga todos os servicos
 kubectl delete services --all 
+
+# valida yml
+npm install -g yaml-lint
+sudo apt install npm
+npx yaml-lint yamllint pod.yml
 
 
 
@@ -77,3 +83,9 @@ kubectl delete services --all
 # $ kubectl exec -it nodejs-deployment-6fd74b494d-d5xm8 -- bash # entra dentro do meu POD
 # $ kubectl exec -it nodejs-deployment-6fd74b494d-d5xm8 -- apk add bash # starta container e entra no bash
 # $ kubectl get hpa # mostra a quantidade de máquinas que tenho no replicaset autoscale
+
+
+# Service exterrnal name to connect pod on RDS
+https://medium.com/@ManagedKube/kubernetes-access-external-services-e4fd643e5097
+https://kubernetes.io/docs/concepts/services-networking/service/
+https://www.magalix.com/blog/kubernetes-services-101-the-pods-interfaces

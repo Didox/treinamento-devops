@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: java-deployment
+spec:
+  template:
+    metadata:
+      name: pod-javadb
+      labels:
+        app: pod-javadb
+    spec:
+      containers:
+        - name: container-pod-javadb
+          image: didox/crud-java-login:v0.0.1
+          env:
+            - name: USER
+              valueFrom:
+                configMapKeyRef:
+                  name: mysql-configmap
+                  key: USER
+            - name: PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: PASSWORD
+            - name: DATABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: mysql-configmap
+                  key: DATABASE_URL
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              memory: "300Mi" # 512 MB
+              cpu: "0.2" # 1 milicors VCPU # este recurso tira do meu cluster este recurso #https://www.datacenters.com/news/what-is-a-vcpu-and-how-do-you-calculate-vcpu-to-cpu https://www.hyve.com/what-is-a-vmware-vcpu/
+            limits: # caso a aplicação precise de mais recurso, ele coloca este limite automático
+              memory: "600Mi" # 800 MB
+              cpu: "0.4"
+  replicas: 2
+  selector:
+    matchLabels:
+      app: pod-javadb
+
+
+# $ kubectl logs -l app=lable-pod-java # log de todos os lables do replicaset
+# $ kubectl logs --tail=20 --follow=true -l app=lable-pod-java

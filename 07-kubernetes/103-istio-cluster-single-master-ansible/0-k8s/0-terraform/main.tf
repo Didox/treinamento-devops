@@ -9,7 +9,7 @@ data "http" "myip" {
 resource "aws_instance" "master" {
   ami           = "ami-09e67e426f25ce0d7"
   instance_type = "t2.large"
-  key_name      = "Itau_treinamento"
+  key_name      = "treinamento-turma1_itau"
   tags = {
     Name = "maquina-cluster-kubernetes-master"
   }
@@ -22,7 +22,7 @@ resource "aws_instance" "master" {
 resource "aws_instance" "workers" {
   ami           = "ami-09e67e426f25ce0d7"
   instance_type = "t2.medium"
-  key_name      = "Itau_treinamento"
+  key_name      = "treinamento-turma1_itau"
   tags = {
     Name = "maquina-cluster-kubernetes-${count.index}"
   }
@@ -190,7 +190,7 @@ output "master" {
     "master",
     "private: ${aws_instance.master.private_ip}",
     "public: ${aws_instance.master.public_ip}",
-    "ssh -i ~/projetos/devops/id_rsa_itau_treinamento ubuntu@${aws_instance.master.public_dns}"
+    "ssh -i ~/Desktop/devops/treinamentoItau ubuntu@${aws_instance.master.public_dns}"
   ]
 }
 
@@ -198,6 +198,6 @@ output "master" {
 output "aws_instance_e_ssh" {
   value = [
     for key, item in aws_instance.workers :
-    "worker ${key + 1} - private - ${item.private_ip} - public - ${item.public_ip} - ssh -i ~/projetos/devops/id_rsa_itau_treinamento ubuntu@${item.public_dns}"
+    "worker ${key + 1} - private - ${item.private_ip} - public - ${item.public_ip} - ssh -i ~/Desktop/devops/treinamentoItau ubuntu@${item.public_dns}"
   ]
 }

@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: java-deployment
+spec:
+  template:
+    metadata:
+      name: pod-javadb
+      labels:
+        app: pod-javadb
+    spec:
+      containers:
+        - name: container-pod-javadb
+          image: didox/crud-java-login:v0.1.2
+          env:
+            - name: USER
+              valueFrom:
+                configMapKeyRef:
+                  name: mysql-configmap
+                  key: USER
+            - name: PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: PASSWORD
+            - name: DATABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: mysql-configmap
+                  key: DATABASE_URL
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              memory: "512Mi" # 512 MB
+              cpu: "0.5" # 0.5 milicors VCPU # este recurso tira do meu cluster este recurso #https://sysdig.com/blog/kubernetes-limits-requests/
+            limits: # caso a aplicação precise de mais recurso, ele coloca este limite automático
+              memory: "800Mi" # 800 MB
+              cpu: "1"
+  replicas: 2
+  selector:
+    matchLabels:
+      app: pod-javadb
+
+
+# $ kubectl logs -l app=lable-pod-java # log de todos os lables do replicaset
+# $ kubectl logs --tail=20 --follow=true -l app=lable-pod-java

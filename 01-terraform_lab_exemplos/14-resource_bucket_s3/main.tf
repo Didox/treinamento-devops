@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "lab_s3" {
-  bucket = "lab-s3"
+  bucket = "lab-terraform-s3"
   acl    = "public-read"
 
   tags = {

@@ -1,0 +1,57 @@
+<div th:replace="compartilhado/top"></div>
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <h1 class="h3 mb-2 text-gray-800">Administradores</h1>
+        <p class="mb-4">
+            Aqui irá listar os administradores do meu sistema
+        </p>
+
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <a href="/administradores/novo" class="btn btn-primary" style="margin-right: 20px;">Novo</a>
+                <h6 class="m-0 font-weight-bold text-primary" style="display: inline-block;">Lista de administradores</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Nome</th>
+                                <th>Email</th>
+                                <th>Senha</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Id</th>
+                                <th>Nome</th>
+                                <th>Email</th>
+                                <th>Senha</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            <tr th:each="administrador : ${administradores}">
+                                <td th:text="${administrador.id}"></td>
+                                <td th:text="${administrador.nome}"></td>
+                                <td th:text="${administrador.email}"></td>
+                                <td th:text="${administrador.senha}"></td>
+                                <td><a th:href="@{'/administradores/' + ${administrador.id}}" class="btn btn-warning">Alterar</td>
+                                <td><a href="#" th:onclick="'if(confirm(\'Confirma ?\')) { window.location.href = \'' + @{/administradores/{id}(id=${administrador.id})} + '/excluir\' } '" class="btn btn-danger">Excluir</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- /.container-fluid -->
+<div th:replace="compartilhado/baixo"></div>

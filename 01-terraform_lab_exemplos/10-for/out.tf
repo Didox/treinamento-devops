@@ -24,3 +24,16 @@ output "dados_da_variavel_map" {
     }
   }
 }
+
+output "dados_da_variavel_key2" {
+  value = [
+    for key, item in var.colaboradores :
+      <<EOF
+
+      ${key}
+      ${item.cargo}
+      ${item.email}
+
+      EOF
+  ]
+}

@@ -17,8 +17,8 @@ resource "aws_security_group" "allow_ssh" {
       cidr_blocks      = ["0.0.0.0/0"]
       ipv6_cidr_blocks = ["::/0"]
       prefix_list_ids = null,
-      security_groups: null,
-      self: null
+      security_groups = null,
+      self            = null
     }
   ]
 
@@ -29,10 +29,10 @@ resource "aws_security_group" "allow_ssh" {
       protocol         = "-1"
       cidr_blocks      = ["0.0.0.0/0"]
       ipv6_cidr_blocks = ["::/0"],
-      prefix_list_ids = null,
-      security_groups: null,
-      self: null,
-      description: "Libera dados da rede interna"
+      prefix_list_ids  = null,
+      security_groups  = null,
+      self             = null,
+      description      = "Libera dados da rede interna"
     }
   ]
 
@@ -40,3 +40,4 @@ resource "aws_security_group" "allow_ssh" {
     Name = "allow_ssh"
   }
 }
+

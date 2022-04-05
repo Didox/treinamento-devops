@@ -15,9 +15,9 @@
         state: latest
       become: yes # roda com sudo
       with_items:
-        - php7.2
+        - php7.4
         - apache2
-        - libapache2-mod-php7.2
+        - libapache2-mod-php7.4
         - php-mysql
         - php-curl
         - mysql-server
@@ -70,6 +70,7 @@
         state: started
 
     - name: "Criando senha root mysql"
+      ignore_errors: yes
       become: yes
       mysql_user:
         name: root

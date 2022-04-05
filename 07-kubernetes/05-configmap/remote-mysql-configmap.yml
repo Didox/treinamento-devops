@@ -5,4 +5,3 @@ metadata:
 data:
   DATABASE_URL: "https://10.104.78.82:3306"
   USER: "root"
-  PASSWORD: "d4i5dox1%2^4"
