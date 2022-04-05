@@ -1,0 +1,85 @@
+- hosts:
+  - ec2-swarm-m1
+  tasks:
+    - name: "Configura hostname swarm-master"
+      shell: hostname swarm-master-1 && echo "swarm-master-1" > /etc/hostname
+      become: yes
+# ---
+- hosts:
+  - ec2-swarm-m2
+  tasks:
+    - name: "Configura hostname swarm-master"
+      shell: hostname swarm-master-2 && echo "swarm-master-2" > /etc/hostname
+      become: yes
+# ---
+- hosts:
+  - ec2-swarm-m3
+  tasks:
+    - name: "Configura hostname swarm-master"
+      shell: hostname swarm-master-3 && echo "swarm-master-3" > /etc/hostname
+      become: yes
+# ---
+- hosts:
+  - ec2-swarm-w1
+  tasks:
+    - name: "Configura hostname swarm-workers"
+      shell: hostname swarm-workers-1 && echo "swarm-workers-1" > /etc/hostname
+      become: yes
+# ---
+- hosts:
+  - ec2-swarm-w2
+  tasks:
+    - name: "Configura hostname swarm-workers"
+      shell: hostname swarm-workers-2 && echo "swarm-workers-2" > /etc/hostname
+      become: yes
+# ---
+- hosts:
+  - ec2-swarm-w3
+  tasks:
+    - name: "Configura hostname swarm-workers"
+      shell: hostname swarm-workers-3 && echo "swarm-workers-3" > /etc/hostname
+      become: yes
+# ---
+- hosts:
+  - ec2-swarm-m1
+  - ec2-swarm-m3
+  - ec2-swarm-m2
+  - ec2-swarm-w1
+  - ec2-swarm-w2
+  - ec2-swarm-w3
+
+  tasks:
+    - name: install packages required by docker
+      become: true
+      apt:
+        update_cache: yes
+        state: latest
+        name:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - gpg-agent
+        - software-properties-common
+
+    - name: add docker GPG key
+      become: true
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: add docker apt repo
+      become: true
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu bionic stable
+        state: present
+
+    - name: install docker
+      become: true
+      apt:
+        update_cache: yes
+        state: latest
+        name:
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+

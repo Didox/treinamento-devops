@@ -1,21 +1,21 @@
 variable key_pair_name {
   type        = string
-  default     = "kp-mineiro"
+  default     = "devops-acesso-sh"
 }
 
 variable subnet-az-a {
   type        = string
-  default     = "subnet-0842414f901483088"
+  default     = "subnet-1fa24744"
 }
 
 variable vpc_id {
   type        = string
-  default     = "vpc-03d1b7e53da104e7c"
+  default     = "vpc-f0d19897"
   description = "description"
 }
 
 variable meu_nome {
   type        = string
-  default     = "mineiro"
-  description = "Adicionar seu nome"
+  default     = "lab-swarms"
+  description = "Nome recurso"
 }
