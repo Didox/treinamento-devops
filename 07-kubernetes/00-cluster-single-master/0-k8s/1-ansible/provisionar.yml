@@ -132,10 +132,10 @@
 
 
 
-# ansible-playbook -i hosts provisionar.yml -u ubuntu --private-key ~/Desktop/devops/treinamentoItau
-# ssh -i ~/Desktop/devops/treinamentoItau ubuntu@ec2-54-174-235-197.compute-1.amazonaws.com
-# ssh -i ~/Desktop/devops/treinamentoItau ubuntu@ec2-50-16-162-135.compute-1.amazonaws.com
-# ssh -i ~/Desktop/devops/treinamentoItau ubuntu@ec2-54-173-115-181.compute-1.amazonaws.com
+# ansible-playbook -i hosts provisionar.yml -u ubuntu --private-key ~/Desktop/devops/Treinamento
+# ssh -i ~/Desktop/devops/Treinamento ubuntu@ec2-54-174-235-197.compute-1.amazonaws.com
+# ssh -i ~/Desktop/devops/Treinamento ubuntu@ec2-50-16-162-135.compute-1.amazonaws.com
+# ssh -i ~/Desktop/devops/Treinamento ubuntu@ec2-54-173-115-181.compute-1.amazonaws.com
 
 # *** verifica log error
 # vim /etc/haproxy/haproxy.cfg

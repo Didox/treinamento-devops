@@ -18,7 +18,7 @@ resource "aws_instance" "dev_deploy_jenkins" {
 
   for_each = toset(["dev", "stage", "prod"])
 
-  key_name      = "treinamento-turma1_itau"
+  key_name      = "treinamento-turma1"
   tags = {
     Name = "dev_deploy_jenkins_${each.key}"
   }

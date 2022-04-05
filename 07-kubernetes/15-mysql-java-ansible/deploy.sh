@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ANSIBLE_OUT=$(ansible-playbook -i hosts provisionar.yml -u ubuntu --private-key ~/Desktop/devops/treinamentoItau)
+ANSIBLE_OUT=$(ansible-playbook -i hosts provisionar.yml -u ubuntu --private-key ~/Desktop/devops/Treinamento)
 echo $ANSIBLE_OUT
 
 echo "Esperando criar os pods ..."
@@ -22,4 +22,4 @@ cat <<EOF > restore-dump-mysql.yml
       shell: cat /root/k8s-deploy/1.2-dump-mysql.sql  | kubectl exec -it $MYSQL_POD_NAME --tty -- mysql -uroot -ppassword_mysql SpringWebYoutubeTest
 EOF
 
-ansible-playbook -i hosts restore-dump-mysql.yml -u ubuntu --private-key ~/Desktop/devops/treinamentoItau
+ansible-playbook -i hosts restore-dump-mysql.yml -u ubuntu --private-key ~/Desktop/devops/Treinamento

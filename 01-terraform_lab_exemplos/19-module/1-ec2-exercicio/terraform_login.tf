@@ -3,7 +3,7 @@ terraform {
     organization = "didox"
 
     workspaces {
-      name = "itauLab"
+      name = "TreinamentoLab"
     }
   }
 }

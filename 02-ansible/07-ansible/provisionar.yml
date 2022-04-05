@@ -6,4 +6,4 @@
 
     - shell: "echo 'Minha senha é: {{ lookup('env', 'MINHA_SENHA') }}' >> teste.txt"
 
-  # MINHA_SENHA=12345 ansible-playbook -i hosts provisionar.yml -u ubuntu --private-key ../../id_rsa_itau_treinamento
+  # MINHA_SENHA=12345 ansible-playbook -i hosts provisionar.yml -u ubuntu --private-key ../../id_rsatreinamento

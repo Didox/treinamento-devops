@@ -29,4 +29,4 @@
     - debug:
         msg: " '{{ ps.stdout_lines }}' "
 
-# ansible-playbook -i hosts provisionar.yml -u ubuntu --private-key ~/Desktop/devops/treinamentoItau
+# ansible-playbook -i hosts provisionar.yml -u ubuntu --private-key ~/Desktop/devops/Treinamento

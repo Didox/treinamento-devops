@@ -5,7 +5,7 @@ provider "aws" {
 resource "aws_instance" "web" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t3.micro"
-  key_name      = "treinamento-turma1_itau" # key chave publica cadastrada na AWS 
+  key_name      = "treinamento-turma1" # key chave publica cadastrada na AWS 
   # subnet_id        =  aws_subnet.my_subnet.id # vincula a subnet direto e gera o IP automático
   tags = {
     Name = "Maquina para testar VPC"
@@ -20,7 +20,7 @@ resource "aws_instance" "web" {
 resource "aws_instance" "web2" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t3.micro"
-  key_name      = "treinamento-turma1_itau"
+  key_name      = "treinamento-turma1"
   tags = {
     Name = "Maquina2 para testar VPC"
   }
@@ -33,7 +33,7 @@ resource "aws_instance" "web2" {
 resource "aws_instance" "web3" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t3.micro"
-  key_name      = "treinamento-turma1_itau"
+  key_name      = "treinamento-turma1"
   tags = {
     Name = "Maquina3 para testar VPC"
   }

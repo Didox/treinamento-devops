@@ -21,7 +21,7 @@ export USER=root
 export PASSWORD=root 
 export DATABASE=SpringWebYoutube 
 
-ansible-playbook -i hosts provisionar.yml -u ubuntu --private-key ~/Desktop/devops/treinamentoItau
+ansible-playbook -i hosts provisionar.yml -u ubuntu --private-key ~/Desktop/devops/Treinamento
 
 echo  "Abrindo site no navegador"
 sleep 10
@@ -30,4 +30,4 @@ open "http://$HOST_DNS"
 
 echo  "Acessando via SH"
 sleep 5
-ssh -i ~/Desktop/devops/treinamentoItau ubuntu@$HOST_DNS -o ServerAliveInterval=60
+ssh -i ~/Desktop/devops/Treinamento ubuntu@$HOST_DNS -o ServerAliveInterval=60

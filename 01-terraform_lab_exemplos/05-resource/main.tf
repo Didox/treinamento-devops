@@ -35,11 +35,11 @@ resource "aws_instance" "web2" {
 #   tags = {
 #     Name = "Minha Maquina Simples EC2"
 #   }
-#   volume_id = aws_ebs_volume.itau_volume_encrypted.id
+#   volume_id = aws_ebs_volume.volume_encrypted.id
 # }
 
 
-# resource "aws_ebs_volume" "itau_volume_encrypted" {
+# resource "aws_ebs_volume" "volume_encrypted" {
 #   size      = 8
 #   encrypted = true
 #   tags      = {
@@ -72,7 +72,7 @@ resource "aws_instance" "web2" {
 #   }
 # }
 
-# resource "aws_ebs_volume" "itau_volume_encrypted" {
+# resource "aws_ebs_volume" "volume_encrypted" {
 #   size      = 8
 #   encrypted = true
 #   availability_zone = "us-east-1a"
@@ -83,7 +83,7 @@ resource "aws_instance" "web2" {
 
 # resource "aws_volume_attachment" "ebs_att" {
 #   device_name = "/dev/sdh"
-#   volume_id   = aws_ebs_volume.itau_volume_encrypted.id
+#   volume_id   = aws_ebs_volume.volume_encrypted.id
 #   instance_id = aws_instance.web.id
 # }
 

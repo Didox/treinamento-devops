@@ -85,7 +85,7 @@
 
     - name: "Copia chave privada"
       copy:
-        src: "/Users/danilo/Desktop/devops/treinamentoItau"
+        src: "/Users/danilo/Desktop/devops/Treinamento"
         dest: "/var/lib/jenkins/chave-privada.pem"
         owner: jenkins
         group: jenkins

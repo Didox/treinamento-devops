@@ -7,6 +7,6 @@ resource "aws_instance" "web" {
   instance_type = var.tipo
   tags = {
     Name = "${var.nome}",
-    Itau = true
+    Treinamento = true
   }
 }

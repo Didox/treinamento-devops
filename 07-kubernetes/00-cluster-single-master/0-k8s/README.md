@@ -1,5 +1,5 @@
 # ### dar nome para o master
-# ssh -i ~/Desktop/devops/treinamentoItau ubuntu@ec2-54-226-188-130.compute-1.amazonaws.com
+# ssh -i ~/Desktop/devops/Treinamento ubuntu@ec2-54-226-188-130.compute-1.amazonaws.com
 
 # sudo su -
 # hostname k8s-master 

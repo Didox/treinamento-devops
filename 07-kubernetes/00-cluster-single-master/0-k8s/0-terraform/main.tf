@@ -9,7 +9,7 @@ data "http" "myip" {
 resource "aws_instance" "maquina_master" {
   ami           = "ami-09e67e426f25ce0d7"
   instance_type = "t2.large"
-  key_name      = "treinamento-turma1_itau"
+  key_name      = "treinamento-turma1"
   tags = {
     Name = "k8s-master"
   }
@@ -22,7 +22,7 @@ resource "aws_instance" "maquina_master" {
 resource "aws_instance" "workers" {
   ami           = "ami-09e67e426f25ce0d7"
   instance_type = "t2.medium"
-  key_name      = "treinamento-turma1_itau"
+  key_name      = "treinamento-turma1"
   tags = {
     Name = "k8s-node-${count.index + 1}"
   }
@@ -161,7 +161,7 @@ resource "aws_security_group" "acessos_workers_single_master" {
 # terraform refresh para mostrar o ssh
 output "maquina_master" {
   value = [
-    "master - ${aws_instance.maquina_master.public_ip} - ssh -i ~/Desktop/devops/treinamentoItau ubuntu@${aws_instance.maquina_master.public_dns} -o ServerAliveInterval=60",
+    "master - ${aws_instance.maquina_master.public_ip} - ssh -i ~/Desktop/devops/Treinamento ubuntu@${aws_instance.maquina_master.public_dns} -o ServerAliveInterval=60",
     "sg master - ${aws_security_group.acessos_workers_single_master.id}"
   ]
 }
@@ -170,6 +170,6 @@ output "maquina_master" {
 output "maquina_workers" {
   value = [
     for key, item in aws_instance.workers :
-      "worker ${key+1} - ${item.public_ip} - ssh -i ~/Desktop/devops/treinamentoItau ubuntu@${item.public_dns} -o ServerAliveInterval=60"
+      "worker ${key+1} - ${item.public_ip} - ssh -i ~/Desktop/devops/Treinamento ubuntu@${item.public_dns} -o ServerAliveInterval=60"
   ]
 }

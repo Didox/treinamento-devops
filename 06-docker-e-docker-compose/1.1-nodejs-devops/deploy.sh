@@ -1,4 +1,4 @@
-cd itau-tdd-lab
+cd Treinamento-tdd-lab
 docker build -t didox/app-nodejs-validacao-cnpj -f Dockerfile .
 docker run -d -p 3000:3000 --name app-nodejs-validacao-cnpj didox/app-nodejs-validacao-cnpj
 docker exec -it app-nodejs-validacao-cnpj npm run test
@@ -22,7 +22,7 @@ echo "Aguardando criação de maquinas ..."
 sleep 10 # 20 segundos
 
 cd ../ansible
-ansible-playbook -i hosts provisionar.yml -u ubuntu --private-key ~/Desktop/devops/treinamentoItau
+ansible-playbook -i hosts provisionar.yml -u ubuntu --private-key ~/Desktop/devops/Treinamento
 
 cd ../terraform
 

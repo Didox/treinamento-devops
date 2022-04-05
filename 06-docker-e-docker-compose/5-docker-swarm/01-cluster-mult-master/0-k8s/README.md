@@ -1,5 +1,5 @@
 # ### dar nome para as maquinas
-# ssh -i ~/Desktop/devops/treinamentoItau ubuntu@ec2-54-226-188-130.compute-1.amazonaws.com
+# ssh -i ~/Desktop/devops/Treinamento ubuntu@ec2-54-226-188-130.compute-1.amazonaws.com
 
 # sudo su -
 # hostname k8s-master-0 
@@ -96,13 +96,13 @@ kubeadm join k8s-haproxy:6443 --token vzs27d.ld5cvhdw912y9w71 \
 # sudo apt-get autoremove  
 # sudo rm -rf ~/.kube
 
-# ssh -i ~/Desktop/devops/treinamentoItau ubuntu@ec2-50-16-162-135.compute-1.amazonaws.com
+# ssh -i ~/Desktop/devops/Treinamento ubuntu@ec2-50-16-162-135.compute-1.amazonaws.com
 # sudo su -
 # hostname k8s-master-1
 # echo "k8s-master-1" > /etc/hostname 
 # bash
 
-# ssh -i ~/Desktop/devops/treinamentoItau ubuntu@ec2-54-173-115-181.compute-1.amazonaws.com
+# ssh -i ~/Desktop/devops/Treinamento ubuntu@ec2-54-173-115-181.compute-1.amazonaws.com
 # sudo su -
 # hostname k8s-master-2 
 # echo "k8s-master-2" > /etc/hostname 
@@ -120,10 +120,10 @@ kubeadm join k8s-haproxy:6443 --token vzs27d.ld5cvhdw912y9w71 \
 #   debug:
 #     msg: kubeadm version #TODO Colocar comando que mostra configs
 
-# ansible-playbook -i hosts provisionar.yml -u ubuntu --private-key ~/Desktop/devops/treinamentoItau
-# ssh -i ~/Desktop/devops/treinamentoItau ubuntu@ec2-54-174-235-197.compute-1.amazonaws.com
-# ssh -i ~/Desktop/devops/treinamentoItau ubuntu@ec2-50-16-162-135.compute-1.amazonaws.com
-# ssh -i ~/Desktop/devops/treinamentoItau ubuntu@ec2-54-173-115-181.compute-1.amazonaws.com
+# ansible-playbook -i hosts provisionar.yml -u ubuntu --private-key ~/Desktop/devops/Treinamento
+# ssh -i ~/Desktop/devops/Treinamento ubuntu@ec2-54-174-235-197.compute-1.amazonaws.com
+# ssh -i ~/Desktop/devops/Treinamento ubuntu@ec2-50-16-162-135.compute-1.amazonaws.com
+# ssh -i ~/Desktop/devops/Treinamento ubuntu@ec2-54-173-115-181.compute-1.amazonaws.com
 
 # *** verifica log error
 # vim /etc/haproxy/haproxy.cfg

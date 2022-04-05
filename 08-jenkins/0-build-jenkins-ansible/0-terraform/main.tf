@@ -9,7 +9,7 @@ data "http" "myip" {
 resource "aws_instance" "jenkins" {
   ami           = "ami-09e67e426f25ce0d7"
   instance_type = "t2.large"
-  key_name      = "treinamento-turma1_itau"
+  key_name      = "treinamento-turma1"
   tags = {
     Name = "jenkins"
   }
@@ -72,6 +72,6 @@ output "jenkins" {
     "private: ${aws_instance.jenkins.private_ip}",
     "public: ${aws_instance.jenkins.public_ip}",
     "public_dns: ${aws_instance.jenkins.public_dns}",
-    "ssh -i ~/Desktop/devops/treinamentoItau ubuntu@${aws_instance.jenkins.public_dns}"
+    "ssh -i ~/Desktop/devops/Treinamento ubuntu@${aws_instance.jenkins.public_dns}"
   ]
 }

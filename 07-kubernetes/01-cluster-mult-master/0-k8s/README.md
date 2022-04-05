@@ -1,5 +1,5 @@
 # ### dar nome para as maquinas
-# ssh -i ~/Desktop/devops/treinamentoItau ubuntu@ec2-54-226-188-130.compute-1.amazonaws.com
+# ssh -i ~/Desktop/devops/Treinamento ubuntu@ec2-54-226-188-130.compute-1.amazonaws.com
 
 # sudo su -
 # hostname k8s-master-0 
@@ -58,6 +58,14 @@ kubeadm join k8s-haproxy:6443 --token vzs27d.ld5cvhdw912y9w71 \
 	--discovery-token-ca-cert-hash sha256:1ce552632ddd7480a4d3bb669fb4d62c7bcf1c95b451e59d5503ec6dd43c33a9
 ####################################################
 # kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+
+#  kubectl logs weave-net-6xxxp -c weave -n kube-system
+
+### caso dê problema de conflito de IP interno kubernetes com a rede externa VPC 
+
+# kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')&env.IPALLOC_RANGE=192.168.0.0/16" 
+
+
 # kubectl get pod -n kube-system -w
 
 # kubectl get nodes -o wide # lista os nos com seus respectivos IPs
@@ -88,13 +96,13 @@ kubeadm join k8s-haproxy:6443 --token vzs27d.ld5cvhdw912y9w71 \
 # sudo apt-get autoremove  
 # sudo rm -rf ~/.kube
 
-# ssh -i ~/Desktop/devops/treinamentoItau ubuntu@ec2-50-16-162-135.compute-1.amazonaws.com
+# ssh -i ~/Desktop/devops/Treinamento ubuntu@ec2-50-16-162-135.compute-1.amazonaws.com
 # sudo su -
 # hostname k8s-master-1
 # echo "k8s-master-1" > /etc/hostname 
 # bash
 
-# ssh -i ~/Desktop/devops/treinamentoItau ubuntu@ec2-54-173-115-181.compute-1.amazonaws.com
+# ssh -i ~/Desktop/devops/Treinamento ubuntu@ec2-54-173-115-181.compute-1.amazonaws.com
 # sudo su -
 # hostname k8s-master-2 
 # echo "k8s-master-2" > /etc/hostname 
@@ -112,10 +120,10 @@ kubeadm join k8s-haproxy:6443 --token vzs27d.ld5cvhdw912y9w71 \
 #   debug:
 #     msg: kubeadm version #TODO Colocar comando que mostra configs
 
-# ansible-playbook -i hosts provisionar.yml -u ubuntu --private-key ~/Desktop/devops/treinamentoItau
-# ssh -i ~/Desktop/devops/treinamentoItau ubuntu@ec2-54-174-235-197.compute-1.amazonaws.com
-# ssh -i ~/Desktop/devops/treinamentoItau ubuntu@ec2-50-16-162-135.compute-1.amazonaws.com
-# ssh -i ~/Desktop/devops/treinamentoItau ubuntu@ec2-54-173-115-181.compute-1.amazonaws.com
+# ansible-playbook -i hosts provisionar.yml -u ubuntu --private-key ~/Desktop/devops/Treinamento
+# ssh -i ~/Desktop/devops/Treinamento ubuntu@ec2-54-174-235-197.compute-1.amazonaws.com
+# ssh -i ~/Desktop/devops/Treinamento ubuntu@ec2-50-16-162-135.compute-1.amazonaws.com
+# ssh -i ~/Desktop/devops/Treinamento ubuntu@ec2-54-173-115-181.compute-1.amazonaws.com
 
 # *** verifica log error
 # vim /etc/haproxy/haproxy.cfg

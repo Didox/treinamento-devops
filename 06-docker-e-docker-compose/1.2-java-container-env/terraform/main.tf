@@ -9,7 +9,7 @@ data "http" "myip" {
 resource "aws_instance" "maquina_nodejs" {
   ami           = "ami-09e67e426f25ce0d7"
   instance_type = "t2.micro"
-  key_name      = "treinamento-turma1_itau"
+  key_name      = "treinamento-turma1"
   tags = {
     Name = "maquina_ansible_com_nginx_e_nodejs"
   }
