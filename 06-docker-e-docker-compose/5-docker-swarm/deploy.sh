@@ -40,7 +40,67 @@ $ID_W2_DNS
 $ID_W3_DNS
 " > ../2-ansible/hosts
 
-
 cd ../2-ansible/
-ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i hosts provisionar.yml -u ubuntu --private-key ~/projetos/devops/devops-acesso-sh.pem
+ANSIBLE_OUT=$(ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i hosts provisionar.yml -u ubuntu --private-key ~/projetos/devops/devops-acesso-sh.pem)
 
+#### Mac ###
+SWARM_JOIN_WORKER=$(echo $ANSIBLE_OUT | grep -oE "( docker swarm join.*?2377)'" | head -n 1 | sed 's/\\//g' | sed "s/'t//g" | sed "s/'//g" | sed "s/'//g" | sed "s/,//g")
+#### Linix ###
+# SWARM_JOIN_WORKER=$(echo $ANSIBLE_OUT | grep -oP "( docker swarm join.*?2377)'" | head -n 1 | sed 's/\\//g' | sed "s/'t//g" | sed "s/'//g" | sed "s/'//g" | sed "s/,//g")
+
+echo $ANSIBLE_OUT
+echo $SWARM_JOIN_WORKER
+
+cat <<EOF > 2-provisionar-swarm-worker-auto-shell.yml
+- hosts:
+  - ec2-swarm-w1
+  - ec2-swarm-w2
+  - ec2-swarm-w3
+  become: yes
+  tasks:
+    - name: "Fazendo join swarm worker no master"
+      shell: $SWARM_JOIN_WORKER
+EOF
+
+ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i hosts 2-provisionar-swarm-worker-auto-shell.yml -u ubuntu --private-key ~/projetos/devops/devops-acesso-sh.pem
+
+cat <<EOF > 3-provisionar-swarm-master-auto-shell.yml
+- hosts:
+  - ec2-swarm-m1
+  become: yes
+  tasks:
+    - shell: docker swarm join-token manager
+      register: ps
+    - debug:
+        msg: " '{{ ps.stdout_lines }}' "
+EOF
+
+ANSIBLE_OUT=$(ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i hosts 3-provisionar-swarm-master-auto-shell.yml -u ubuntu --private-key ~/projetos/devops/devops-acesso-sh.pem)
+#### Mac ###
+
+SWARM_JOIN_MANAGER=$(echo $ANSIBLE_OUT | grep -oE "( docker swarm join.*?2377)'" | head -n 1 | sed 's/\\//g' | sed "s/'t//g" | sed "s/'//g" | sed "s/'//g" | sed "s/,//g")
+#### Linix ###
+# SWARM_JOIN_MANAGER=$(echo $ANSIBLE_OUT | grep -oP "( docker swarm join.*?2377)'" | head -n 1 | sed 's/\\//g' | sed "s/'t//g" | sed "s/'//g" | sed "s/'//g" | sed "s/,//g")
+
+echo $ANSIBLE_OUT
+echo $SWARM_JOIN_MANAGER
+
+
+cat <<EOF > 4-provisionar-swarm-master-auto-shell.yml
+- hosts:
+  - ec2-swarm-m2
+  - ec2-swarm-m3
+  become: yes
+  tasks:
+    - shell: docker swarm leave --force
+    
+    - name: "Fazendo join swarm master no master"
+      shell: $SWARM_JOIN_MANAGER
+
+    - shell: docker node ls
+      register: ps
+    - debug:
+        msg: " '{{ ps.stdout_lines }}' "
+EOF
+
+ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i hosts 4-provisionar-swarm-master-auto-shell.yml -u ubuntu --private-key ~/projetos/devops/devops-acesso-sh.pem

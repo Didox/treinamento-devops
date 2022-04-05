@@ -1,0 +1,8 @@
+- hosts:
+  - ec2-swarm-w1
+  - ec2-swarm-w2
+  - ec2-swarm-w3
+  become: yes
+  tasks:
+    - name: "Fazendo join swarm worker no master"
+      shell:  docker swarm join --token SWMTKN-1-19bwk32cryq9ypwuvg0v4d74sjxku3xe5xqqwsss3hazyup4mr-bl9mlaghl6ei0n3faj5jyx0v3 172.31.18.218:2377

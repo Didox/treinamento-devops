@@ -19,7 +19,6 @@ ssh -i ../../devops-acesso-sh.pem ubuntu@ec2-204-236-198-169.compute-1.amazonaws
 ## https://docs.docker.com/engine/swarm/swarm-tutorial/create-swarm/
 ```shell
 sudo su -
-docker swarm init --advertise-addr <MANAGER-IP>
 docker swarm init --advertise-addr $(hostname -i | awk '{print $1;exit}')
 ```
 

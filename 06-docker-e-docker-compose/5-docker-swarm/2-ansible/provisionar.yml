@@ -83,3 +83,17 @@
         - docker-ce-cli
         - containerd.io
 
+# ---
+- hosts:
+  - ec2-swarm-m1
+  become: yes
+  tasks:    
+    - shell: docker swarm leave --force
+      register: ps
+    - shell: docker swarm init --advertise-addr $(hostname -i | awk '{print $1;exit}')
+      register: ps
+    - debug:
+        msg: " '{{ ps.stdout_lines }}' "
+
+  
+

@@ -1,0 +1,12 @@
+- hosts:
+  - ec2-swarm-m1
+  - ec2-swarm-m2
+  - ec2-swarm-m3
+  become: yes
+  tasks:
+    - shell: docker swarm leave --force
+    
+    - shell: docker swarm join-token manager
+      register: ps
+    - debug:
+        msg: " '{{ ps.stdout_lines }}' "
