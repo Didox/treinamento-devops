@@ -68,6 +68,8 @@
 
     - name: "Instala jenkins"
       shell: "apt-get install jenkins -y"
+      ignore_errors: yes
+      async: 50 # se demorar mais do que ~50 seconds ele continua
 
     - name: Espera 30 segundos
       wait_for: timeout=30
