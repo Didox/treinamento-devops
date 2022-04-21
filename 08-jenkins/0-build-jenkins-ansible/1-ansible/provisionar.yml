@@ -85,8 +85,8 @@
 
     - name: "Copia chave privada"
       copy:
-        src: "/Users/danilo/Desktop/devops/Treinamento"
-        dest: "/var/lib/jenkins/chave-privada.pem"
+        src: "/Users/danilo/Desktop/desafio_devops/terraform/ssh/id_rsa"
+        dest: "/var/lib/jenkins/id_rsa"
         owner: jenkins
         group: jenkins
         mode: '0400'
