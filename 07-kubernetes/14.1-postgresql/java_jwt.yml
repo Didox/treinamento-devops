@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ilab-java-jwt
+  labels:
+    app: ilab-java-jwt
+spec:
+  containers:
+    - name: java-jwt
+      image: didox/java_jwt:latest
+      env:
+        - name: USER
+          value: ilab
+        - name: PASSWORD
+          value: "p1o3s4t6g7r8e9sql"
+        - name: DATABASE_URL
+          value: "postgresql://clusterip-postgre:5432/apirest?createDatabaseIfNotExist=true&sslmode=disable&useTimezone=true&serverTimezone=UTC"
+      ports:
+        - containerPort: 8080
