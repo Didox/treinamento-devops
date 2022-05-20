@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ilab-postgre
+  labels:
+    app: ilab-postgre
+spec:
+  containers:
+    - name: postgresql
+      image: postgres
+      env:
+        - name: POSTGRES_USER
+          value: ilab
+        - name: POSTGRES_PASSWORD
+          value: p1o3s4t6g7r8e9sql
+        - name: POSTGRES_DB
+          value: apirest
+      ports:
+        - containerPort: 5432
