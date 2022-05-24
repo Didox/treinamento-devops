@@ -1,39 +1,5 @@
-# - hosts:
-#   - k8s-master
-#   tasks:
-#     - name: "Configura hostname k8s-master"
-#       shell: hostname k8s-master && echo "k8s-master" > /etc/hostname
-#       become: yes
-# ---
-# - hosts:
-#   - k8s-worker-1
-#   tasks:
-#     - name: "Configura hostname k8s-worker-1"
-#       shell: hostname gui-k8s-worker-1 && echo "gui-k8s-worker-1" > /etc/hostname
-#       become: yes
-# # ---
-# - hosts:
-#   - k8s-worker-2
-#   tasks:
-#     - name: "Configura hostname k8s-worker-2"
-#       shell: hostname gui-k8s-worker-2 && echo "gui-k8s-worker-2" > /etc/hostname
-#       become: yes
-# # ---
-# - hosts:
-#   - k8s-worker-3
-#   tasks:
-#     - name: "Configura hostname k8s-worker-3"
-#       shell: hostname gui-k8s-worker-3 && echo "gui-k8s-worker-3" > /etc/hostname
-#       become: yes
-# ---
 - hosts: all
   tasks:
-    # doc https://phoenixnap.com/kb/install-kubernetes-on-ubuntu
-    # doc ansible https://kubernetes.io/blog/2019/03/15/kubernetes-setup-using-ansible-and-vagrant/
-
-    # - name: "Coloca nome na maquina"
-    #   shell: hostname k8s-proxy && echo "k8s-proxy" > /etc/hostname && bash
-    #   become: yes
     - name: "Configurando containerd config no diretorio etc"
       shell: mkdir -p /etc/containerd && containerd config default > /etc/containerd/config.toml
       become: yes
@@ -45,7 +11,6 @@
     - name: "Reseta workers no cluster master"
       shell: kubeadm reset --force
       become: yes
-
 
     - name: "Adiciona workers no cluster master"
       shell: kubeadm join 172.31.4.4:6443 --token 1b7ht3.shv0hr4feg5n3gq3 --discovery-token-ca-cert-hash sha256:f0276e6b3a50cb400de9701c39828ab83caef0caf725bfc7a61f6960db595903
