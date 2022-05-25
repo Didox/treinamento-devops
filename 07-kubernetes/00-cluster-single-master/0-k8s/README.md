@@ -1,3 +1,4 @@
+```shell
 # ### dar nome para o master
 # ssh -i ~/Desktop/devops/Treinamento ubuntu@ec2-54-226-188-130.compute-1.amazonaws.com
 
@@ -63,6 +64,8 @@ as root:
 # kubectl get all --all-namespaces # llista todos os pods do kubernetes
 # kubectl get pods -n kube-system # lista os pods internos do kubernetes
 
+# kubectl get ev # verifica todos os possiveis erros dos pods
+
 # etcd-k8s-master-0 # onde o kubernetes guarda suas informações, sua base de infos
 # kube-apiserver-k8s-master-0 # API de conexão do kubernetes
 # kube-proxy-4sxnj #proxy interno dos pods
@@ -76,3 +79,5 @@ as root:
 # kubectl scale deployment nginx-treinamento --replicas=3 # para escalar um deployment
 
 # ---
+
+```
