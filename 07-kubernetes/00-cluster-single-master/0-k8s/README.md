@@ -28,7 +28,7 @@ source <(kubectl completion bash) # para deixar o kubeclt com auto complete
 
 uname -a # para saber o nome do servidor
 
-kubeadm init --apiserver-advertise-address $(hostname -i | awk '{print $1;exit}')
+kubeadm init --apiserver-advertise-address $(hostname -i | awk '{print $1;exit}') --ignore-preflight-errors cri
 
 # caso trave com erro de timeout, olhar o security group do haproxy
 systemctl status kubelet | less # verifica se o serviço está de pé
