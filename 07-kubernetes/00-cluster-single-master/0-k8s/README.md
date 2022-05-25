@@ -26,6 +26,8 @@ bash
 
 source <(kubectl completion bash) # para deixar o kubeclt com auto complete
 
+uname -a # para saber o nome do servidor
+
 kubeadm init --apiserver-advertise-address $(hostname -i | awk '{print $1;exit}')
 
 # caso trave com erro de timeout, olhar o security group do haproxy
