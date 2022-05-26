@@ -28,7 +28,7 @@ source <(kubectl completion bash) # para deixar o kubeclt com auto complete
 
 uname -a # para saber o nome do servidor
 
-kubeadm init --apiserver-advertise-address $(hostname -i | awk '{print $1;exit}') --ignore-preflight-errors cri
+kubeadm init --apiserver-advertise-address $(hostname -i | awk '{print $1;exit}') --cri-socket /run/cri-dockerd.sock
 
 # caso trave com erro de timeout, olhar o security group do haproxy
 systemctl status kubelet | less # verifica se o serviço está de pé
@@ -54,13 +54,15 @@ Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
 You can now join any number of machines by running the following on each node
 as root:
 
-  kubeadm join <control-plane-host>:<control-plane-port> --token <token> --discovery-token-ca-cert-hash sha256:<hash>
+  kubeadm join <control-plane-host>:<control-plane-port> --token <token> --discovery-token-ca-cert-hash sha256:<hash> --cri-socket /run/cri-dockerd.sock
 ####################################################
 
 
 kubectl delete -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
 kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
 kubectl get pod -n kube-system -w
+
+kubectl cluster-info # mostra informações do cluster
 
 kubectl get nodes -o wide # lista os nos com seus respectivos IPs
 kubectl get all --all-namespaces # llista todos os pods do kubernetes
