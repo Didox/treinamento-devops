@@ -31,6 +31,22 @@ source <(kubectl completion bash) # para deixar o kubeclt com auto complete
 
 uname -a # para saber o nome do servidor
 
+sudo apt update
+sudo apt install git wget curl
+VER=$(curl -s https://api.github.com/repos/Mirantis/cri-dockerd/releases/latest|grep tag_name | cut -d '"' -f 4|sed 's/v//g')
+wget https://github.com/Mirantis/cri-dockerd/releases/download/v${VER}/cri-dockerd-${VER}.amd64.tgz
+tar xvf cri-dockerd-${VER}.amd64.tgz
+sudo mv cri-dockerd/cri-dockerd /usr/local/bin/
+wget https://raw.githubusercontent.com/Mirantis/cri-dockerd/master/packaging/systemd/cri-docker.service
+wget https://raw.githubusercontent.com/Mirantis/cri-dockerd/master/packaging/systemd/cri-docker.socket
+sudo mv cri-docker.socket cri-docker.service /etc/systemd/system/
+sudo sed -i -e 's,/usr/bin/cri-dockerd,/usr/local/bin/cri-dockerd,' /etc/systemd/system/cri-docker.service
+sudo systemctl daemon-reload
+sudo systemctl enable cri-docker.service
+sudo systemctl enable --now cri-docker.socket
+sudo kubeadm config images pull --cri-socket /run/cri-dockerd.sock 
+
+
 kubeadm init --apiserver-advertise-address $(hostname -i | awk '{print $1;exit}') --cri-socket /run/cri-dockerd.sock
 
 # caso trave com erro de timeout, olhar o security group do haproxy
