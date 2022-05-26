@@ -1,4 +1,7 @@
 ```shell
+https://computingforgeeks.com/deploy-kubernetes-cluster-on-ubuntu-with-kubeadm/
+https://computingforgeeks.com/install-mirantis-cri-dockerd-as-docker-engine-shim-for-kubernetes/
+
 # ### dar nome para o master
 ssh -i ~/Desktop/devops/Treinamento ubuntu@ec2-54-226-188-130.compute-1.amazonaws.com
 
