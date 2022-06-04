@@ -2,74 +2,30 @@
   become: true
 
   tasks:
-    - name: "Download pacote jenkins"
-      shell: wget -qO - https://pkg.jenkins.io/debian-stable/jenkins.io.key | apt-key add -
-
     - name: "Configura hostname jenkins"
       shell: hostname jenkins && echo "jenkins" > /etc/hostname
 
     - name: "Update apt"
       shell: "apt-get update"
 
-    - name: "Instala mvn"
-      shell: "sudo apt install maven -y"
+    - name: "Instala nodejs"
+      shell: "sudo apt install nodejs -y"
 
-    - name: "Instala unzip"
-      shell: "sudo apt install unzip -y"
-
-    - name: "Instala awscli"
-      shell: "apt install awscli -y"
-      
     - name: "Instala java"
-      shell: "apt install default-jdk -y"
-    
+      shell: "apt install default-jre -y"
+
+    - name: "Instala npm"
+      shell: "sudo apt install npm -y"
+
     - name: "Instala ansible"
       shell: "sudo apt install ansible -y"
 
-    - name: "Instala pacotes"
-      apt:
-        name: "{{ item }}"
-        state: latest
-      with_items:
-        - mysql-server
-        - python3-pycurl
-        - python3-mysqldb
-
-    - name: "Lavanta serviço do mysql"
-      service:
-        name: mysql
-        state: started
-
-    - name: "Criando senha root mysql"
-      ignore_errors: yes
-      mysql_user:
-        name: "root"
-        host: localhost
-        check_implicit_admin: yes
-        password: "root"
-        priv: "*.*:ALL,GRANT"
-        state: present
-   
-    # https://www.jenkins.io/doc/book/installing/linux/
-    - name: "Add pacote jenkins"
-      shell: sudo sh -c 'echo deb http://pkg.jenkins-ci.org/debian binary/ > /etc/apt/sources.list.d/jenkins.list'
-  
-    - name: "Install terraform passo 1"
-      shell: sudo apt-get update && sudo apt-get install -y gnupg software-properties-common curl
-
-    - name: "Install terraform passo 2"
-      shell: curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
-
-    - name: "Install terraform passo 3"
-      shell: sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
-
-    - name: "Install terraform passo 4"
-      shell: sudo apt-get update && sudo apt-get install terraform -y
-
-    - name: "Instala jenkins"
-      shell: "apt-get install jenkins -y"
-      ignore_errors: yes
-      async: 50 # se demorar mais do que ~50 seconds ele continua
+    - name: "Install jenkins"
+      shell: |
+        wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key |sudo gpg --dearmor -o /usr/share/keyrings/jenkins.gpg
+        sudo sh -c 'echo deb [signed-by=/usr/share/keyrings/jenkins.gpg] http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+        sudo apt update
+        sudo apt install jenkins
 
     - name: Espera 30 segundos
       wait_for: timeout=30
