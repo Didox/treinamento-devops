@@ -1,30 +1,68 @@
-resource "azurerm_linux_virtual_machine" "myterraformvm" {
-  name                  = "MinhaVmTerraform"
-  location              = "eastus"
-  resource_group_name   = "vm-k8s"
-  size                  = "Standard_B1ls"
+resource "random_pet" "rg-name" {
+  prefix    = var.resource_group_name_prefix
+}
 
-  network_interface_ids = [azurerm_network_interface.k8s-desafio.id]
+resource "azurerm_resource_group" "rg" {
+  name      = random_pet.rg-name.id
+  location  = var.resource_group_location
+}
+
+# Generate random text for a unique storage account name
+resource "random_id" "randomId" {
+  keepers = {
+    # Generate a new ID only when a new resource group is defined
+    resource_group = azurerm_resource_group.rg.name
+  }
+
+  byte_length = 8
+}
+
+# Create storage account for boot diagnostics
+resource "azurerm_storage_account" "mystorageaccount" {
+  name                     = "meuStorage${random_id.randomId.hex}"
+  location                 = azurerm_resource_group.rg.location
+  resource_group_name      = azurerm_resource_group.rg.name
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+}
+
+# Create (and display) an SSH key
+resource "tls_private_key" "example_ssh" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+# Create virtual machine
+resource "azurerm_linux_virtual_machine" "myterraformvm" {
+  name                  = "vmTerraform"
+  location              = azurerm_resource_group.rg.location
+  resource_group_name   = azurerm_resource_group.rg.name
+  network_interface_ids = [azurerm_network_interface.myterraformnic.id]
+  size                  = "Standard_DS1_v2"
 
   os_disk {
-    name                 = "myOsDisk"
+    name                 = "meuOsDisk"
     caching              = "ReadWrite"
     storage_account_type = "Premium_LRS"
   }
 
   source_image_reference {
-      offer = "0001-com-ubuntu-server-focal"
-      publisher = "Canonical"
-      sku = "20_04-lts-gen2"
-      version = "latest"
+    publisher = "Canonical"
+    offer     = "UbuntuServer"
+    sku       = "18.04-LTS"
+    version   = "latest"
   }
 
-  computer_name                   = "myvm"
-  admin_username                  = "ubuntu"
+  computer_name                   = "minhaVm"
+  admin_username                  = "azureuser"
   disable_password_authentication = true
 
   admin_ssh_key {
-    username   = "ubuntu"
-    public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC6n+egdpEqWRcnPIc0D/c7IVgErojxHldA8C1iFKIKX98GlSXMmzVdVedxMjcs6AMU0puGGBQruQEy9HqqwsbFcEyjPofIJa4oztyXn0VqSPjdWsD3dr/5IkUu38Q0CooLgOXfabSIytwj+810cWX7Kno2GVAfOLKRI0/+JE9Q4poX47DpyF8yN3dRN6aitQmnPioq3NwViHbdHpe7mGhUju6nItDNuN39KeCgA4s2yuDz42sFXsBxjdt3F7j6iaq3iPpOC8+5sYpER1KpxQ4JO1g3dsIOoNzlyLvkUMY46JKCoRh/0crTRKhNXhARiFUpNWOQDfyLFepSD9+hq9Xfa6es4rXKGi0eSv9v5Fc119hSVObjoF7760FDSp/1IMccQw06JS2V/HRHIY9+s5Pm9ChoO/tpdglxPszD2vWjE7JrvHXVZlxyTEi5SQOTBGM/s3dONaW0/tU9ZMgNOgMZ1AOkspyDltXsP2hDK6fOLj5rt8P1vqq//D2wY1Pc04M= danilo@Macbooks-MacBook-Pro.local"
+    username   = "azureuser"
+    public_key = tls_private_key.example_ssh.public_key_openssh
+  }
+
+  boot_diagnostics {
+    storage_account_uri = azurerm_storage_account.mystorageaccount.primary_blob_endpoint
   }
 }
