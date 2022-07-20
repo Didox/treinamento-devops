@@ -17,4 +17,13 @@
       become: yes # roda com sudo
       with_items:
         - php7.2
+        - apache2
+        - libapache2-mod-php7.2
+        - php-mysql
+        - php-curl
+        - mysql-server
+        - python3-pycurl
+        - python3-mysqldb
         - unzip
+
+# ansible-playbook -i hosts provisionar.yml -u azureuser --private-key ../chave.pem
