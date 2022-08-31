@@ -1,0 +1,21 @@
+name: CI_IBM
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    # runs-on: maven:3.8.6-openjdk-18
+    
+    steps:
+    - name: Gerando build
+      run: echo "passo 1"
+      # run: mvn package -Dmaven.test.skip
+  test:
+    needs: build
+    runs-on: ubuntu-20.04
+    # runs-on: maven:3.8.6-openjdk-18
+    steps:
+    - name: Rodando teste unidade
+      run: echo passo 2
+      # run: mvn test
