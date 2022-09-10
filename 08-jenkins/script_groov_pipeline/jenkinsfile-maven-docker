@@ -1,0 +1,50 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Git-clone') {
+            steps {
+                git url: "https://github.com/torneseumprogramador/spring-app-validar-cpf-treinamento-concrete.git", branch: "master"
+            }
+        }
+        stage('Clean') {
+            steps {
+                sh "mvn clean"
+            }
+        }
+        stage('Build') {
+            steps {
+                sh "mvn package -Dmaven.test.skip"
+            }
+        }
+        stage('Test') {
+            steps {
+                sh "mvn test"
+            }
+        }
+        stage('Prepara-Dockerfile') {
+            steps {
+                sh "echo 'FROM openjdk:8-jdk-alpine' > Dockerfile"
+                sh "echo 'COPY target/*.jar app.jar' >> Dockerfile"
+                sh "echo 'ENTRYPOINT [\"java\",\"-jar\",\"/app.jar\"]' >> Dockerfile"
+            }
+        }
+        stage('Build-docker') {
+            steps {
+                sh "docker build -t java-cpf ."
+            }
+        }
+        stage('Deploy-QA') {
+            steps {
+                sh "docker rm java-cpf-qa --force"
+                sh "docker run -d -p 8082:8080 --name java-cpf-qa java-cpf"
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh "docker rm java-cpf --force"
+                sh "docker run -d -p 8081:8080 --name java-cpf java-cpf"
+            }
+        }
+    }
+}
