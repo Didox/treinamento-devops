@@ -1,0 +1,56 @@
+pipeline {
+    agent any
+    
+    parameters {
+        string(name: 'TAG', defaultValue: '', description: 'Digite uma tag no padrao V0.0.0')
+    }
+
+    stages {
+        stage('Git-clone') {
+            steps {
+                git url: "https://github.com/torneseumprogramador/ecomerce-java-tdd-ibm-turma2.git", branch: "main"
+            }
+        }
+        stage('Clean') {
+            steps {
+                sh "mvn clean"
+            }
+        }
+        stage('Build') {
+            steps {
+                sh "mvn package -Dmaven.test.skip"
+            }
+        }
+        stage('Test') {
+            steps {
+                sh "echo \"create database IF NOT EXISTS ecommerce_test;\" > criar-db.sql"
+                sh "mysql -uroot -p'root' -h 172.31.10.202 < criar-db.sql"
+                sh "MYSQL_USER=\"root\" MYSQL_PASS=\"root\" MYSQL_HOST=\"172.31.10.202\" DATABASE=\"ecommerce_test\" ./test.sh"
+            }
+        }
+        stage('Prepara-Dockerfile') {
+            steps {
+                sh "echo 'FROM openjdk:11-jdk' > Dockerfile"
+                sh "echo 'COPY target/*.jar app.jar' >> Dockerfile"
+                sh "echo 'ENTRYPOINT [\"java\",\"-jar\",\"/app.jar\"]' >> Dockerfile"
+            }
+        }
+        stage('Build-docker') {
+            steps {
+                sh "docker build -t didox/turma1_ibm_java_ecommerce_k8s:$TAG ."
+            }
+        }
+        stage('Push-Docker') {
+            steps {
+                sh "docker push didox/turma1_ibm_java_ecommerce_k8s:$TAG"
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh "rm -rf k8s-turma1-ibm"
+                sh "git clone https://github.com/torneseumprogramador/k8s-turma1-ibm"
+                sh "cd k8s-turma1-ibm && ./deploy.sh"
+            }
+        }
+    }
+}
